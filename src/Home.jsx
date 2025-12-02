@@ -13,7 +13,7 @@ const ROSE_KEYFRAMES = [
   },
   {
     // Section 1 – eye / bullets
-    position: { x: -3.15, y: -1, z: 0 },
+    position: { x: -4.1, y: -1, z: 0 },
     rotation: { x: 0.2, y: Math.PI * 0.1, z: 0 },
     scale: 0.7,
   },
@@ -370,16 +370,28 @@ function Home() {
 
   const bullets = [
     {
-      title: "User-Centric Design",
-      body: "Creating intuitive interfaces that prioritize user experience and accessibility.",
+      rayLabel: "01 INTERFACE DESIGN",
+      tinyLabel: "INTERFACE DESIGN",
+      heading: "Interfaces that feel obvious, not overdesigned.",
+      body: "I design flows, layouts, and interactions that make it clear what to do next.\n\nStrong hierarchy, calm typography, and motion that supports understanding instead of distracting from it.",
+      inPractice: ["Clear user flows", "Scannable layouts", "Accessible defaults"],
+      tools: "TOOLS · Figma · Pen & paper · Prototyping"
     },
     {
-      title: "Modern Technologies",
-      body: "Building with cutting-edge web technologies and frameworks for optimal performance.",
+      rayLabel: "02 FRONTEND DEVELOPMENT",
+      tinyLabel: "FRONTEND DEVELOPMENT",
+      heading: "Production-ready frontends, not just Dribbble shots.",
+      body: "I build React interfaces with reusable components, clean structure, and animation used on purpose.\n\nThe goal is code that's maintainable, easy to iterate on, and faithful to the design without being fragile.",
+      inPractice: ["Component systems", "Design–dev handoff", "Thoughtful animation"],
+      tools: "STACK · React · Tailwind · Framer Motion · Three.js"
     },
     {
-      title: "Creative Solutions",
-      body: "Developing innovative solutions that balance aesthetics with functionality.",
+      rayLabel: "03 PERFORMANCE",
+      tinyLabel: "PERFORMANCE & TECHNICAL SEO",
+      heading: "Speed and structure that search engines actually like.",
+      body: "I care about how a site feels and how it performs under the hood: Core Web Vitals, semantic markup, and clean metadata.\n\nI've built and use my own technical SEO scanner to surface issues and turn them into fixes.",
+      inPractice: ["Core Web Vitals", "Semantic HTML", "Clean metadata & sitemaps"],
+      tools: "TOOLS · Lighthouse · WebPageTest · AI Visibility"
     },
   ];
 
@@ -837,18 +849,18 @@ function Home() {
       <section className="h-screen bg-[#ece6da] flex items-center snap-center">
         <div className="max-w-6xl mx-auto px-8 flex items-center gap-12 w-full">
           {/* Right: animated eye */}
-          <div className="w-[400px] flex justify-center ml-auto">
+          <div className="w-[400px] flex justify-center -ml-32">
             <Eye progress={eyeProgress} />
           </div>
 
           {/* Left: fanned bullet titles emerging from the moon */}
           <div className="flex-1 max-w-lg">
-            <div className="relative h-[500px] flex items-center -ml-24">
+            <div className="relative h-[500px] flex items-center -ml-48">
               {bullets.map((bullet, index) => {
                 // Much bigger vertical spacing + more fan, pushed further left
-                const offsetsY = [-100, 0, 100];
-                const rotations = [-15, 0, 15];
-                const translateX = [-20, 0, -20]; // moved left
+                const offsetsY = [-60, 0, 60];
+                const rotations = [-9, 0, 9];
+                const translateX = [25, 35, 25]; // moved left
 
                 const isActive = index === activeIndex;
 
@@ -883,25 +895,14 @@ function Home() {
                     }}
                   >
                     <span
-                      className="block text-sm uppercase tracking-[0.25em] mb-2"
+                      className="block text-xl uppercase tracking-[0.25em] mb-2"
                       style={{ fontFamily: "Share Tech Mono, monospace" }}
                     >
                       <TypingText
-                        text={`0${index + 1}`}
+                        text={bullet.rayLabel}
                         speed={100}
                         trigger={typingStates[index]}
                         cursor={false}
-                      />
-                    </span>
-                    <span
-                      className="block text-lg font-medium tracking-wide"
-                      style={{ fontFamily: "Notable, serif" }}
-                    >
-                      <TypingText
-                        text={bullet.title}
-                        speed={80}
-                        trigger={typingStates[index]}
-                        cursor={true}
                       />
                     </span>
                   </button>
@@ -911,37 +912,69 @@ function Home() {
           </div>
 
           {/* Center-Right: flip-board detail panel */}
-          <div className="flex-1 flex items-center justify-center ml-12 -mr-12">
+          <div className="flex-1 flex items-center justify-center ml-8 -mr-16">
             <div className=" perspective-1000">
               <div
-                className="bg-black text-white rounded-3xl px-10 py-10 shadow-2xl h-96"
+                className="bg-black text-white rounded-3xl px-10 py-10 shadow-2xl w-[480px] h-[550px] flex flex-col"
               >
+                {/* Tiny label at top */}
                 <p
-                  className="text-xs uppercase tracking-[0.3em] mb-3 opacity-70"
+                  className="text-xs uppercase tracking-[0.3em] mb-6 opacity-70"
                   style={{ fontFamily: "Share Tech Mono, monospace" }}
                 >
-                  {bullets[activeIndex].title}
+                  {bullets[activeIndex].tinyLabel}
                 </p>
 
+                {/* Big heading */}
                 <h3
-                  className="text-lg font-semibold mb-4"
+                  className="text-2xl font-semibold mb-6 leading-tight"
                   style={{ fontFamily: "Notable, serif" }}
                 >
                   <FlipText
-                    text={bullets[activeIndex].title}
+                    text={bullets[activeIndex].heading}
                     speed={30}
-                    cycles={10}
-                    triggerKey={`title-${activeIndex}`}
+                    triggerKey={`heading-${activeIndex}`}
                   />
                 </h3>
 
-                <p className="text-lg leading-relaxed text-gray-200">
-                  <FlipText
-                    text={bullets[activeIndex].body}
-                    speed={20}
-                    cycles={14}
-                    triggerKey={`body-${activeIndex}`}
-                  />
+                {/* Body text */}
+                <div className="flex-1 mb-8">
+                  <p className="text-base leading-relaxed text-gray-200 whitespace-pre-line">
+                    <FlipText
+                      text={bullets[activeIndex].body}
+                      speed={20}
+                      triggerKey={`body-${activeIndex}`}
+                    />
+                  </p>
+                </div>
+
+                {/* In practice row */}
+                <div className="mb-6">
+                  <p
+                    className="text-xs uppercase tracking-[0.2em] mb-3 opacity-70"
+                    style={{ fontFamily: "Share Tech Mono, monospace" }}
+                  >
+                    IN PRACTICE
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {bullets[activeIndex].inPractice.map((item, idx) => (
+                      <span
+                        key={idx}
+                        className="text-xs bg-gray-800 px-3 py-1 rounded-full"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Tools line at bottom */}
+                <p
+                  className="text-xs uppercase tracking-wide opacity-60 mt-auto"
+                  style={{ fontFamily: "Share Tech Mono, monospace" }}
+                >
+                  {bullets[activeIndex].tools}
                 </p>
               </div>
             </div>
