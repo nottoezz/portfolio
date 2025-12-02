@@ -4,132 +4,63 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+const ROSE_KEYFRAMES = [
+  {
+    // Section 0 – hero (start)
+    position: { x: 2, y: -3, z: 0 },
+    rotation: { x: 0, y: Math.PI / 6, z: 0 },
+    scale: 2,
+  },
+  {
+    // Section 1 – eye / bullets
+    position: { x: -3.15, y: -1, z: 0 },
+    rotation: { x: 0.2, y: Math.PI * 0.1, z: 0 },
+    scale: 0.7,
+  },
+  {
+    // Section 2 – final tiny focus
+    position: { x: 0, y: -4, z: -3 },
+    rotation: { x: 0, y: Math.PI / 2, z: 0 },
+    scale: 2,
+  },
+];
+
+// Given scrollY, return interpolated pose between keyframes
+function getRosePoseFromScroll(scrollY) {
+  const h = window.innerHeight || 1;
+
+  // 0–1 => between keyframe 0 & 1
+  // 1–2 => between keyframe 1 & 2
+  const sectionFloat = scrollY / h;
+  const idx = Math.floor(sectionFloat);
+  const tRaw = sectionFloat - idx;
+  const t = Math.min(Math.max(tRaw, 0), 1);
+
+  const last = ROSE_KEYFRAMES[ROSE_KEYFRAMES.length - 1];
+  const from = ROSE_KEYFRAMES[idx] || last;
+  const to = ROSE_KEYFRAMES[idx + 1] || last;
+
+  const lerp = (a, b) => a + (b - a) * t;
+
+  return {
+    position: {
+      x: lerp(from.position.x, to.position.x),
+      y: lerp(from.position.y, to.position.y),
+      z: lerp(from.position.z, to.position.z),
+    },
+    rotation: {
+      x: lerp(from.rotation.x, to.rotation.x),
+      y: lerp(from.rotation.y, to.rotation.y),
+      z: lerp(from.rotation.z, to.rotation.z),
+    },
+    scale: lerp(from.scale, to.scale),
+  };
+}
+
 function Eye() {
-  const eyeRef = React.useRef(null);
-  const [ringOffset, setRingOffset] = React.useState({ x: 0, y: 0 });
-  const [pupilOffset, setPupilOffset] = React.useState({ x: 0, y: 0 });
-  const ringTargetRef = React.useRef({ x: 0, y: 0 });
-  const pupilTargetRef = React.useRef({ x: 0, y: 0 });
-
-  React.useEffect(() => {
-    const handleMouseMove = (event) => {
-      const eye = eyeRef.current;
-      if (!eye) return;
-
-      const rect = eye.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-
-      const dx = event.clientX - centerX;
-      const dy = event.clientY - centerY;
-
-      const distance = Math.sqrt(dx * dx + dy * dy);
-
-      // Ring movement range (less than pupil)
-      const ringMaxDist = rect.width * 0.15;
-      let ringNx = dx;
-      let ringNy = dy;
-      if (distance > ringMaxDist && distance !== 0) {
-        const scale = ringMaxDist / distance;
-        ringNx = dx * scale;
-        ringNy = dy * scale;
-      }
-
-      // Pupil movement range (full range)
-      const pupilMaxDist = rect.width * 0.25;
-      let pupilNx = dx;
-      let pupilNy = dy;
-      if (distance > pupilMaxDist && distance !== 0) {
-        const scale = pupilMaxDist / distance;
-        pupilNx = dx * scale;
-        pupilNy = dy * scale;
-      }
-
-      // Set target positions
-      ringTargetRef.current = { x: ringNx, y: ringNy };
-      pupilTargetRef.current = { x: pupilNx, y: pupilNy };
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
-  // Smooth interpolation for rings (more weighted)
-  React.useEffect(() => {
-    const animateRings = () => {
-      setRingOffset((current) => {
-        const target = ringTargetRef.current;
-        const dx = target.x - current.x;
-        const dy = target.y - current.y;
-        const ease = 0.035; // much slower for heavy movement
-
-        return {
-          x: current.x + dx * ease,
-          y: current.y + dy * ease,
-        };
-      });
-
-      requestAnimationFrame(animateRings);
-    };
-
-    const animationId = requestAnimationFrame(animateRings);
-    return () => cancelAnimationFrame(animationId);
-  }, []);
-
-  // Smooth interpolation for pupil (more weighted but still responsive)
-  React.useEffect(() => {
-    const animatePupil = () => {
-      setPupilOffset((current) => {
-        const target = pupilTargetRef.current;
-        const dx = target.x - current.x;
-        const dy = target.y - current.y;
-        const ease = 0.06; // slower for more weight
-
-        return {
-          x: current.x + dx * ease,
-          y: current.y + dy * ease,
-        };
-      });
-
-      requestAnimationFrame(animatePupil);
-    };
-
-    const animationId = requestAnimationFrame(animatePupil);
-    return () => cancelAnimationFrame(animationId);
-  }, []);
-
   return (
-    <div
-      ref={eyeRef}
-      className="relative w-96 h-96 -ml-30"
-    >
-      {/* Outer ring - minimal movement */}
-      <div
-        className="absolute inset-0 rounded-full border-[3px] border-black bg-black"
-        style={{
-          transform: `translate(${ringOffset.x * 0.1}px, ${ringOffset.y * 0.1}px)`,
-        }}
-      />
-
-      {/* Inner ring - follows rings */}
-      <div
-        className="absolute inset-[28%] rounded-full border-[3px] border-black bg-white"
-        style={{
-          transform: `translate(${ringOffset.x}px, ${ringOffset.y}px)`,
-        }}
-      />
-
-      {/* Pupil (blue dot + white highlight) - independent movement */}
-      <div
-        className="absolute w-6 h-6 rounded-full bg-sky-400 shadow-md"
-        style={{
-          left: "50%",
-          top: "50%",
-          transform: `translate(calc(-50% + ${pupilOffset.x}px), calc(-50% + ${pupilOffset.y}px))`,
-        }}
-      >
-        <div className="absolute inset-[25%] rounded-full bg-white opacity-90" />
-      </div>
+    <div className="w-96 h-96 -ml-30">
+      <div className="w-full h-full rounded-full border-4 border-black bg-white" />
     </div>
   );
 }
@@ -258,6 +189,8 @@ function Home() {
 
   // Scroll detection
   useEffect(() => {
+    if (isLoading) return; // wait until main is on screen
+
     const el = scrollContainerRef.current;
     if (!el) return;
 
@@ -269,7 +202,7 @@ function Home() {
 
     el.addEventListener("scroll", handleScroll);
     return () => el.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isLoading]);
 
   // Three.js setup - only run after loading is complete
   useEffect(() => {
@@ -328,9 +261,18 @@ function Home() {
           }
         });
 
-        roseModel.scale.set(2, 2, 2);
-        roseModel.position.set(2, -3, 0);
-        roseModel.rotation.y = Math.PI / 6;
+        const start = ROSE_KEYFRAMES[0];
+        roseModel.scale.set(start.scale, start.scale, start.scale);
+        roseModel.position.set(
+          start.position.x,
+          start.position.y,
+          start.position.z
+        );
+        roseModel.rotation.set(
+          start.rotation.x,
+          start.rotation.y,
+          start.rotation.z
+        );
         scene.add(roseModel);
       },
       undefined,
@@ -345,59 +287,33 @@ function Home() {
       if (roseModel) {
         const scrollY = scrollRef.current;
 
-        // First phase: scroll animation (0-100vh)
-        const firstPhaseProgress = Math.min(scrollY / window.innerHeight, 1);
-        const targetX = 2 - firstPhaseProgress * 5;
-        const targetRotationY = Math.PI / 6 + firstPhaseProgress * Math.PI * 1.2;
-        const targetRotationX = firstPhaseProgress * 0.6;
+        // Get the ideal pose based on scroll
+        const { position, rotation, scale } = getRosePoseFromScroll(scrollY);
 
-        // Second phase: shrinking and centering (150vh+ during second section)
-        const secondPhaseStart = window.innerHeight * 1.5;
-        const secondPhaseProgress = Math.max(0, Math.min((scrollY - secondPhaseStart) / (window.innerHeight * 1.2), 1));
+        // Smoothly interpolate towards that pose
+        const posEase = 0.08;
+        const rotEase = 0.08;
+        const scaleEase = 0.05;
 
-        // Target center position and extremely small scale
-        const centerX = 4;
-        const centerY = 0.5; // Slightly higher for perfect centering
-        const centerZ = -3; // Bring forward
-        const smallScale = 0.15; // Extremely small scale
+        roseModel.position.x += (position.x - roseModel.position.x) * posEase;
+        roseModel.position.y += (position.y - roseModel.position.y) * posEase;
+        roseModel.position.z += (position.z - roseModel.position.z) * posEase;
 
-        // Interpolate between first phase end and second phase target
-        const finalX = targetX + (centerX - targetX) * secondPhaseProgress;
-        const finalY = -3 + (centerY - (-3)) * secondPhaseProgress;
-        const finalZ = 0 + (centerZ - 0) * secondPhaseProgress;
-        const finalScale = 2 + (smallScale - 2) * secondPhaseProgress;
+        roseModel.rotation.x += (rotation.x - roseModel.rotation.x) * rotEase;
+        roseModel.rotation.y += (rotation.y - roseModel.rotation.y) * rotEase;
+        roseModel.rotation.z += (rotation.z - roseModel.rotation.z) * rotEase;
 
-        // Spin during transition then settle to hero position
-        const spinRotationY = targetRotationY + secondPhaseProgress * Math.PI * 2; // 1 full rotation
-        const spinRotationX = targetRotationX + secondPhaseProgress * Math.PI * 0.3; // Reduced X spin
-        const heroRotationY = Math.PI / 6; // Final Y rotation (hero position)
-        const heroRotationX = 0; // Final X rotation (hero position)
+        roseModel.scale.x += (scale - roseModel.scale.x) * scaleEase;
+        roseModel.scale.y += (scale - roseModel.scale.y) * scaleEase;
+        roseModel.scale.z += (scale - roseModel.scale.z) * scaleEase;
 
-        // Interpolate from spin to final hero position in last 50% of transition
-        const settleProgress = Math.max(0, (secondPhaseProgress - 0.5) / 0.5);
-        const centerRotationY = spinRotationY + (heroRotationY - spinRotationY) * settleProgress;
-        const centerRotationX = spinRotationX + (heroRotationX - spinRotationX) * settleProgress;
+        // Optional: mouse influence layered on top
+        const maxMouseInfluence = 0.03;
+        const mouseFalloff = Math.min(scrollY / (window.innerHeight * 2.7), 1);
+        const mouseInfluence = maxMouseInfluence * (1 - mouseFalloff);
 
-        roseModel.position.x += (finalX - roseModel.position.x) * 0.08;
-        roseModel.position.y += (finalY - roseModel.position.y) * 0.08;
-        roseModel.position.z += (finalZ - roseModel.position.z) * 0.08;
-
-        roseModel.rotation.y += (centerRotationY - roseModel.rotation.y) * 0.08;
-        roseModel.rotation.x += (centerRotationX - roseModel.rotation.x) * 0.08;
-
-        roseModel.scale.x += (finalScale - roseModel.scale.x) * 0.05;
-        roseModel.scale.y += (finalScale - roseModel.scale.y) * 0.05;
-        roseModel.scale.z += (finalScale - roseModel.scale.z) * 0.05;
-
-        // Reduce mouse influence during second phase
-        const mouseInfluence = 0.03 * (1 - Math.min(scrollY / (window.innerHeight * 2.7), 1));
-        const mouseTargetY =
-          roseModel.rotation.y + mouseRef.current.x * mouseInfluence;
-        const mouseTargetX =
-          roseModel.rotation.x + mouseRef.current.y * mouseInfluence * 0.5;
-
-        roseModel.rotation.y += (mouseTargetY - roseModel.rotation.y) * 0.02;
-        roseModel.rotation.x += (mouseTargetX - roseModel.rotation.x) * 0.02;
+        roseModel.rotation.y += mouseRef.current.x * mouseInfluence;
+        roseModel.rotation.x += mouseRef.current.y * mouseInfluence * 0.5;
       }
 
       renderer.render(scene, camera);
