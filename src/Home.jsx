@@ -4,6 +4,136 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+function Eye() {
+  const eyeRef = React.useRef(null);
+  const [ringOffset, setRingOffset] = React.useState({ x: 0, y: 0 });
+  const [pupilOffset, setPupilOffset] = React.useState({ x: 0, y: 0 });
+  const ringTargetRef = React.useRef({ x: 0, y: 0 });
+  const pupilTargetRef = React.useRef({ x: 0, y: 0 });
+
+  React.useEffect(() => {
+    const handleMouseMove = (event) => {
+      const eye = eyeRef.current;
+      if (!eye) return;
+
+      const rect = eye.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const dx = event.clientX - centerX;
+      const dy = event.clientY - centerY;
+
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      // Ring movement range (less than pupil)
+      const ringMaxDist = rect.width * 0.15;
+      let ringNx = dx;
+      let ringNy = dy;
+      if (distance > ringMaxDist && distance !== 0) {
+        const scale = ringMaxDist / distance;
+        ringNx = dx * scale;
+        ringNy = dy * scale;
+      }
+
+      // Pupil movement range (full range)
+      const pupilMaxDist = rect.width * 0.25;
+      let pupilNx = dx;
+      let pupilNy = dy;
+      if (distance > pupilMaxDist && distance !== 0) {
+        const scale = pupilMaxDist / distance;
+        pupilNx = dx * scale;
+        pupilNy = dy * scale;
+      }
+
+      // Set target positions
+      ringTargetRef.current = { x: ringNx, y: ringNy };
+      pupilTargetRef.current = { x: pupilNx, y: pupilNy };
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  // Smooth interpolation for rings (more weighted)
+  React.useEffect(() => {
+    const animateRings = () => {
+      setRingOffset((current) => {
+        const target = ringTargetRef.current;
+        const dx = target.x - current.x;
+        const dy = target.y - current.y;
+        const ease = 0.035; // much slower for heavy movement
+
+        return {
+          x: current.x + dx * ease,
+          y: current.y + dy * ease,
+        };
+      });
+
+      requestAnimationFrame(animateRings);
+    };
+
+    const animationId = requestAnimationFrame(animateRings);
+    return () => cancelAnimationFrame(animationId);
+  }, []);
+
+  // Smooth interpolation for pupil (more weighted but still responsive)
+  React.useEffect(() => {
+    const animatePupil = () => {
+      setPupilOffset((current) => {
+        const target = pupilTargetRef.current;
+        const dx = target.x - current.x;
+        const dy = target.y - current.y;
+        const ease = 0.06; // slower for more weight
+
+        return {
+          x: current.x + dx * ease,
+          y: current.y + dy * ease,
+        };
+      });
+
+      requestAnimationFrame(animatePupil);
+    };
+
+    const animationId = requestAnimationFrame(animatePupil);
+    return () => cancelAnimationFrame(animationId);
+  }, []);
+
+  return (
+    <div
+      ref={eyeRef}
+      className="relative w-96 h-96 -ml-30"
+    >
+      {/* Outer ring - minimal movement */}
+      <div
+        className="absolute inset-0 rounded-full border-[3px] border-black bg-black"
+        style={{
+          transform: `translate(${ringOffset.x * 0.1}px, ${ringOffset.y * 0.1}px)`,
+        }}
+      />
+
+      {/* Inner ring - follows rings */}
+      <div
+        className="absolute inset-[28%] rounded-full border-[3px] border-black bg-white"
+        style={{
+          transform: `translate(${ringOffset.x}px, ${ringOffset.y}px)`,
+        }}
+      />
+
+      {/* Pupil (blue dot + white highlight) - independent movement */}
+      <div
+        className="absolute w-6 h-6 rounded-full bg-sky-400 shadow-md"
+        style={{
+          left: "50%",
+          top: "50%",
+          transform: `translate(calc(-50% + ${pupilOffset.x}px), calc(-50% + ${pupilOffset.y}px))`,
+        }}
+      >
+        <div className="absolute inset-[25%] rounded-full bg-white opacity-90" />
+      </div>
+    </div>
+  );
+}
+
 function FlipText({ text, speed = 30, triggerKey }) {
   const [display, setDisplay] = React.useState(() =>
     // initial: just show the text or spaces, up to you
@@ -334,12 +464,9 @@ function Home() {
       {/* Scroll Section with crescent + fanned bullets + flip board */}
       <section className="min-h-screen bg-gray-50 flex items-center">
         <div className="max-w-6xl mx-auto px-8 flex items-center gap-12 w-full">
-          {/* Right: crescent moon – much bigger, slimmer, no inner circle */}
+          {/* Right: animated eye */}
           <div className="w-[400px] flex justify-center ml-auto">
-            <div className="relative w-96 h-96 -ml-30">
-              {/* Thin outer ring */}
-              <div className="absolute inset-0 rounded-full border-2 border-black/40" />
-            </div>
+            <Eye />
           </div>
 
           {/* Left: fanned bullet titles emerging from the moon */}
