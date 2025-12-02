@@ -781,11 +781,36 @@ function Home() {
               Liam Birch
             </h1>
             <p
-              className="text-xl font-normal text-black opacity-80 my-2 mb-10"
+              className="text-xl font-normal text-black opacity-80 my-2 mb-4 max-w-170"
               style={{ fontFamily: "Notable, serif" }}
             >
-              UI/UX Designer
+              Designing interfaces. Building fast, technically-sound systems behind them.
             </p>
+            <p
+              className="text-sm font-mono text-black opacity-60 tracking-wide"
+              style={{ fontFamily: "Share Tech Mono, monospace" }}
+            >
+              React · Three.js · Tailwind · Performance · Technical SEO
+            </p>
+
+            <div className="absolute bottom-0 left-0 flex gap-4 top-100">
+              <button
+                className="w-32 h-32 bg-black text-white font-mono text-sm tracking-wide hover:bg-gray-800 transition-colors duration-200 cursor-pointer flex items-center justify-center"
+                style={{ fontFamily: "Share Tech Mono, monospace" }}
+              >
+                <span className="text-center leading-tight">
+                  See My<br />Work
+                </span>
+              </button>
+              <button
+                className="w-32 h-32 border-2 border-black text-black font-mono text-sm tracking-wide hover:bg-black/20 hover:text-black transition-all duration-200 cursor-pointer flex items-center justify-center"
+                style={{ fontFamily: "Share Tech Mono, monospace" }}
+              >
+                <span className="text-center leading-tight">
+                  Book A<br />Call
+                </span>
+              </button>
+            </div>
 
             <div
               className="fixed left-[47vw] top-[90%] -translate-y-1/2 z-[200] transition-opacity duration-300"
