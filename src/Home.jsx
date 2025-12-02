@@ -212,7 +212,7 @@ function Home() {
 
   // Loading component
   const LoadingScreen = () => (
-    <div className="fixed inset-0 bg-gray-100 flex items-center justify-center z-[1000]">
+    <div className="fixed inset-0 bg-[#ece6da] flex items-center justify-center z-[1000]">
       <div className="relative">
         <div className="w-32 h-32 relative">
           <div className="absolute inset-0 border-4 border-black/20 rounded-full animate-spin" />
@@ -501,7 +501,7 @@ function Home() {
     <main
       ref={scrollContainerRef}
       className="
-        bg-gray-100 text-gray-900
+        bg-[#ece6da] text-gray-900
         overflow-x-hidden
         h-screen
         overflow-y-scroll
@@ -563,7 +563,7 @@ function Home() {
       </section>
 
       {/* Scroll Section with crescent + fanned bullets + flip board */}
-      <section className="h-screen bg-gray-50 flex items-center snap-center">
+      <section className="h-screen bg-[#ece6da] flex items-center snap-center">
         <div className="max-w-6xl mx-auto px-8 flex items-center gap-12 w-full">
           {/* Right: animated eye */}
           <div className="w-[400px] flex justify-center ml-auto">
@@ -679,7 +679,7 @@ function Home() {
       </section>
 
       {/* Rose Focus Section - rose shrinks and centers */}
-      <section className="h-screen bg-gray-100 flex items-center justify-center snap-center">
+      <section className="h-screen bg-[#ece6da] flex items-center justify-center snap-center">
       </section>
     </main>
   );
