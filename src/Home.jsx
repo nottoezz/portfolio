@@ -57,11 +57,70 @@ function getRosePoseFromScroll(scrollY) {
   };
 }
 
-function Eye() {
+function Eye({ progress = 0 }) {
+  const circumference = 2 * Math.PI * 144; // radius = (384px - 16px border)/2 = 184px, but using 144 for visual appeal
+  const dashOffset = circumference * (1 - progress);
+
   return (
-    <div className="w-96 h-96 -ml-30">
-      <div className="w-full h-full rounded-full border-4 border-black bg-white" />
+    <div className="w-96 h-96 -ml-30 relative">
+      <svg
+        width="384"
+        height="384"
+        viewBox="0 0 384 384"
+        className="absolute inset-0"
+      >
+        <circle
+          cx="192"
+          cy="192"
+          r="144"
+          fill="none"
+          stroke="black"
+          strokeWidth="4"
+          strokeDasharray={circumference}
+          strokeDashoffset={dashOffset}
+          strokeLinecap="round"
+          className="transition-all duration-1000 ease-out"
+        />
+      </svg>
     </div>
+  );
+}
+
+function TypingText({ text, speed = 50, trigger = false, cursor = true }) {
+  const [displayText, setDisplayText] = React.useState('');
+  const [showCursor, setShowCursor] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!trigger) {
+      setDisplayText('');
+      setShowCursor(false);
+      return;
+    }
+
+    setShowCursor(true);
+    let currentIndex = 0;
+
+    const typeInterval = setInterval(() => {
+      if (currentIndex < text.length) {
+        setDisplayText(text.slice(0, currentIndex + 1));
+        currentIndex++;
+      } else {
+        clearInterval(typeInterval);
+        // Keep cursor for a moment after typing completes
+        setTimeout(() => setShowCursor(false), 500);
+      }
+    }, speed);
+
+    return () => clearInterval(typeInterval);
+  }, [text, speed, trigger]);
+
+  return (
+    <span className="inline-block">
+      {displayText}
+      {showCursor && cursor && (
+        <span className="animate-pulse text-black">|</span>
+      )}
+    </span>
   );
 }
 
@@ -131,6 +190,10 @@ function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [scrollY, setScrollY] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [eyeProgress, setEyeProgress] = useState(0);
+  const [roseSettled, setRoseSettled] = useState(false);
+  const [bulletsVisible, setBulletsVisible] = useState(false);
+  const [typingStates, setTypingStates] = useState([false, false, false]);
 
   const bullets = [
     {
@@ -203,6 +266,78 @@ function Home() {
     el.addEventListener("scroll", handleScroll);
     return () => el.removeEventListener("scroll", handleScroll);
   }, [isLoading]);
+
+  // Eye animation trigger when rose settles in eye section
+  useEffect(() => {
+    const h = window.innerHeight || 1;
+    const sectionFloat = scrollY / h;
+
+    // Check if we're in the eye section (around section 1)
+    const inEyeSection = sectionFloat > 0.7 && sectionFloat < 1.3;
+
+    if (inEyeSection) {
+      // Calculate how close the rose is to its target position
+      const eyeKeyframe = ROSE_KEYFRAMES[1];
+      const currentPose = getRosePoseFromScroll(scrollY);
+
+      // Calculate distance from current pose to target pose
+      const posDiff = Math.sqrt(
+        Math.pow(currentPose.position.x - eyeKeyframe.position.x, 2) +
+        Math.pow(currentPose.position.y - eyeKeyframe.position.y, 2) +
+        Math.pow(currentPose.position.z - eyeKeyframe.position.z, 2)
+      );
+
+      const rotDiff = Math.sqrt(
+        Math.pow(currentPose.rotation.x - eyeKeyframe.rotation.x, 2) +
+        Math.pow(currentPose.rotation.y - eyeKeyframe.rotation.y, 2) +
+        Math.pow(currentPose.rotation.z - eyeKeyframe.rotation.z, 2)
+      );
+
+      const scaleDiff = Math.abs(currentPose.scale - eyeKeyframe.scale);
+
+      // If rose is close to settled (within thresholds), start eye animation
+      const settledThreshold = 0.1; // Adjust this value to control when animation starts
+      const isSettled = posDiff < settledThreshold && rotDiff < settledThreshold && scaleDiff < settledThreshold;
+
+      if (isSettled && !roseSettled) {
+        setRoseSettled(true);
+        // Add delay before eye animation starts
+        setTimeout(() => {
+          setEyeProgress(1);
+        }, 800); // 800ms delay
+      }
+    } else {
+      // Reset when not in eye section
+      setEyeProgress(0);
+      setRoseSettled(false);
+      setBulletsVisible(false);
+      setTypingStates([false, false, false]);
+    }
+  }, [scrollY, roseSettled]);
+
+  // Trigger bullet typing animations when entering eye section
+  useEffect(() => {
+    const h = window.innerHeight || 1;
+    const sectionFloat = scrollY / h;
+
+    const inEyeSection = sectionFloat > 0.7 && sectionFloat < 1.3;
+    if (inEyeSection && !bulletsVisible) {
+      setBulletsVisible(true);
+
+      // Trigger typing animations in sequence
+      setTimeout(() => {
+        setTypingStates(prev => [true, false, false]);
+      }, 300);
+
+      setTimeout(() => {
+        setTypingStates(prev => [true, true, false]);
+      }, 800);
+
+      setTimeout(() => {
+        setTypingStates(prev => [true, true, true]);
+      }, 1300);
+    }
+  }, [scrollY, bulletsVisible]);
 
   // Three.js setup - only run after loading is complete
   useEffect(() => {
@@ -432,7 +567,7 @@ function Home() {
         <div className="max-w-6xl mx-auto px-8 flex items-center gap-12 w-full">
           {/* Right: animated eye */}
           <div className="w-[400px] flex justify-center ml-auto">
-            <Eye />
+            <Eye progress={eyeProgress} />
           </div>
 
           {/* Left: fanned bullet titles emerging from the moon */}
@@ -455,12 +590,17 @@ function Home() {
                     className={`
                       absolute left-0 origin-left
                       text-left
-                      transition-all duration-300
-                      hover:translate-x-1
+                      transition-all duration-500 ease-out
+                      hover:translate-x-2 hover:scale-105
+                      ${
+                        bulletsVisible
+                          ? "opacity-100"
+                          : "opacity-0"
+                      }
                       ${
                         isActive
-                          ? "opacity-100"
-                          : "opacity-70 hover:opacity-100"
+                          ? "scale-105"
+                          : "hover:opacity-100"
                       }
                     `}
                     style={{
@@ -475,13 +615,23 @@ function Home() {
                       className="block text-sm uppercase tracking-[0.25em] mb-2"
                       style={{ fontFamily: "Share Tech Mono, monospace" }}
                     >
-                      {`0${index + 1}`}
+                      <TypingText
+                        text={`0${index + 1}`}
+                        speed={100}
+                        trigger={typingStates[index]}
+                        cursor={false}
+                      />
                     </span>
                     <span
                       className="block text-lg font-medium tracking-wide"
                       style={{ fontFamily: "Notable, serif" }}
                     >
-                      {bullet.title}
+                      <TypingText
+                        text={bullet.title}
+                        speed={80}
+                        trigger={typingStates[index]}
+                        cursor={true}
+                      />
                     </span>
                   </button>
                 );
