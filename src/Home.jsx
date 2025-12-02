@@ -308,7 +308,7 @@ function Home() {
         roseModel.scale.z += (scale - roseModel.scale.z) * scaleEase;
 
         // Optional: mouse influence layered on top
-        const maxMouseInfluence = 0.03;
+        const maxMouseInfluence = 0.01;
         const mouseFalloff = Math.min(scrollY / (window.innerHeight * 2.7), 1);
         const mouseInfluence = maxMouseInfluence * (1 - mouseFalloff);
 
