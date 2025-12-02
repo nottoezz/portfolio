@@ -196,6 +196,7 @@ function Home() {
   const mountRef = useRef(null);
   const mouseRef = useRef({ x: 0, y: 0 });
   const scrollRef = useRef(0); // for Three.js loop
+  const scrollContainerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [scrollY, setScrollY] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -257,14 +258,17 @@ function Home() {
 
   // Scroll detection
   useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+
     const handleScroll = () => {
-      const y = window.scrollY;
+      const y = el.scrollTop;
       setScrollY(y);
       scrollRef.current = y;
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    el.addEventListener("scroll", handleScroll);
+    return () => el.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Three.js setup - only run after loading is complete
@@ -339,24 +343,61 @@ function Home() {
       requestAnimationFrame(animate);
 
       if (roseModel) {
-        const scrollProgress = Math.min(scrollRef.current / 400, 1);
+        const scrollY = scrollRef.current;
 
-        const targetX = 2 - scrollProgress * 5;
-        const targetRotationY = Math.PI / 6 + scrollProgress * Math.PI * 1.2;
-        const targetRotationX = scrollProgress * 0.6;
+        // First phase: scroll animation (0-100vh)
+        const firstPhaseProgress = Math.min(scrollY / window.innerHeight, 1);
+        const targetX = 2 - firstPhaseProgress * 5;
+        const targetRotationY = Math.PI / 6 + firstPhaseProgress * Math.PI * 1.2;
+        const targetRotationX = firstPhaseProgress * 0.6;
 
-        roseModel.position.x += (targetX - roseModel.position.x) * 0.08;
-        roseModel.rotation.y += (targetRotationY - roseModel.rotation.y) * 0.08;
-        roseModel.rotation.x += (targetRotationX - roseModel.rotation.x) * 0.08;
+        // Second phase: shrinking and centering (150vh+ during second section)
+        const secondPhaseStart = window.innerHeight * 1.5;
+        const secondPhaseProgress = Math.max(0, Math.min((scrollY - secondPhaseStart) / (window.innerHeight * 1.2), 1));
 
-        const mouseInfluence = 0.05 * (1 - scrollProgress);
+        // Target center position and extremely small scale
+        const centerX = 4;
+        const centerY = 0.5; // Slightly higher for perfect centering
+        const centerZ = -3; // Bring forward
+        const smallScale = 0.15; // Extremely small scale
+
+        // Interpolate between first phase end and second phase target
+        const finalX = targetX + (centerX - targetX) * secondPhaseProgress;
+        const finalY = -3 + (centerY - (-3)) * secondPhaseProgress;
+        const finalZ = 0 + (centerZ - 0) * secondPhaseProgress;
+        const finalScale = 2 + (smallScale - 2) * secondPhaseProgress;
+
+        // Spin during transition then settle to hero position
+        const spinRotationY = targetRotationY + secondPhaseProgress * Math.PI * 2; // 1 full rotation
+        const spinRotationX = targetRotationX + secondPhaseProgress * Math.PI * 0.3; // Reduced X spin
+        const heroRotationY = Math.PI / 6; // Final Y rotation (hero position)
+        const heroRotationX = 0; // Final X rotation (hero position)
+
+        // Interpolate from spin to final hero position in last 50% of transition
+        const settleProgress = Math.max(0, (secondPhaseProgress - 0.5) / 0.5);
+        const centerRotationY = spinRotationY + (heroRotationY - spinRotationY) * settleProgress;
+        const centerRotationX = spinRotationX + (heroRotationX - spinRotationX) * settleProgress;
+
+        roseModel.position.x += (finalX - roseModel.position.x) * 0.08;
+        roseModel.position.y += (finalY - roseModel.position.y) * 0.08;
+        roseModel.position.z += (finalZ - roseModel.position.z) * 0.08;
+
+        roseModel.rotation.y += (centerRotationY - roseModel.rotation.y) * 0.08;
+        roseModel.rotation.x += (centerRotationX - roseModel.rotation.x) * 0.08;
+
+        roseModel.scale.x += (finalScale - roseModel.scale.x) * 0.05;
+        roseModel.scale.y += (finalScale - roseModel.scale.y) * 0.05;
+        roseModel.scale.z += (finalScale - roseModel.scale.z) * 0.05;
+
+        // Reduce mouse influence during second phase
+        const mouseInfluence = 0.03 * (1 - Math.min(scrollY / (window.innerHeight * 2.7), 1));
         const mouseTargetY =
           roseModel.rotation.y + mouseRef.current.x * mouseInfluence;
         const mouseTargetX =
           roseModel.rotation.x + mouseRef.current.y * mouseInfluence * 0.5;
 
-        roseModel.rotation.y += (mouseTargetY - roseModel.rotation.y) * 0.03;
-        roseModel.rotation.x += (mouseTargetX - roseModel.rotation.x) * 0.03;
+        roseModel.rotation.y += (mouseTargetY - roseModel.rotation.y) * 0.02;
+        roseModel.rotation.x += (mouseTargetX - roseModel.rotation.x) * 0.02;
       }
 
       renderer.render(scene, camera);
@@ -406,7 +447,16 @@ function Home() {
   const textOpacity = Math.max(1 - scrollY / 300, 0);
 
   return (
-    <main className="bg-gray-100 text-gray-900 overflow-x-hidden">
+    <main
+      ref={scrollContainerRef}
+      className="
+        bg-gray-100 text-gray-900
+        overflow-x-hidden
+        h-screen
+        overflow-y-scroll
+        snap-y snap-mandatory
+      "
+    >
       {/* Film background - static overlay */}
       <div className="film-grain-static" />
 
@@ -418,7 +468,7 @@ function Home() {
       />
 
       {/* Hero Section */}
-      <section className="min-h-screen relative flex items-center">
+      <section className="h-screen relative flex items-center snap-center">
         <div
           className="fixed left-[20vw] top-[50%] -translate-y-1/2 z-[200] transition-all duration-300"
           style={{
@@ -462,7 +512,7 @@ function Home() {
       </section>
 
       {/* Scroll Section with crescent + fanned bullets + flip board */}
-      <section className="min-h-screen bg-gray-50 flex items-center">
+      <section className="h-screen bg-gray-50 flex items-center snap-center">
         <div className="max-w-6xl mx-auto px-8 flex items-center gap-12 w-full">
           {/* Right: animated eye */}
           <div className="w-[400px] flex justify-center ml-auto">
@@ -560,6 +610,10 @@ function Home() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Rose Focus Section - rose shrinks and centers */}
+      <section className="h-screen bg-gray-100 flex items-center justify-center snap-center">
       </section>
     </main>
   );
