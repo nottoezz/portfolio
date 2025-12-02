@@ -194,6 +194,7 @@ function Home() {
   const [roseSettled, setRoseSettled] = useState(false);
   const [bulletsVisible, setBulletsVisible] = useState(false);
   const [typingStates, setTypingStates] = useState([false, false, false]);
+  const [animationsPlayed, setAnimationsPlayed] = useState(false);
 
   const bullets = [
     {
@@ -301,43 +302,55 @@ function Home() {
 
       if (isSettled && !roseSettled) {
         setRoseSettled(true);
-        // Add delay before eye animation starts
-        setTimeout(() => {
+        if (!animationsPlayed) {
+          // Add delay before eye animation starts (first time only)
+          setTimeout(() => {
+            setEyeProgress(1);
+          }, 800); // 800ms delay
+        } else {
+          // Subsequent visits - show completed state immediately
           setEyeProgress(1);
-        }, 800); // 800ms delay
+        }
       }
     } else {
-      // Reset when not in eye section
+      // Reset eye progress when not in eye section
       setEyeProgress(0);
       setRoseSettled(false);
-      setBulletsVisible(false);
-      setTypingStates([false, false, false]);
+      // Keep bulletsVisible and typingStates for subsequent visits to show completed state
     }
   }, [scrollY, roseSettled]);
 
-  // Trigger bullet typing animations when entering eye section
+  // Trigger bullet typing animations when entering eye section (only once per load)
   useEffect(() => {
     const h = window.innerHeight || 1;
     const sectionFloat = scrollY / h;
 
     const inEyeSection = sectionFloat > 0.7 && sectionFloat < 1.3;
-    if (inEyeSection && !bulletsVisible) {
-      setBulletsVisible(true);
+    if (inEyeSection) {
+      if (!animationsPlayed) {
+        // First time entering - trigger animations
+        setBulletsVisible(true);
+        setAnimationsPlayed(true);
 
-      // Trigger typing animations in sequence
-      setTimeout(() => {
-        setTypingStates(prev => [true, false, false]);
-      }, 300);
+        // Trigger typing animations in sequence
+        setTimeout(() => {
+          setTypingStates(prev => [true, false, false]);
+        }, 300);
 
-      setTimeout(() => {
-        setTypingStates(prev => [true, true, false]);
-      }, 800);
+        setTimeout(() => {
+          setTypingStates(prev => [true, true, false]);
+        }, 800);
 
-      setTimeout(() => {
-        setTypingStates(prev => [true, true, true]);
-      }, 1300);
+        setTimeout(() => {
+          setTypingStates(prev => [true, true, true]);
+        }, 1300);
+      } else {
+        // Subsequent visits - show completed state immediately
+        setBulletsVisible(true);
+        setTypingStates([true, true, true]);
+      }
     }
-  }, [scrollY, bulletsVisible]);
+  }, [scrollY, bulletsVisible, animationsPlayed]);
 
   // Three.js setup - only run after loading is complete
   useEffect(() => {
