@@ -182,11 +182,124 @@ function FlipText({ text, speed = 30, triggerKey }) {
   return <span className="inline-block whitespace-pre-wrap">{display}</span>;
 }
 
+function CustomCursor({ active, variant = 'normal', color = 'black' }) {
+  const [cursorPos, setCursorPos] = React.useState({ x: 0, y: 0 });
+  const [targetPos, setTargetPos] = React.useState({ x: 0, y: 0 });
+  const animationRef = React.useRef();
+
+  // Easing factor - lower = more floaty/laggy
+  const easeFactor = variant === 'hover' ? 0.3 : 0.15; // Snappier on hover
+
+  React.useEffect(() => {
+    if (!active) return;
+
+    const handleMouseMove = (e) => {
+      setTargetPos({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    // Animation loop for smooth easing
+    const animate = () => {
+      setCursorPos(prev => ({
+        x: prev.x + (targetPos.x - prev.x) * easeFactor,
+        y: prev.y + (targetPos.y - prev.y) * easeFactor,
+      }));
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [active, targetPos, easeFactor]);
+
+  if (!active) return null;
+
+  // Size and opacity adjustments for hover variant
+  const outerSize = variant === 'hover' ? 32 : 28; // 26-30px range
+  const innerSize = variant === 'hover' ? 6 : 5;   // 4-6px range
+  const strokeOpacity = variant === 'hover' ? 0.6 : 1;
+
+  // Color scheme based on background
+  const isWhite = color === 'white';
+  const borderColor = isWhite ? 'border-white' : 'border-black';
+  const bgColor = isWhite ? 'bg-white' : 'bg-black';
+
+  return (
+    <div
+      className="fixed top-0 left-0 pointer-events-none z-[9999] mix-blend-normal"
+      style={{
+        transform: `translate(${cursorPos.x - outerSize/2}px, ${cursorPos.y - outerSize/2}px)`,
+        transition: 'none', // We'll handle animation manually
+      }}
+    >
+      {/* Outer circle */}
+      <div
+        className={`absolute rounded-full bg-transparent ${borderColor}`}
+        style={{
+          width: `${outerSize}px`,
+          height: `${outerSize}px`,
+          borderWidth: '1.5px',
+          opacity: strokeOpacity,
+          transform: variant === 'hover' ? 'scale(1.2)' : 'scale(1)',
+          transition: 'transform 0.2s ease-out, opacity 0.2s ease-out',
+        }}
+      />
+      {/* Inner dot */}
+      <div
+        className={`absolute rounded-full ${bgColor}`}
+        style={{
+          width: `${innerSize}px`,
+          height: `${innerSize}px`,
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
+      />
+    </div>
+  );
+}
+
+// Hook for intersection observer animations
+function useIntersectionObserver(ref, options = {}) {
+  const [isIntersecting, setIsIntersecting] = React.useState(false);
+
+  React.useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsIntersecting(entry.isIntersecting);
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px',
+        ...options
+      }
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.unobserve(element);
+    };
+  }, [ref, options]);
+
+  return isIntersecting;
+}
+
 function Home() {
   const mountRef = useRef(null);
   const mouseRef = useRef({ x: 0, y: 0 });
   const scrollRef = useRef(0); // for Three.js loop
   const scrollContainerRef = useRef(null);
+  const heroRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [scrollY, setScrollY] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -195,6 +308,65 @@ function Home() {
   const [bulletsVisible, setBulletsVisible] = useState(false);
   const [typingStates, setTypingStates] = useState([false, false, false]);
   const [animationsPlayed, setAnimationsPlayed] = useState(false);
+
+  // Custom cursor state
+  const [cursorActive, setCursorActive] = useState(false);
+  const [cursorVariant, setCursorVariant] = useState('normal');
+  const [cursorColor, setCursorColor] = useState('black');
+
+  // Refs for intersection observer animations
+  const panel1Ref = React.useRef(null);
+
+  // Intersection states for animations
+  const panel1Visible = useIntersectionObserver(panel1Ref);
+
+  // Helper function to determine cursor color based on background
+  const getCursorColor = (element) => {
+    if (!element) return 'black';
+
+    // Check for known dark elements
+    if (element.classList.contains('bg-black') ||
+        element.closest('.bg-black')) {
+      return 'white';
+    }
+
+    // Check computed background color
+    const computedStyle = window.getComputedStyle(element);
+    const bgColor = computedStyle.backgroundColor;
+
+    // If it's transparent, check parent elements
+    if (bgColor === 'rgba(0, 0, 0, 0)' || bgColor === 'transparent') {
+      let parent = element.parentElement;
+      while (parent) {
+        const parentStyle = window.getComputedStyle(parent);
+        const parentBg = parentStyle.backgroundColor;
+        if (parentBg !== 'rgba(0, 0, 0, 0)' && parentBg !== 'transparent') {
+          // Parse RGB values to determine if dark or light
+          const rgb = parentBg.match(/\d+/g);
+          if (rgb && rgb.length >= 3) {
+            const [r, g, b] = rgb.map(Number);
+            // Calculate brightness (YIQ formula)
+            const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+            return brightness < 128 ? 'white' : 'black';
+          }
+          break;
+        }
+        parent = parent.parentElement;
+      }
+      return 'black'; // Default fallback
+    }
+
+    // Parse RGB values from background-color
+    const rgb = bgColor.match(/\d+/g);
+    if (rgb && rgb.length >= 3) {
+      const [r, g, b] = rgb.map(Number);
+      // Calculate brightness (YIQ formula)
+      const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+      return brightness < 128 ? 'white' : 'black';
+    }
+
+    return 'black'; // Default fallback
+  };
 
   const bullets = [
     {
@@ -351,6 +523,60 @@ function Home() {
       }
     }
   }, [scrollY, bulletsVisible, animationsPlayed]);
+
+  // Custom cursor event handlers - active on entire page
+  React.useEffect(() => {
+    if (isLoading) return;
+
+    const handleMouseEnter = () => {
+      setCursorActive(true);
+    };
+
+    const handleMouseLeave = () => {
+      setCursorActive(false);
+      setCursorVariant('normal');
+    };
+
+    const handleMouseMove = (e) => {
+      // Always active on the page now
+      setCursorActive(true);
+
+      // Check if mouse is over an interactive element
+      const target = e.target;
+      const isInteractive = target.tagName === 'BUTTON' ||
+                           target.tagName === 'A' ||
+                           target.closest('button') ||
+                           target.closest('a') ||
+                           target.classList.contains('cursor-hover');
+
+      setCursorVariant(isInteractive ? 'hover' : 'normal');
+
+      // Determine cursor color based on background
+      const elementUnderCursor = document.elementFromPoint(e.clientX, e.clientY);
+      const newColor = getCursorColor(elementUnderCursor);
+      setCursorColor(newColor);
+    };
+
+    // Listen on the main element for page-wide cursor
+    const mainElement = scrollContainerRef.current;
+    if (mainElement) {
+      mainElement.addEventListener('mousemove', handleMouseMove);
+      mainElement.addEventListener('mouseenter', handleMouseEnter);
+      mainElement.addEventListener('mouseleave', handleMouseLeave);
+    }
+
+    // Also listen on window for when mouse leaves the entire page
+    window.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+      if (mainElement) {
+        mainElement.removeEventListener('mousemove', handleMouseMove);
+        mainElement.removeEventListener('mouseenter', handleMouseEnter);
+        mainElement.removeEventListener('mouseleave', handleMouseLeave);
+      }
+      window.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, [isLoading]);
 
   // Three.js setup - only run after loading is complete
   useEffect(() => {
@@ -511,18 +737,22 @@ function Home() {
   const textOpacity = Math.max(1 - scrollY / 300, 0);
 
   return (
-    <main
-      ref={scrollContainerRef}
-      className="
-        bg-[#ece6da] text-gray-900
-        overflow-x-hidden
-        h-screen
-        overflow-y-scroll
-        snap-y snap-mandatory
-      "
-    >
-      {/* Film background - static overlay */}
-      <div className="film-grain-static" />
+    <>
+      {/* Custom cursor - only active over hero section */}
+      <CustomCursor active={cursorActive} variant={cursorVariant} color={cursorColor} />
+
+      <main
+        ref={scrollContainerRef}
+        className="
+          bg-[#ece6da] text-gray-900
+          overflow-x-hidden
+          h-screen
+          overflow-y-scroll
+          snap-y snap-mandatory
+        "
+      >
+        {/* Film background - static overlay */}
+        <div className="film-grain-static" />
 
       {/* Three.js background */}
       <div
@@ -532,7 +762,10 @@ function Home() {
       />
 
       {/* Hero Section */}
-      <section className="h-screen relative flex items-center snap-center">
+      <section
+        ref={heroRef}
+        className="h-screen relative flex items-center snap-center"
+      >
         <div
           className="fixed left-[20vw] top-[50%] -translate-y-1/2 z-[200] transition-all duration-300"
           style={{
@@ -691,10 +924,153 @@ function Home() {
         </div>
       </section>
 
-      {/* Rose Focus Section - rose shrinks and centers */}
-      <section className="h-screen bg-[#ece6da] flex items-center justify-center snap-center">
+      {/* Rose Focus – Card 1 (about you + skills) */}
+      <section
+        ref={panel1Ref}
+        className={`
+          relative h-screen bg-[#ece6da] snap-center
+          transition-all duration-500
+          ${panel1Visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}
+        `}
+      >
+        {/* content sits ABOVE the rose */}
+        <div className="relative z-[200] h-full flex items-center">
+          <div
+            className="
+              max-w-9xl w-full
+              px-6 md:px-10
+              mx-auto md:ml-[6vw] md:mr-auto   /* push whole block left */
+            "
+          >
+            <div
+              className="
+                grid grid-cols-1
+                md:grid-cols-[minmax(0,1.5fr)_minmax(0,1.1fr)_minmax(0,1.5fr)]
+                gap-10 md:gap-24 pr-24
+                items-center
+              "
+            >
+              {/* Left: main black card about you */}
+              <div className="bg-black text-[#ece6da] rounded-3xl border border-black shadow-2xl p-8 md:p-10">
+                <p
+                  className="text-xs uppercase tracking-[0.3em] opacity-60 mb-4"
+                  style={{ fontFamily: "Share Tech Mono, monospace" }}
+                >
+                  About me
+                </p>
+
+                <h2
+                  className="text-4xl md:text-5xl leading-tight mb-6"
+                  style={{ fontFamily: "Notable, serif" }}
+                >
+                  Designing interfaces,
+                  <span className="block md:inline"> building the systems behind them.</span>
+                </h2>
+
+                <p className="text-sm md:text-base opacity-90 leading-relaxed">
+                  I'm Liam, a UI/UX designer and front-end developer focused on clear flows,
+                  confident typography, and interfaces that feel intentional rather than
+                  over-designed. I like working where product strategy, interaction design,
+                  and implementation overlap — taking ideas from sketch to shipped experience.
+                </p>
+
+                <p className="text-sm md:text-base opacity-90 leading-relaxed mt-4">
+                  Most of my work lives in that space between visual polish and technical
+                  detail: motion that supports understanding, layouts that scale with real
+                  content, and builds that respect performance and accessibility.
+                </p>
+              </div>
+
+              {/* Middle: reserved space for the rose (now wider) */}
+              <div className="hidden md:block pointer-events-none">
+                <div className="w-full h-[420px]" />
+              </div>
+
+              {/* Right: skills/meta */}
+              <div className="grid grid-cols-1 gap-5 text-sm text-black">
+                <div className="border border-black rounded-2xl px-4 py-3 bg-[#f2ebdd] h-24 flex flex-col justify-center">
+                  <p
+                    className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
+                    style={{ fontFamily: "Share Tech Mono, monospace" }}
+                  >
+                    Role
+                  </p>
+                  <p className="text-sm">
+                    UI/UX Design · Front-end Development · Product thinking
+                  </p>
+                </div>
+
+                <div className="border border-black rounded-2xl px-4 py-3 bg-[#f2ebdd] h-24 flex flex-col justify-center">
+                  <p
+                    className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
+                    style={{ fontFamily: "Share Tech Mono, monospace" }}
+                  >
+                    Focus
+                  </p>
+                  <p className="text-sm">
+                    Interaction design, motion, layout systems, design/dev handoff,
+                    and experiences that feel light but intentional.
+                  </p>
+                </div>
+
+                <div className="border border-black rounded-2xl px-4 py-3 bg-[#f2ebdd] h-24 flex flex-col justify-center">
+                  <p
+                    className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
+                    style={{ fontFamily: "Share Tech Mono, monospace" }}
+                  >
+                    Stack
+                  </p>
+                  <p className="text-sm">
+                    React · Three.js · Tailwind · Framer Motion · Figma · a lot of
+                    small prototypes and experiments.
+                  </p>
+                </div>
+
+                <div className="border border-black rounded-2xl px-4 py-3 bg-[#f2ebdd] h-24 flex flex-col justify-center">
+                  <p
+                    className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
+                    style={{ fontFamily: "Share Tech Mono, monospace" }}
+                  >
+                    Experience
+                  </p>
+                  <p className="text-sm">
+                    4+ years designing digital products, from concept to launch,
+                    across web and mobile platforms.
+                  </p>
+                </div>
+
+                <div className="border border-black rounded-2xl px-4 py-3 bg-[#f2ebdd] h-24 flex flex-col justify-center">
+                  <p
+                    className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
+                    style={{ fontFamily: "Share Tech Mono, monospace" }}
+                  >
+                    Approach
+                  </p>
+                  <p className="text-sm">
+                    User-centered design with technical excellence. I believe great
+                    products emerge from the intersection of empathy and craft.
+                  </p>
+                </div>
+
+                <div className="border border-black rounded-2xl px-4 py-3 bg-[#f2ebdd] h-24 flex flex-col justify-center">
+                  <p
+                    className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
+                    style={{ fontFamily: "Share Tech Mono, monospace" }}
+                  >
+                    Specialties
+                  </p>
+                  <p className="text-sm">
+                    Design systems · Component libraries · Motion design · A11y ·
+                    Performance optimization · Cross-functional collaboration.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
-    </main>
+      </main>
+    </>
   );
 }
 
