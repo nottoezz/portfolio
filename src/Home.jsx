@@ -452,7 +452,6 @@ const bullets = [
   },
 ];
 
-
 // ---------------------------------------------------------------------------
 // Loading screen
 // ---------------------------------------------------------------------------
@@ -1115,16 +1114,43 @@ function Home() {
                     </div>
                   </div>
                   {/* div4 – small tag above rose (2 / 3 / 3 / 4) */}
+                  {/* div4 – Creative waves card (2 / 3 / 3 / 4) */}
                   <div
-                    className="border border-black/40 rounded-2xl bg-[#f8f0df] px-3 py-2 flex items-center justify-center"
+                    className="creative-card border border-black/40 rounded-2xl overflow-hidden"
                     style={{ gridArea: "2 / 3 / 3 / 4" }}
                   >
-                    <p
-                      className="text-[9px] uppercase tracking-[0.25em] text-black/70 text-center"
-                      style={{ fontFamily: "Share Tech Mono, monospace" }}
+                    {/* animated SVG waves in the background */}
+                    <svg
+                      className="creative-card__waves"
+                      viewBox="0 0 1440 320"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
                     >
-                      Rose · 3D Focus
-                    </p>
+                      <g>
+                        {/* main wave */}
+                        <path
+                          d="M0,224L48,218.7C96,213,192,203,288,208C384,213,480,235,576,245.3C672,256,768,256,864,218.7C960,181,1056,107,1152,101.3C1248,96,1344,160,1392,192L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+                          fill="#000000"
+                          fillOpacity="0.06"
+                        />
+                        {/* second, slightly offset wave for depth */}
+                        <path
+                          d="M0,240L60,218.7C120,197,240,155,360,149.3C480,144,600,176,720,197.3C840,219,960,229,1080,229.3C1200,229,1320,219,1380,213.3L1440,208L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"
+                          fill="#000000"
+                          fillOpacity="0.035"
+                        />
+                      </g>
+                    </svg>
+
+                    {/* centered label */}
+                    <div className="relative flex items-center justify-center h-full px-3 py-2">
+                      <span
+                        className="text-[9px] uppercase tracking-[0.35em] text-black/85"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        creative
+                      </span>
+                    </div>
                   </div>
                   {/* div7 – main rose window (2 / 4 / 5 / 5) – stays central-ish */}
                   <div
@@ -1168,8 +1194,8 @@ function Home() {
                         </div>
                       </div>
                       <p className="text-xs md:text-sm leading-snug text-black/90 max-w-[28rem]">
-                        End-to-end product work: interfaces, behaviour, data, and
-                        performance — from first sketch to deployed build.
+                        End-to-end product work: interfaces, behaviour, data,
+                        and performance — from first sketch to deployed build.
                       </p>
                     </div>
                   </div>
@@ -1281,11 +1307,13 @@ function Home() {
                     <div className="relative overflow-hidden flex-1">
                       <div className="inline-block whitespace-nowrap animate-marquee">
                         <span
-                          className="text-[10px] uppercase tracking-[0.25em] text-black/75"
+                          className="text-4xl font-bold uppercase tracking-wider text-black/80"
                           style={{ fontFamily: "Share Tech Mono, monospace" }}
                         >
                           Portfolio · In progress · Selected work · Experiments
-                          · Interfaces · Systems · Performance
+                          · Interfaces · Systems · Performance · Portfolio · In
+                          progress · Selected work · Experiments · Interfaces ·
+                          Systems · Performance
                         </span>
                       </div>
                     </div>

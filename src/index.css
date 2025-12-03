@@ -73,9 +73,37 @@ html, body {
 }
 
 .animate-marquee {
-  animation: marquee 18s linear infinite;
+  animation: marquee 25s linear infinite;
 }
 
 .animate-marquee-slow {
   animation: marquee-slow 28s linear infinite;
+}
+
+.creative-card {
+  position: relative;
+  background-color: #f8f0df; /* same warm cream as other cards */
+}
+
+/* SVG waves sit behind the text */
+.creative-card__waves {
+  position: absolute;
+  inset: -19% 0 -10% 0;    /* extend beyond the card so edges feel clean */
+  width: 200%;             /* wider than card so we can slide it */
+  height: auto;
+  transform: translate3d(0, 0, 0);
+  animation: creative-waves 18s linear infinite;
+}
+
+/* subtle horizontal drift – feels like slow motion waves */
+@keyframes creative-waves {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(-25%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
 }
