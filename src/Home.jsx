@@ -306,7 +306,7 @@ function Home() {
   const [eyeProgress, setEyeProgress] = useState(0);
   const [roseSettled, setRoseSettled] = useState(false);
   const [bulletsVisible, setBulletsVisible] = useState(false);
-  const [typingStates, setTypingStates] = useState([false, false, false]);
+  const [typingStates, setTypingStates] = useState([false, false, false, false]);
   const [animationsPlayed, setAnimationsPlayed] = useState(false);
 
   // Custom cursor state
@@ -375,7 +375,7 @@ function Home() {
       heading: "Interfaces that feel obvious, not overdesigned.",
       body: "I design flows, layouts, and interactions that make it clear what to do next.\n\nStrong hierarchy, calm typography, and motion that supports understanding instead of distracting from it.",
       inPractice: ["Clear user flows", "Scannable layouts", "Accessible defaults"],
-      tools: "TOOLS · Figma · Pen & paper · Prototyping"
+      tools: "TOOLS · Figma · Pen & paper · Prototyping",
     },
     {
       rayLabel: "02 FRONTEND DEVELOPMENT",
@@ -383,15 +383,23 @@ function Home() {
       heading: "Production-ready frontends, not just Dribbble shots.",
       body: "I build React interfaces with reusable components, clean structure, and animation used on purpose.\n\nThe goal is code that's maintainable, easy to iterate on, and faithful to the design without being fragile.",
       inPractice: ["Component systems", "Design–dev handoff", "Thoughtful animation"],
-      tools: "STACK · React · Tailwind · Framer Motion · Three.js"
+      tools: "STACK · React · Tailwind · Framer Motion · Three.js",
     },
     {
-      rayLabel: "03 PERFORMANCE",
+      rayLabel: "03 PERFORMANCE & SEO",
       tinyLabel: "PERFORMANCE & TECHNICAL SEO",
       heading: "Speed and structure that search engines actually like.",
       body: "I care about how a site feels and how it performs under the hood: Core Web Vitals, semantic markup, and clean metadata.\n\nI've built and use my own technical SEO scanner to surface issues and turn them into fixes.",
       inPractice: ["Core Web Vitals", "Semantic HTML", "Clean metadata & sitemaps"],
-      tools: "TOOLS · Lighthouse · WebPageTest · AI Visibility"
+      tools: "TOOLS · Lighthouse · WebPageTest · AI Visibility",
+    },
+    {
+      rayLabel: "04 BACKEND & APIS",
+      tinyLabel: "BACKEND · APIS · DATA",
+      heading: "Backends, databases, and APIs that support the UX.",
+      body: "I design and build lean backends to support the interfaces I create: REST APIs, authentication, and data models aligned with the product.\n\nEnough structure to be reliable, without over-engineering early versions.",
+      inPractice: ["RESTful APIs", "Auth & permissions", "Relational & document stores"],
+      tools: "STACK · Node.js · Express · MongoDB · PostgreSQL",
     },
   ];
 
@@ -518,16 +526,20 @@ function Home() {
 
         // Trigger typing animations in sequence
         setTimeout(() => {
-          setTypingStates(prev => [true, false, false]);
+          setTypingStates(prev => [true, false, false, false]);
         }, 300);
 
         setTimeout(() => {
-          setTypingStates(prev => [true, true, false]);
+          setTypingStates(prev => [true, true, false, false]);
         }, 800);
 
         setTimeout(() => {
-          setTypingStates(prev => [true, true, true]);
+          setTypingStates(prev => [true, true, true, false]);
         }, 1300);
+
+        setTimeout(() => {
+          setTypingStates(prev => [true, true, true, true]);
+        }, 1800);
       } else {
         // Subsequent visits - show completed state immediately
         setBulletsVisible(true);
@@ -858,15 +870,15 @@ function Home() {
             <div className="relative h-[500px] flex items-center -ml-48">
               {bullets.map((bullet, index) => {
                 // Much bigger vertical spacing + more fan, pushed further left
-                const offsetsY = [-60, 0, 60];
-                const rotations = [-9, 0, 9];
-                const translateX = [25, 35, 25]; // moved left
+                const offsetsY = [-90, -30, 30, 90];
+                const rotations = [-12, -4, 4, 12];
+                const translateX = [25, 30, 30, 25]; // moved left
 
                 const isActive = index === activeIndex;
 
                 return (
                   <button
-                    key={bullet.title}
+                    key={bullet.rayLabel}
                     type="button"
                     onMouseEnter={() => setActiveIndex(index)}
                     onFocus={() => setActiveIndex(index)}
