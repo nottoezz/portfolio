@@ -1281,20 +1281,21 @@ function Home() {
                   </div>
                   {/* div6 – long top strip card (1 / 3 / 2 / 6) */}
                   <div
-                    className="border border-black/80 rounded-2xl bg-[#f4ebdd] px-5 py-3 flex flex-col justify-center"
+                    className="border border-black/80 rounded-2xl bg-[#f4ebdd] px-6 py-5 flex flex-col justify-center"
                     style={{ gridArea: "1 / 3 / 2 / 6" }}
                   >
-                    <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                      <p
-                        className="text-[10px] uppercase tracking-[0.25em] opacity-70"
-                        style={{ fontFamily: "Share Tech Mono, monospace" }}
-                      >
-                        Approach
+                    <p
+                      className="text-[10px] uppercase tracking-[0.25em] opacity-70 mb-4"
+                      style={{ fontFamily: "Share Tech Mono, monospace" }}
+                    >
+                      Approach
+                    </p>
+                    <div className="space-y-3">
+                      <p className="text-[13px] md:text-[15px] leading-relaxed text-black/90 font-light">
+                        Start from constraints and real content, ship something small, then refine.
                       </p>
-                      <p className="text-[11px] md:text-[13px] leading-snug text-black/80 max-w-[38rem]">
-                        Start from constraints and real content, ship something
-                        small, then refine. Mix craft with pragmatism: clean
-                        systems, clear UX, and code that can evolve.
+                      <p className="text-[13px] md:text-[15px] leading-relaxed text-black/85 font-light">
+                        Mix craft with pragmatism: clean systems, clear UX, and code that can evolve.
                       </p>
                     </div>
                   </div>
