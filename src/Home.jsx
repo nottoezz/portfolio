@@ -14,12 +14,12 @@ const ROSE_KEYFRAMES = [
   {
     // Section 1 – eye / bullets
     position: { x: -4.1, y: -1, z: 0 },
-    rotation: { x: 0.2, y: Math.PI * 0.1, z: 0 },
+    rotation: { x: 0.2, y: Math.PI * 1.5, z: 0 },
     scale: 0.7,
   },
   {
     // Section 2 – final tiny focus
-    position: { x: 0, y: -4, z: -3 },
+    position: { x: -0.2, y: -3, z: -3 },
     rotation: { x: 0, y: Math.PI / 2, z: 0 },
     scale: 2,
   },
@@ -543,7 +543,7 @@ function Home() {
       } else {
         // Subsequent visits - show completed state immediately
         setBulletsVisible(true);
-        setTypingStates([true, true, true]);
+        setTypingStates([true, true, true, true]);
       }
     }
   }, [scrollY, bulletsVisible, animationsPlayed]);
@@ -870,9 +870,9 @@ function Home() {
             <div className="relative h-[500px] flex items-center -ml-48">
               {bullets.map((bullet, index) => {
                 // Much bigger vertical spacing + more fan, pushed further left
-                const offsetsY = [-90, -30, 30, 90];
-                const rotations = [-12, -4, 4, 12];
-                const translateX = [25, 30, 30, 25]; // moved left
+                const offsetsY = [-80, -30, 30, 80];
+                const rotations = [-20, -4, 4, 20];
+                const translateX = [8, 30, 30, 8]; // moved left
 
                 const isActive = index === activeIndex;
 
@@ -994,151 +994,162 @@ function Home() {
         </div>
       </section>
 
-      {/* Rose Focus – Card 1 (about you + skills) */}
-      <section
-        ref={panel1Ref}
-        className={`
-          relative h-screen bg-[#ece6da] snap-center
-          transition-all duration-500
-          ${panel1Visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}
-        `}
-      >
-        {/* content sits ABOVE the rose */}
-        <div className="relative z-[200] h-full flex items-center">
-          <div
-            className="
-              max-w-9xl w-full
-              px-6 md:px-10
-              mx-auto md:ml-[6vw] md:mr-auto   /* push whole block left */
-            "
-          >
-            <div
-              className="
-                grid grid-cols-1
-                md:grid-cols-[minmax(0,1.5fr)_minmax(0,1.1fr)_minmax(0,1.5fr)]
-                gap-10 md:gap-24 pr-24
-                items-center
-              "
+{/* Rose Focus – Card 1 (about you + skills) */}
+<section
+  ref={panel1Ref}
+  className={`
+    relative h-screen bg-[#ece6da] snap-center
+    transition-all duration-500
+    ${panel1Visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
+  `}
+>
+  {/* content sits ABOVE the rose */}
+  <div className="relative z-[200] h-full flex items-center">
+    <div
+      className="
+        max-w-9xl w-full
+        px-6 md:px-12
+        mx-auto
+      "
+    >
+      {/* Main black card spanning the whole section */}
+      <div className="bg-black text-[#ece6da] rounded-3xl border border-black shadow-[0_32px_80px_rgba(0,0,0,0.35)] p-8 md:p-10">
+        <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)_minmax(0,1fr)] gap-6 md:gap-8 items-start">
+          {/* Left: main text content */}
+          <div>
+            <p
+              className="text-xs uppercase tracking-[0.3em] opacity-60 mb-4"
+              style={{ fontFamily: "Share Tech Mono, monospace" }}
             >
-              {/* Left: main black card about you */}
-              <div className="bg-black text-[#ece6da] rounded-3xl border border-black shadow-2xl p-8 md:p-10">
-                <p
-                  className="text-xs uppercase tracking-[0.3em] opacity-60 mb-4"
-                  style={{ fontFamily: "Share Tech Mono, monospace" }}
-                >
-                  About me
-                </p>
+              About · Who I am
+            </p>
 
-                <h2
-                  className="text-4xl md:text-5xl leading-tight mb-6"
-                  style={{ fontFamily: "Notable, serif" }}
-                >
-                  Designing interfaces,
-                  <span className="block md:inline"> building the systems behind them.</span>
-                </h2>
+            <h2
+              className="text-4xl md:text-5xl leading-tight mb-6"
+              style={{ fontFamily: "Notable, serif" }}
+            >
+              Designing interfaces,
+              <span className="block md:inline">
+                {" "}
+                engineering the systems that power them.
+              </span>
+            </h2>
 
-                <p className="text-sm md:text-base opacity-90 leading-relaxed">
-                  I'm Liam, a UI/UX designer and front-end developer focused on clear flows,
-                  confident typography, and interfaces that feel intentional rather than
-                  over-designed. I like working where product strategy, interaction design,
-                  and implementation overlap — taking ideas from sketch to shipped experience.
-                </p>
+            <p className="text-sm md:text-base opacity-90 leading-relaxed">
+              I'm Liam, a product-minded developer who lives in that overlap
+              between UI design, frontend engineering, and the backend pieces
+              that keep everything running. I care about how a screen looks,
+              how it feels to use, and what has to happen behind the scenes
+              for it to stay fast and reliable.
+            </p>
 
-                <p className="text-sm md:text-base opacity-90 leading-relaxed mt-4">
-                  Most of my work lives in that space between visual polish and technical
-                  detail: motion that supports understanding, layouts that scale with real
-                  content, and builds that respect performance and accessibility.
-                </p>
-              </div>
+            <p className="text-sm md:text-base opacity-90 leading-relaxed mt-4">
+              I work end-to-end: designing flows, building React interfaces,
+              wiring them up to APIs and databases, and keeping an eye on
+              performance, accessibility, and technical SEO. Most of my
+              projects start as small experiments and grow into real,
+              shipped products — things that people actually use.
+            </p>
 
-              {/* Middle: reserved space for the rose (now wider) */}
-              <div className="hidden md:block pointer-events-none">
-                <div className="w-full h-[420px]" />
-              </div>
+            <p className="text-xs md:text-[13px] opacity-70 mt-5 font-mono tracking-wide"
+               style={{ fontFamily: "Share Tech Mono, monospace" }}>
+              Recent focus: AI-driven tools, technical SEO, and fast web
+              experiences that feel intentional rather than over-designed.
+            </p>
+          </div>
 
-              {/* Right: skills/meta */}
-              <div className="grid grid-cols-1 gap-5 text-sm text-black">
-                <div className="border border-black rounded-2xl px-4 py-3 bg-[#f2ebdd] h-24 flex flex-col justify-center">
-                  <p
-                    className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
-                    style={{ fontFamily: "Share Tech Mono, monospace" }}
-                  >
-                    Role
-                  </p>
-                  <p className="text-sm">
-                    UI/UX Design · Front-end Development · Product thinking
-                  </p>
-                </div>
+          {/* Middle: bordered box for the rose */}
+          <div className="flex items-center justify-center h-full">
+            <div className="border-2 border-white/30 rounded-2xl w-full h-full max-w-80 flex items-center justify-center bg-[#ece6da]">
+            </div>
+          </div>
 
-                <div className="border border-black rounded-2xl px-4 py-3 bg-[#f2ebdd] h-24 flex flex-col justify-center">
-                  <p
-                    className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
-                    style={{ fontFamily: "Share Tech Mono, monospace" }}
-                  >
-                    Focus
-                  </p>
-                  <p className="text-sm">
-                    Interaction design, motion, layout systems, design/dev handoff,
-                    and experiences that feel light but intentional.
-                  </p>
-                </div>
+          {/* Right: skills/meta cards inside the main card */}
+          <div className="grid grid-cols-1 gap-4 text-sm text-black">
+            <div className="border border-black rounded-2xl px-4 py-3 bg-[#f2ebdd] min-h-20 flex flex-col justify-center">
+              <p
+                className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
+                style={{ fontFamily: "Share Tech Mono, monospace" }}
+              >
+                Role
+              </p>
+              <p className="text-sm">
+                Frontend & full-stack development · UI/UX design · Product thinking
+              </p>
+            </div>
 
-                <div className="border border-black rounded-2xl px-4 py-3 bg-[#f2ebdd] h-24 flex flex-col justify-center">
-                  <p
-                    className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
-                    style={{ fontFamily: "Share Tech Mono, monospace" }}
-                  >
-                    Stack
-                  </p>
-                  <p className="text-sm">
-                    React · Three.js · Tailwind · Framer Motion · Figma · a lot of
-                    small prototypes and experiments.
-                  </p>
-                </div>
+            <div className="border border-black rounded-2xl px-4 py-3 bg-[#f2ebdd] min-h-20 flex flex-col justify-center">
+              <p
+                className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
+                style={{ fontFamily: "Share Tech Mono, monospace" }}
+              >
+                Focus
+              </p>
+              <p className="text-sm">
+                End-to-end product work: interfaces, behaviour, data, and
+                performance — from first sketch to deployed build.
+              </p>
+            </div>
 
-                <div className="border border-black rounded-2xl px-4 py-3 bg-[#f2ebdd] h-24 flex flex-col justify-center">
-                  <p
-                    className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
-                    style={{ fontFamily: "Share Tech Mono, monospace" }}
-                  >
-                    Experience
-                  </p>
-                  <p className="text-sm">
-                    4+ years designing digital products, from concept to launch,
-                    across web and mobile platforms.
-                  </p>
-                </div>
+            <div className="border border-black rounded-2xl px-4 py-3 bg-[#f2ebdd] min-h-20 flex flex-col justify-center">
+              <p
+                className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
+                style={{ fontFamily: "Share Tech Mono, monospace" }}
+              >
+                Stack
+              </p>
+              <p className="text-sm">
+                React · Node.js · Express · PostgreSQL · MongoDB · Supabase ·
+                Three.js · Tailwind · Framer Motion · Figma · Linux / basic infra
+              </p>
+            </div>
 
-                <div className="border border-black rounded-2xl px-4 py-3 bg-[#f2ebdd] h-24 flex flex-col justify-center">
-                  <p
-                    className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
-                    style={{ fontFamily: "Share Tech Mono, monospace" }}
-                  >
-                    Approach
-                  </p>
-                  <p className="text-sm">
-                    User-centered design with technical excellence. I believe great
-                    products emerge from the intersection of empathy and craft.
-                  </p>
-                </div>
+            <div className="border border-black rounded-2xl px-4 py-3 bg-[#f2ebdd] min-h-20 flex flex-col justify-center">
+              <p
+                className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
+                style={{ fontFamily: "Share Tech Mono, monospace" }}
+              >
+                Experience
+              </p>
+              <p className="text-sm">
+                4+ years designing and building digital products, plus founder /
+                developer of an AI-powered technical SEO tool used by early
+                customers.
+              </p>
+            </div>
 
-                <div className="border border-black rounded-2xl px-4 py-3 bg-[#f2ebdd] h-24 flex flex-col justify-center">
-                  <p
-                    className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
-                    style={{ fontFamily: "Share Tech Mono, monospace" }}
-                  >
-                    Specialties
-                  </p>
-                  <p className="text-sm">
-                    Design systems · Component libraries · Motion design · A11y ·
-                    Performance optimization · Cross-functional collaboration.
-                  </p>
-                </div>
-              </div>
+            <div className="border border-black rounded-2xl px-4 py-3 bg-[#f2ebdd] min-h-20 flex flex-col justify-center">
+              <p
+                className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
+                style={{ fontFamily: "Share Tech Mono, monospace" }}
+              >
+                Approach
+              </p>
+              <p className="text-sm">
+                Start from constraints and real content, ship something small,
+                then refine. Mix craft with pragmatism: clean systems, clear UX,
+                and code that can evolve.
+              </p>
+            </div>
+
+            <div className="border border-black rounded-2xl px-4 py-3 bg-[#f2ebdd] min-h-20 flex flex-col justify-center">
+              <p
+                className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
+                style={{ fontFamily: "Share Tech Mono, monospace" }}
+              >
+                Specialties
+              </p>
+              <p className="text-sm">
+                Design systems · Component libraries · APIs & data modelling ·
+                Performance optimization · Technical SEO · Motion design · A11y
+              </p>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </div>
+</section>
       </main>
     </>
   );
