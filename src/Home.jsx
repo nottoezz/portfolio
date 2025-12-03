@@ -113,6 +113,157 @@ function Eye({ progress = 0 }) {
 }
 
 // ---------------------------------------------------------------------------
+// Eye Card
+// ---------------------------------------------------------------------------
+
+function EyeCard() {
+  const cardRef = useRef(null);
+  const targetRef = useRef({ x: 0, y: 0 });
+  const [pupilOffset, setPupilOffset] = useState({ x: 0, y: 0 });
+  const [isBlinking, setIsBlinking] = useState(false);
+  const rafRef = useRef(null);
+
+  // Smooth animation loop using requestAnimationFrame
+  useEffect(() => {
+    const animate = () => {
+      setPupilOffset((prev) => {
+        const targetX = targetRef.current.x;
+        const targetY = targetRef.current.y;
+
+        // Smooth easing - slower for more weight/delay
+        const ease = 0.08;
+        const newX = prev.x + (targetX - prev.x) * ease;
+        const newY = prev.y + (targetY - prev.y) * ease;
+
+        // Only update if there's meaningful change to avoid unnecessary renders
+        if (Math.abs(newX - prev.x) < 0.001 && Math.abs(newY - prev.y) < 0.001) {
+          return prev;
+        }
+
+        return { x: newX, y: newY };
+      });
+
+      rafRef.current = requestAnimationFrame(animate);
+    };
+
+    rafRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, []);
+
+  // Pupil follows cursor (updates target position)
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!cardRef.current) return;
+
+      const rect = cardRef.current.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+
+      // Normalised direction -1..1
+      const nx = clamp((e.clientX - cx) / (rect.width / 2), -1, 1);
+      const ny = clamp((e.clientY - cy) / (rect.height / 2), -1, 1);
+
+      // Circular constraint - calculate distance from center
+      const distance = Math.sqrt(nx * nx + ny * ny);
+      const maxRadius = 8; // maximum radius for circular movement (px in SVG space)
+
+      // Normalize to circular boundary if outside
+      let normalizedX = nx;
+      let normalizedY = ny;
+      if (distance > 1) {
+        normalizedX = nx / distance;
+        normalizedY = ny / distance;
+      }
+
+      // Update target position (animation loop will smoothly interpolate)
+      targetRef.current = {
+        x: normalizedX * maxRadius,
+        y: normalizedY * maxRadius,
+      };
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  // Random blinking
+  useEffect(() => {
+    let timeoutId;
+
+    const scheduleBlink = () => {
+      const delay = 3000 + Math.random() * 4000; // 3–7s
+      timeoutId = window.setTimeout(() => {
+        setIsBlinking(true);
+        // blink duration
+        window.setTimeout(() => {
+          setIsBlinking(false);
+          scheduleBlink();
+        }, 140);
+      }, delay);
+    };
+
+    scheduleBlink();
+    return () => window.clearTimeout(timeoutId);
+  }, []);
+
+  return (
+    <div
+      ref={cardRef}
+      className="flex items-center justify-center w-full h-full"
+    >
+      <div className="w-56 h-56">
+        <svg
+          viewBox="0 0 120 80"
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-full h-full"
+        >
+          {/* Eye group – we squash on Y to blink */}
+          <g
+            style={{
+              transformBox: "fill-box",
+              transformOrigin: "50% 50%",
+              transform: `scaleY(${isBlinking ? 0.1 : 1})`,
+              transition: "transform 0.12s ease-in-out",
+            }}
+          >
+            {/* Sclera background */}
+            <ellipse
+              cx="60"
+              cy="40"
+              rx="42"
+              ry="22"
+              fill="#f7efe0"
+              stroke="#111"
+              strokeWidth="1.5"
+            />
+
+            {/* Eye outline */}
+            <path
+              d="M60 16 C 32 16, 15 32, 9 40 C 8 41, 8 43, 9 44 C 15 52, 32 68, 60 68 C 88 68, 105 52, 111 44 C 112 43, 112 41, 111 40 C 105 32, 88 16, 60 16 Z"
+              fill="none"
+              stroke="#111"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+
+            {/* Iris + pupil */}
+            <g transform={`translate(${pupilOffset.x}, ${pupilOffset.y})`}>
+              <circle cx="60" cy="40" r="7" fill="#222" />
+              <circle cx="58" cy="38" r="2" fill="#f7f7f7" />
+            </g>
+          </g>
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Typing text (hero bullet rays)
 // ---------------------------------------------------------------------------
 
@@ -1291,6 +1442,13 @@ function Home() {
                       modelling · Performance optimization · Technical SEO ·
                       Motion design · A11y
                     </p>
+                  </div>
+                  {/* div9 – Notes card (4 / 5 / 5 / 6) */}
+                  <div
+                    className="border border-black rounded-2xl bg-transparent backdrop-blur-[1px] p-0 flex items-center justify-center overflow-hidden"
+                    style={{ gridArea: "4 / 5 / 5 / 6" }}
+                  >
+                    <EyeCard />
                   </div>
                   {/* div12 – long bottom left strip (5 / 1 / 6 / 4) */}
                   <div
