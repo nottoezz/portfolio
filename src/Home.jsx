@@ -1,6 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import {
+  FaReact,
+  FaNodeJs,
+  FaLinux,
+} from "react-icons/fa";
+import {
+  SiExpress,
+  SiPostgresql,
+  SiMongodb,
+  SiSupabase,
+  SiThreedotjs,
+  SiTailwindcss,
+  SiFramer,
+  SiFigma,
+} from "react-icons/si";
 
 // ---------------------------------------------------------------------------
 // Constants & helpers
@@ -219,6 +234,7 @@ function FlipText({ text, speed = 30, triggerKey }) {
   return <span className="inline-block whitespace-pre-wrap">{display}</span>;
 }
 
+
 // ---------------------------------------------------------------------------
 // Custom cursor
 // ---------------------------------------------------------------------------
@@ -396,6 +412,24 @@ function useIntersectionObserver(ref, options = {}) {
 
   return isIntersecting;
 }
+
+// ---------------------------------------------------------------------------
+// Stack items config
+// ---------------------------------------------------------------------------
+
+const STACK_ITEMS = [
+  { label: "React", Icon: FaReact },
+  { label: "Node.js", Icon: FaNodeJs },
+  { label: "Express", Icon: SiExpress },
+  { label: "PostgreSQL", Icon: SiPostgresql },
+  { label: "MongoDB", Icon: SiMongodb },
+  { label: "Supabase", Icon: SiSupabase },
+  { label: "Three.js", Icon: SiThreedotjs },
+  { label: "Tailwind", Icon: SiTailwindcss },
+  { label: "Framer Motion", Icon: SiFramer },
+  { label: "Figma", Icon: SiFigma },
+  { label: "Linux / infra", Icon: FaLinux },
+];
 
 // ---------------------------------------------------------------------------
 // Bullets config
@@ -1145,7 +1179,7 @@ function Home() {
                     {/* centered label */}
                     <div className="relative flex items-center justify-center h-full px-3 py-2">
                       <span
-                        className="text-[9px] uppercase tracking-[0.35em] text-black/85"
+                        className="text-[15px] uppercase tracking-[0.35em] text-black/85"
                         style={{ fontFamily: "Share Tech Mono, monospace" }}
                       >
                         creative
@@ -1199,49 +1233,29 @@ function Home() {
                       </p>
                     </div>
                   </div>
-                  {/* div2 – small Role tile (3 / 3 / 4 / 4) */}
+                  {/* div2 – Location card (3 / 3 / 5 / 4) */}
                   <div
-                    className="border border-black rounded-2xl bg-[#f2ebdd] px-4 py-3 flex flex-col justify-center"
-                    style={{ gridArea: "3 / 3 / 4 / 4" }}
+                    className="border border-black rounded-2xl bg-[#f2ebdd] px-4 py-3 flex flex-col items-center justify-center"
+                    style={{ gridArea: "3 / 3 / 5 / 4" }}
                   >
                     <p
-                      className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
+                      className="text-[11px] uppercase tracking-[0.2em] mb-2 opacity-70"
                       style={{ fontFamily: "Share Tech Mono, monospace" }}
                     >
-                      Role
+                      Location
                     </p>
-                    <p className="text-[11px] md:text-sm leading-snug text-black/90">
-                      Frontend & full-stack development · UI/UX design · Product
-                      thinking
-                    </p>
-                  </div>
-                  {/* div3 – tiny tag under Role (4 / 3 / 5 / 4) */}
-                  <div
-                    className="rounded-2xl bg-black text-[#ece6da] px-4 py-3 flex items-center justify-center"
-                    style={{ gridArea: "4 / 3 / 5 / 4" }}
-                  >
+
+                    <img
+                      src="/globe.png"
+                      alt="Glove illustration"
+                      className="w-38 h-38 md:w-45 md:h-45 object-contain"
+                    />
+
                     <p
-                      className="text-[9px] uppercase tracking-[0.3em] text-center"
+                      className="mt-3 text-[11px] uppercase tracking-[0.18em] opacity-80"
                       style={{ fontFamily: "Share Tech Mono, monospace" }}
                     >
-                      Interface · Systems · Performance
-                    </p>
-                  </div>
-                  {/* div9 – small Stack header (4 / 5 / 5 / 6) */}
-                  <div
-                    className="border border-black rounded-2xl bg-[#f6eee0] px-4 py-3 flex flex-col justify-center"
-                    style={{ gridArea: "4 / 5 / 5 / 6" }}
-                  >
-                    <p
-                      className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
-                      style={{ fontFamily: "Share Tech Mono, monospace" }}
-                    >
-                      Stack
-                    </p>
-                    <p className="text-[11px] md:text-sm leading-snug text-black/90">
-                      React · Node.js · Express · PostgreSQL · MongoDB ·
-                      Supabase · Three.js · Tailwind · Framer Motion · Figma ·
-                      Linux / basic infra
+                      South Africa
                     </p>
                   </div>
                   {/* div10 – Experience card (4 / 2 / 5 / 3) */}
@@ -1283,19 +1297,29 @@ function Home() {
                     className="border border-black rounded-2xl bg-[#f3ebdd] px-4 py-3 flex items-center"
                     style={{ gridArea: "5 / 1 / 6 / 4" }}
                   >
-                    <p
-                      className="text-[10px] uppercase tracking-[0.25em] opacity-70 mr-4 shrink-0"
-                      style={{ fontFamily: "Share Tech Mono, monospace" }}
-                    >
-                      Notes
-                    </p>
-                    <div className="relative overflow-hidden flex-1">
-                      <div className="inline-block whitespace-nowrap animate-marquee-slow">
-                        <span className="text-[11px] md:text-sm leading-snug text-black/90">
-                          Designing for real constraints, real content, real
-                          users. Shipping small, learning fast, polishing the
-                          pieces that matter — then doing another pass.
-                        </span>
+                    <div className="relative overflow-hidden w-full">
+                      <div className="inline-block whitespace-nowrap animate-marquee">
+                        {[...STACK_ITEMS, ...STACK_ITEMS].map(({ label, Icon }, index) => (
+                          <div
+                            key={`${label}-${index}`}
+                            className="
+                              inline-flex flex-col items-center justify-center
+                              rounded-lg border border-black/10
+                              bg-black/0 hover:bg-black/[0.03]
+                              transition-all duration-200
+                              py-5 px-3 cursor-default group
+                              mr-6
+                            "
+                          >
+                            <Icon className="w-25 h-10 text-black/80 group-hover:text-black mx-auto" />
+                            <span
+                              className="mt-2.5 text-[11px] text-black/70 tracking-[0.06em] uppercase text-center leading-tight"
+                              style={{ fontFamily: "Share Tech Mono, monospace" }}
+                            >
+                              {label}
+                            </span>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -1307,13 +1331,16 @@ function Home() {
                     <div className="relative overflow-hidden flex-1">
                       <div className="inline-block whitespace-nowrap animate-marquee">
                         <span
-                          className="text-4xl font-bold uppercase tracking-wider text-black/80"
+                          className="text-4xl font-bold uppercase tracking-wider text-black/80 inline-block whitespace-nowrap"
                           style={{ fontFamily: "Share Tech Mono, monospace" }}
                         >
-                          Portfolio · In progress · Selected work · Experiments
-                          · Interfaces · Systems · Performance · Portfolio · In
-                          progress · Selected work · Experiments · Interfaces ·
-                          Systems · Performance
+                          Portfolio · In progress · Selected work · Experiments · Interfaces · Systems · Performance ·{" "}
+                        </span>
+                        <span
+                          className="text-4xl font-bold uppercase tracking-wider text-black/80 inline-block whitespace-nowrap"
+                          style={{ fontFamily: "Share Tech Mono, monospace" }}
+                        >
+                          Portfolio · In progress · Selected work · Experiments · Interfaces · Systems · Performance ·{" "}
                         </span>
                       </div>
                     </div>

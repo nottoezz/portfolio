@@ -53,13 +53,13 @@ html, body {
   scrollbar-color: rgba(0, 0, 0, 0.3) #ece6da;
 }
 
-/* Marquee animations for scrolling text */
+/* Marquee animations for scrolling text - smooth infinite scroll */
 @keyframes marquee {
-  0% {
-    transform: translateX(0);
+  from {
+    transform: translate3d(0, 0, 0);
   }
-  100% {
-    transform: translateX(-50%);
+  to {
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
@@ -73,7 +73,8 @@ html, body {
 }
 
 .animate-marquee {
-  animation: marquee 25s linear infinite;
+  animation: marquee 30s linear infinite;
+  will-change: transform;
 }
 
 .animate-marquee-slow {
@@ -92,7 +93,7 @@ html, body {
   width: 200%;             /* wider than card so we can slide it */
   height: auto;
   transform: translate3d(0, 0, 0);
-  animation: creative-waves 18s linear infinite;
+  animation: creative-waves 30s linear infinite;
 }
 
 /* subtle horizontal drift – feels like slow motion waves */
