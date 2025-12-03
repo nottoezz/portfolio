@@ -164,7 +164,9 @@ function FlipText({ text, speed = 30, triggerKey }) {
 
       setDisplay((prev) => {
         // Ensure prev has at least the same length (pad with spaces)
-        const prevChars = (prev || "").padEnd(targetChars.length, " ").split("");
+        const prevChars = (prev || "")
+          .padEnd(targetChars.length, " ")
+          .split("");
 
         let allDone = true;
 
@@ -225,10 +227,7 @@ function getCursorColorForElement(element) {
   if (!isBrowser || !element) return "black";
 
   // Prefer explicit dark backgrounds
-  if (
-    element.classList.contains("bg-black") ||
-    element.closest(".bg-black")
-  ) {
+  if (element.classList.contains("bg-black") || element.closest(".bg-black")) {
     return "white";
   }
 
@@ -342,9 +341,7 @@ function CustomCursor({ active = true }) {
         }}
       />
       <div
-        className={`absolute rounded-full ${
-          isWhite ? "bg-white" : "bg-black"
-        }`}
+        className={`absolute rounded-full ${isWhite ? "bg-white" : "bg-black"}`}
         style={{
           width: innerSize,
           height: innerSize,
@@ -410,7 +407,11 @@ const bullets = [
     tinyLabel: "INTERFACE DESIGN",
     heading: "Interfaces that feel obvious, not overdesigned.",
     body: "I design flows, layouts, and interactions that make it clear what to do next.\n\nStrong hierarchy, calm typography, and motion that supports understanding instead of distracting from it.",
-    inPractice: ["Clear user flows", "Scannable layouts", "Accessible defaults"],
+    inPractice: [
+      "Clear user flows",
+      "Scannable layouts",
+      "Accessible defaults",
+    ],
     tools: "TOOLS · Figma · Pen & paper · Prototyping",
   },
   {
@@ -418,7 +419,11 @@ const bullets = [
     tinyLabel: "FRONTEND DEVELOPMENT",
     heading: "Production-ready frontends, not just Dribbble shots.",
     body: "I build React interfaces with reusable components, clean structure, and animation used on purpose.\n\nThe goal is code that's maintainable, easy to iterate on, and faithful to the design without being fragile.",
-    inPractice: ["Component systems", "Design–dev handoff", "Thoughtful animation"],
+    inPractice: [
+      "Component systems",
+      "Design–dev handoff",
+      "Thoughtful animation",
+    ],
     tools: "STACK · React · Tailwind · Framer Motion · Three.js",
   },
   {
@@ -426,7 +431,11 @@ const bullets = [
     tinyLabel: "PERFORMANCE & TECHNICAL SEO",
     heading: "Speed and structure that search engines actually like.",
     body: "I care about how a site feels and how it performs under the hood: Core Web Vitals, semantic markup, and clean metadata.\n\nI've built and use my own technical SEO scanner to surface issues and turn them into fixes.",
-    inPractice: ["Core Web Vitals", "Semantic HTML", "Clean metadata & sitemaps"],
+    inPractice: [
+      "Core Web Vitals",
+      "Semantic HTML",
+      "Clean metadata & sitemaps",
+    ],
     tools: "TOOLS · Lighthouse · WebPageTest · AI Visibility",
   },
   {
@@ -434,10 +443,15 @@ const bullets = [
     tinyLabel: "BACKEND · APIS · DATA",
     heading: "Backends, databases, and APIs that support the UX.",
     body: "I design and build lean backends to support the interfaces I create: REST APIs, authentication, and data models aligned with the product.\n\nEnough structure to be reliable, without over-engineering early versions.",
-    inPractice: ["RESTful APIs", "Auth & permissions", "Relational & document stores"],
+    inPractice: [
+      "RESTful APIs",
+      "Auth & permissions",
+      "Relational & document stores",
+    ],
     tools: "STACK · Node.js · Express · MongoDB · PostgreSQL",
   },
 ];
+
 
 // ---------------------------------------------------------------------------
 // Loading screen
@@ -758,10 +772,7 @@ function Home() {
         roseModel.scale.z += (scale - roseModel.scale.z) * scaleEase;
 
         const maxMouseInfluence = 0.01;
-        const mouseFalloff = Math.min(
-          y / (viewportHeight * 2.7),
-          1
-        );
+        const mouseFalloff = Math.min(y / (viewportHeight * 2.7), 1);
         const mouseInfluence = maxMouseInfluence * (1 - mouseFalloff);
 
         roseModel.rotation.y += mouseRef.current.x * mouseInfluence;
@@ -1060,214 +1071,231 @@ function Home() {
           {/* content sits ABOVE the rose */}
           <div className="relative z-200 h-full flex items-center">
             <div className="w-full px-4 md:px-8 mx-auto">
-              {/* 5x5 abstract grid using full width & height */}
-              <div
-                className="h-[80vh] md:h-[78vh] grid gap-3 md:gap-4 lg:gap-5"
-                style={{
-                  gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
-                  gridTemplateRows: "repeat(5, minmax(0, 1fr))",
-                }}
-              >
-                {/* div1 – big about story card (1 / 1 / 4 / 3) */}
+              <div className="relative h-[80vh] md:h-[78vh]">
+                {/* 5x5 abstract grid using full width & height */}
                 <div
-                  className="bg-black text-[#ece6da] rounded-3xl shadow-2xl p-6 md:p-8 flex items-center justify-center"
-                  style={{ gridArea: "1 / 1 / 4 / 3" }}
+                  className="relative h-full grid gap-3 md:gap-4 lg:gap-5"
+                  style={{
+                    gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
+                    gridTemplateRows: "repeat(5, minmax(0, 1fr))",
+                  }}
                 >
-                  <h2
-                    className="text-4xl md:text-5xl lg:text-6xl leading-tight text-center"
-                    style={{ fontFamily: "Notable, serif" }}
+                  {/* div1 – big about story card (1 / 1 / 4 / 3) */}
+                  <div
+                    className="bg-black text-[#ece6da] rounded-3xl shadow-2xl p-6 md:p-8 flex items-center justify-center"
+                    style={{ gridArea: "1 / 1 / 4 / 3" }}
                   >
-                    Designing interfaces,
-                    <span className="block">
-                      engineering the systems that power them.
-                    </span>
-                  </h2>
-                </div>
-                {/* div6 – long top strip card (1 / 3 / 2 / 6) */}
-                <div
-                  className="border border-black/80 rounded-2xl bg-[#f4ebdd] px-5 py-3 flex flex-col justify-center"
-                  style={{ gridArea: "1 / 3 / 2 / 6" }}
-                >
-                  <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                    <p
-                      className="text-[10px] uppercase tracking-[0.25em] opacity-70"
-                      style={{ fontFamily: "Share Tech Mono, monospace" }}
+                    <h2
+                      className="text-4xl md:text-5xl lg:text-6xl leading-tight text-center"
+                      style={{ fontFamily: "Notable, serif" }}
                     >
-                      Approach
-                    </p>
-                    <p className="text-[11px] md:text-[13px] leading-snug text-black/80 max-w-[38rem]">
-                      Start from constraints and real content, ship something small,
-                      then refine. Mix craft with pragmatism: clean systems, clear UX,
-                      and code that can evolve.
-                    </p>
-                  </div>
-                </div>
-                {/* div4 – small tag above rose (2 / 3 / 3 / 4) */}
-                <div
-                  className="border border-black/40 rounded-2xl bg-[#f8f0df] px-3 py-2 flex items-center justify-center"
-                  style={{ gridArea: "2 / 3 / 3 / 4" }}
-                >
-                  <p
-                    className="text-[9px] uppercase tracking-[0.25em] text-black/70 text-center"
-                    style={{ fontFamily: "Share Tech Mono, monospace" }}
-                  >
-                    Rose · 3D Focus
-                  </p>
-                </div>
-                {/* div7 – main rose window (2 / 4 / 5 / 5) – stays central-ish */}
-                <div
-                  className="relative rounded-[2.2rem] border-2 border-black/40 bg-[#ece6da] flex items-center justify-center overflow-hidden"
-                  style={{ gridArea: "2 / 4 / 5 / 5" }}
-                >
-                  <div className="absolute inset-[12%] border border-black/20 rounded-[1.9rem]" />
-                  <div className="absolute inset-[26%] border border-dashed border-black/15 rounded-[1.7rem]" />
-                  <div className="absolute bottom-4 right-5 flex items-center gap-2">
-                    <span className="h-1 w-8 bg-black" />
-                    <span
-                      className="text-[10px] uppercase tracking-[0.25em] text-black/60"
-                      style={{ fontFamily: "Share Tech Mono, monospace" }}
-                    >
-                      orbit / scroll
-                    </span>
-                  </div>
-                  {/* 3D rose renders behind via Three.js */}
-                </div>
-                {/* div8 – tall Focus card (2 / 5 / 4 / 6) */}
-                <div
-                  className="border border-black rounded-2xl bg-[#efe5d2] px-4 py-3 flex flex-col justify-between"
-                  style={{ gridArea: "2 / 5 / 4 / 6" }}
-                >
-                  <p
-                    className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
-                    style={{ fontFamily: "Share Tech Mono, monospace" }}
-                  >
-                    Focus
-                  </p>
-                  <p className="text-xs md:text-sm leading-snug text-black/90 max-w-[28rem]">
-                    End-to-end product work: interfaces, behaviour, data, and
-                    performance — from first sketch to deployed build.
-                  </p>
-                </div>
-                {/* div2 – small Role tile (3 / 3 / 4 / 4) */}
-                <div
-                  className="border border-black rounded-2xl bg-[#f2ebdd] px-4 py-3 flex flex-col justify-center"
-                  style={{ gridArea: "3 / 3 / 4 / 4" }}
-                >
-                  <p
-                    className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
-                    style={{ fontFamily: "Share Tech Mono, monospace" }}
-                  >
-                    Role
-                  </p>
-                  <p className="text-[11px] md:text-sm leading-snug text-black/90">
-                    Frontend & full-stack development · UI/UX design · Product thinking
-                  </p>
-                </div>
-                {/* div3 – tiny tag under Role (4 / 3 / 5 / 4) */}
-                <div
-                  className="rounded-2xl bg-black text-[#ece6da] px-4 py-3 flex items-center justify-center"
-                  style={{ gridArea: "4 / 3 / 5 / 4" }}
-                >
-                  <p
-                    className="text-[9px] uppercase tracking-[0.3em] text-center"
-                    style={{ fontFamily: "Share Tech Mono, monospace" }}
-                  >
-                    Interface · Systems · Performance
-                  </p>
-                </div>
-                {/* div9 – small Stack header (4 / 5 / 5 / 6) */}
-                <div
-                  className="border border-black rounded-2xl bg-[#f6eee0] px-4 py-3 flex flex-col justify-center"
-                  style={{ gridArea: "4 / 5 / 5 / 6" }}
-                >
-                  <p
-                    className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
-                    style={{ fontFamily: "Share Tech Mono, monospace" }}
-                  >
-                    Stack
-                  </p>
-                  <p className="text-[11px] md:text-sm leading-snug text-black/90">
-                    React · Node.js · Express · PostgreSQL · MongoDB · Supabase
-                    · Three.js · Tailwind · Framer Motion · Figma · Linux / basic infra
-                  </p>
-                </div>
-                {/* div10 – Experience card (4 / 2 / 5 / 3) */}
-                <div
-                  className="border border-black rounded-2xl bg-[#f2ebdd] px-4 py-3 flex flex-col justify-center"
-                  style={{ gridArea: "4 / 2 / 5 / 3" }}
-                >
-                  <p
-                    className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
-                    style={{ fontFamily: "Share Tech Mono, monospace" }}
-                  >
-                    Experience
-                  </p>
-                  <p className="text-xs md:text-sm leading-snug text-black/90 max-w-[28rem]">
-                    4+ years designing and building digital products, plus
-                    founder / developer of an AI-powered technical SEO tool used
-                    by early customers.
-                  </p>
-                </div>
-                {/* div11 – Specialties card (4 / 1 / 5 / 2) */}
-                <div
-                  className="border border-black rounded-2xl bg-[#efe3cf] px-4 py-3 flex flex-col justify-center"
-                  style={{ gridArea: "4 / 1 / 5 / 2" }}
-                >
-                  <p
-                    className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
-                    style={{ fontFamily: "Share Tech Mono, monospace" }}
-                  >
-                    Specialties
-                  </p>
-                  <p className="text-xs md:text-sm leading-snug text-black/90 max-w-[28rem]">
-                    Design systems · Component libraries · APIs & data modelling
-                    · Performance optimization · Technical SEO · Motion design ·
-                    A11y
-                  </p>
-                </div>
-                {/* div12 – long bottom left strip (5 / 1 / 6 / 4) */}
-                <div
-                  className="border border-black rounded-2xl bg-[#f3ebdd] px-4 py-3 flex items-center"
-                  style={{ gridArea: "5 / 1 / 6 / 4" }}
-                >
-                  <p
-                    className="text-[10px] uppercase tracking-[0.25em] opacity-70 mr-4 shrink-0"
-                    style={{ fontFamily: "Share Tech Mono, monospace" }}
-                  >
-                    Notes
-                  </p>
-                  <div className="relative overflow-hidden flex-1">
-                    <div className="inline-block whitespace-nowrap animate-marquee-slow">
-                      <span className="text-[11px] md:text-sm leading-snug text-black/90">
-                        Designing for real constraints, real content, real users.{" "}
-                        Shipping small, learning fast, polishing the pieces that
-                        matter — then doing another pass.
+                      Designing interfaces,
+                      <span className="block">
+                        engineering the systems that power them.
                       </span>
-                    </div>
+                    </h2>
                   </div>
-                </div>
-                {/* div13 – bottom right strip (5 / 4 / 6 / 6) */}
-                <div
-                  className="border border-black rounded-2xl bg-[#f8f0df] px-4 py-3 flex items-center justify-between gap-4"
-                  style={{ gridArea: "5 / 4 / 6 / 6" }}
-                >
-                  <div className="relative overflow-hidden flex-1">
-                    <div className="inline-block whitespace-nowrap animate-marquee">
-                      <span
-                        className="text-[10px] uppercase tracking-[0.25em] text-black/75"
+                  {/* div6 – long top strip card (1 / 3 / 2 / 6) */}
+                  <div
+                    className="border border-black/80 rounded-2xl bg-[#f4ebdd] px-5 py-3 flex flex-col justify-center"
+                    style={{ gridArea: "1 / 3 / 2 / 6" }}
+                  >
+                    <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                      <p
+                        className="text-[10px] uppercase tracking-[0.25em] opacity-70"
                         style={{ fontFamily: "Share Tech Mono, monospace" }}
                       >
-                        Portfolio · In progress · Selected work · Experiments ·
-                        Interfaces · Systems · Performance
-                      </span>
+                        Approach
+                      </p>
+                      <p className="text-[11px] md:text-[13px] leading-snug text-black/80 max-w-[38rem]">
+                        Start from constraints and real content, ship something
+                        small, then refine. Mix craft with pragmatism: clean
+                        systems, clear UX, and code that can evolve.
+                      </p>
                     </div>
                   </div>
-                  <span
-                    className="text-[9px] font-mono text-black/60 shrink-0"
-                    style={{ fontFamily: "Share Tech Mono, monospace" }}
+                  {/* div4 – small tag above rose (2 / 3 / 3 / 4) */}
+                  <div
+                    className="border border-black/40 rounded-2xl bg-[#f8f0df] px-3 py-2 flex items-center justify-center"
+                    style={{ gridArea: "2 / 3 / 3 / 4" }}
                   >
-                    LIAM / 2025
-                  </span>
+                    <p
+                      className="text-[9px] uppercase tracking-[0.25em] text-black/70 text-center"
+                      style={{ fontFamily: "Share Tech Mono, monospace" }}
+                    >
+                      Rose · 3D Focus
+                    </p>
+                  </div>
+                  {/* div7 – main rose window (2 / 4 / 5 / 5) – stays central-ish */}
+                  <div
+                    className="relative rounded-[2.2rem] border-2 border-black/40 bg-[#ece6da] flex items-center justify-center overflow-hidden"
+                    style={{ gridArea: "2 / 4 / 5 / 5" }}
+                  >
+                    <div className="absolute inset-[12%] border border-black/20 rounded-[1.9rem]" />
+                    <div className="absolute inset-[26%] border border-dashed border-black/15 rounded-[1.7rem]" />
+                    <div className="absolute bottom-4 right-5 flex items-center gap-2">
+                      <span className="h-1 w-8 bg-black" />
+                      <span
+                        className="text-[10px] uppercase tracking-[0.25em] text-black/60"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        orbit / scroll
+                      </span>
+                    </div>
+                    {/* 3D rose renders behind via Three.js */}
+                  </div>
+                  {/* div8 – tall Focus card (2 / 5 / 4 / 6) */}
+                  <div
+                    className="border border-black rounded-2xl bg-[#efe5d2] px-4 py-3 flex flex-col justify-between"
+                    style={{ gridArea: "2 / 5 / 4 / 6" }}
+                  >
+                    <div>
+                      <p
+                        className="text-[11px] uppercase tracking-[0.2em] mb-3 opacity-70"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        Focus
+                      </p>
+                      <div className="flex items-center gap-3 mb-2">
+                        <img
+                          src="/focusCardImg.png"
+                          alt="Focus illustration"
+                          className="w-35 h-35 object-contain rounded-lg flex-shrink-0"
+                        />
+                        <div className="font-extrabold text-4xl right-0 leading-tight font-mono">
+                          <div>Work</div>
+                          <div>- Flow</div>
+                        </div>
+                      </div>
+                      <p className="text-xs md:text-sm leading-snug text-black/90 max-w-[28rem]">
+                        End-to-end product work: interfaces, behaviour, data, and
+                        performance — from first sketch to deployed build.
+                      </p>
+                    </div>
+                  </div>
+                  {/* div2 – small Role tile (3 / 3 / 4 / 4) */}
+                  <div
+                    className="border border-black rounded-2xl bg-[#f2ebdd] px-4 py-3 flex flex-col justify-center"
+                    style={{ gridArea: "3 / 3 / 4 / 4" }}
+                  >
+                    <p
+                      className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
+                      style={{ fontFamily: "Share Tech Mono, monospace" }}
+                    >
+                      Role
+                    </p>
+                    <p className="text-[11px] md:text-sm leading-snug text-black/90">
+                      Frontend & full-stack development · UI/UX design · Product
+                      thinking
+                    </p>
+                  </div>
+                  {/* div3 – tiny tag under Role (4 / 3 / 5 / 4) */}
+                  <div
+                    className="rounded-2xl bg-black text-[#ece6da] px-4 py-3 flex items-center justify-center"
+                    style={{ gridArea: "4 / 3 / 5 / 4" }}
+                  >
+                    <p
+                      className="text-[9px] uppercase tracking-[0.3em] text-center"
+                      style={{ fontFamily: "Share Tech Mono, monospace" }}
+                    >
+                      Interface · Systems · Performance
+                    </p>
+                  </div>
+                  {/* div9 – small Stack header (4 / 5 / 5 / 6) */}
+                  <div
+                    className="border border-black rounded-2xl bg-[#f6eee0] px-4 py-3 flex flex-col justify-center"
+                    style={{ gridArea: "4 / 5 / 5 / 6" }}
+                  >
+                    <p
+                      className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
+                      style={{ fontFamily: "Share Tech Mono, monospace" }}
+                    >
+                      Stack
+                    </p>
+                    <p className="text-[11px] md:text-sm leading-snug text-black/90">
+                      React · Node.js · Express · PostgreSQL · MongoDB ·
+                      Supabase · Three.js · Tailwind · Framer Motion · Figma ·
+                      Linux / basic infra
+                    </p>
+                  </div>
+                  {/* div10 – Experience card (4 / 2 / 5 / 3) */}
+                  <div
+                    className="border border-black rounded-2xl bg-[#f2ebdd] px-4 py-3 flex flex-col justify-center"
+                    style={{ gridArea: "4 / 2 / 5 / 3" }}
+                  >
+                    <p
+                      className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
+                      style={{ fontFamily: "Share Tech Mono, monospace" }}
+                    >
+                      Experience
+                    </p>
+                    <p className="text-xs md:text-sm leading-snug text-black/90 max-w-[28rem]">
+                      4+ years designing and building digital products, plus
+                      founder / developer of an AI-powered technical SEO tool
+                      used by early customers.
+                    </p>
+                  </div>
+                  {/* div11 – Specialties card (4 / 1 / 5 / 2) */}
+                  <div
+                    className="border border-black rounded-2xl bg-[#efe3cf] px-4 py-3 flex flex-col justify-center"
+                    style={{ gridArea: "4 / 1 / 5 / 2" }}
+                  >
+                    <p
+                      className="text-[11px] uppercase tracking-[0.2em] mb-1 opacity-70"
+                      style={{ fontFamily: "Share Tech Mono, monospace" }}
+                    >
+                      Specialties
+                    </p>
+                    <p className="text-xs md:text-sm leading-snug text-black/90 max-w-[28rem]">
+                      Design systems · Component libraries · APIs & data
+                      modelling · Performance optimization · Technical SEO ·
+                      Motion design · A11y
+                    </p>
+                  </div>
+                  {/* div12 – long bottom left strip (5 / 1 / 6 / 4) */}
+                  <div
+                    className="border border-black rounded-2xl bg-[#f3ebdd] px-4 py-3 flex items-center"
+                    style={{ gridArea: "5 / 1 / 6 / 4" }}
+                  >
+                    <p
+                      className="text-[10px] uppercase tracking-[0.25em] opacity-70 mr-4 shrink-0"
+                      style={{ fontFamily: "Share Tech Mono, monospace" }}
+                    >
+                      Notes
+                    </p>
+                    <div className="relative overflow-hidden flex-1">
+                      <div className="inline-block whitespace-nowrap animate-marquee-slow">
+                        <span className="text-[11px] md:text-sm leading-snug text-black/90">
+                          Designing for real constraints, real content, real
+                          users. Shipping small, learning fast, polishing the
+                          pieces that matter — then doing another pass.
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  {/* div13 – bottom right strip (5 / 4 / 6 / 6) */}
+                  <div
+                    className="border border-black rounded-2xl bg-[#f8f0df] px-4 py-3 flex items-center justify-between gap-4"
+                    style={{ gridArea: "5 / 4 / 6 / 6" }}
+                  >
+                    <div className="relative overflow-hidden flex-1">
+                      <div className="inline-block whitespace-nowrap animate-marquee">
+                        <span
+                          className="text-[10px] uppercase tracking-[0.25em] text-black/75"
+                          style={{ fontFamily: "Share Tech Mono, monospace" }}
+                        >
+                          Portfolio · In progress · Selected work · Experiments
+                          · Interfaces · Systems · Performance
+                        </span>
+                      </div>
+                    </div>
+                    <span
+                      className="text-[9px] font-mono text-black/60 shrink-0"
+                      style={{ fontFamily: "Share Tech Mono, monospace" }}
+                    >
+                      LIAM / 2025
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
