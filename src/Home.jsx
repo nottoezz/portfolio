@@ -44,10 +44,10 @@ const ROSE_KEYFRAMES = [
     scale: 1.5,
   },
   {
-    // Section 3 – selected works (centered)
-    position: { x: 0, y: -2, z: 0 },
+    // Section 3 – selected works (centered, smaller)
+    position: { x: 0, y: -1.2, z: 0 },
     rotation: { x: 0, y: Math.PI / 6, z: 0 },
-    scale: 1.5,
+    scale: 1.0,
   },
 ];
 
@@ -680,6 +680,7 @@ function Home() {
   const [eyeProgress, setEyeProgress] = useState(0);
   const [roseSettled, setRoseSettled] = useState(false);
   const [bulletsVisible, setBulletsVisible] = useState(false);
+  const [selectedWork, setSelectedWork] = useState(0); // 0 = Work 1 (AI Visibility) by default
   const [typingStates, setTypingStates] = useState([
     false,
     false,
@@ -1541,48 +1542,173 @@ function Home() {
         </section>
 
         {/* Selected Works Section */}
-        <section className="h-screen bg-[#ece6da] flex items-center justify-center snap-center relative overflow-hidden">
+        <section className="h-screen bg-[#ece6da] flex items-center justify-center snap-center relative overflow-visible">
           <div className="relative w-full h-full flex items-center justify-center">
-            {/* Circle container */}
-            <div className="relative w-[700px] h-[700px] flex items-center justify-center">
+            {/* Typographic Halo - wraps around circle in 4 quadrants */}
+            {selectedWork === 0 && (
+              <>
+                {/* Top-left: Project Title */}
+                <div
+                  className="absolute hidden md:block"
+                  style={{
+                    top: '2rem',
+                    left: '2rem',
+                    width: 'clamp(300px, calc((100vw - 700px) / 2 - 4rem), 450px)',
+                  }}
+                >
+                  <h3
+                    className="text-5xl md:text-6xl lg:text-7xl font-normal text-black leading-tight mb-4"
+                    style={{ fontFamily: "Notable, serif" }}
+                  >
+                    AI VISIBILITY
+                  </h3>
+                  <p
+                    className="text-sm md:text-base uppercase tracking-[0.2em] text-black/60"
+                    style={{ fontFamily: "Share Tech Mono, monospace" }}
+                  >
+                    Technical SEO Scanner
+                  </p>
+                </div>
+
+                {/* Top-right: Bold Tagline */}
+                <div
+                  className="absolute hidden md:block text-right"
+                  style={{
+                    top: '2rem',
+                    right: '2rem',
+                    width: 'clamp(300px, calc((100vw - 700px) / 2 - 4rem), 450px)',
+                  }}
+                >
+                  <p
+                    className="text-3xl md:text-4xl lg:text-5xl font-normal text-black leading-tight"
+                    style={{ fontFamily: "Notable, serif" }}
+                  >
+                    Real audits. Real insights. Real results.
+                  </p>
+                </div>
+
+                {/* Bottom-left: Description */}
+                <div
+                  className="absolute hidden md:block"
+                  style={{
+                    bottom: '2rem',
+                    left: '2rem',
+                    width: 'clamp(300px, calc((100vw - 700px) / 2 - 4rem), 450px)',
+                  }}
+                >
+                  <p className="text-base md:text-lg lg:text-xl text-black/80 leading-relaxed">
+                    A full-stack tool that audits real-world websites for performance, technical SEO, and crawlability – then turns those scans into actionable insight for founders and marketers.
+                  </p>
+                </div>
+
+                {/* Bottom-right: Role + Impact */}
+                <div
+                  className="absolute hidden md:block text-right"
+                  style={{
+                    bottom: '2rem',
+                    right: '2rem',
+                    width: 'clamp(300px, calc((100vw - 700px) / 2 - 4rem), 450px)',
+                  }}
+                >
+                  <div className="space-y-4 lg:space-y-5">
+                    <div>
+                      <p
+                        className="text-xs md:text-sm uppercase tracking-[0.2em] text-black/60 mb-2"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        Role
+                      </p>
+                      <p className="text-base md:text-lg text-black/80">Solo designer, developer & product owner</p>
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs md:text-sm uppercase tracking-[0.2em] text-black/60 mb-2"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        Impact
+                      </p>
+                      <p className="text-base md:text-lg text-black/80">Live platform. Paying customers. Powers client acquisition.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mobile: Stacked layout above circle */}
+                <div className="absolute top-8 left-1/2 -translate-x-1/2 w-[90%] max-w-[500px] md:hidden space-y-4 px-4">
+                  <h3
+                    className="text-3xl font-normal text-black leading-tight"
+                    style={{ fontFamily: "Notable, serif" }}
+                  >
+                    AI VISIBILITY
+                  </h3>
+                  <p
+                    className="text-xl font-normal text-black leading-tight"
+                    style={{ fontFamily: "Notable, serif" }}
+                  >
+                    Real audits. Real insights. Real results.
+                  </p>
+                  <p className="text-sm text-black/80 leading-relaxed">
+                    A full-stack tool that audits real-world websites for performance, technical SEO, and crawlability – then turns those scans into actionable insight for founders and marketers.
+                  </p>
+                  <div className="space-y-2 pt-2">
+                    <p
+                      className="text-xs uppercase tracking-[0.2em] text-black/60"
+                      style={{ fontFamily: "Share Tech Mono, monospace" }}
+                    >
+                      Role
+                    </p>
+                    <p className="text-sm text-black/80">Solo designer, developer & product owner</p>
+                    <p
+                      className="text-xs uppercase tracking-[0.2em] text-black/60 pt-2"
+                      style={{ fontFamily: "Share Tech Mono, monospace" }}
+                    >
+                      Impact
+                    </p>
+                    <p className="text-sm text-black/80">Live platform. Paying customers. Powers client acquisition.</p>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Circle container - larger to fill screen */}
+            <div className="relative w-[400px] h-[400px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px] flex items-center justify-center md:mt-0 mt-[280px]">
               {/* Circle border */}
               <div className="absolute inset-0 rounded-full border-2 border-black"></div>
               
               {/* Connecting lines */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ overflow: 'visible' }}>
-                {/* Top line */}
+                {/* 45° line (top-right) - from circle edge to work circle */}
                 <line
-                  x1="50%"
-                  y1="0%"
-                  x2="50%"
-                  y2="8%"
+                  x1="85.36%"
+                  y1="14.64%"
+                  x2="94%"
+                  y2="6%"
                   stroke="black"
                   strokeWidth="1.5"
                 />
-                {/* Right line */}
+                {/* 135° line (top-left) */}
                 <line
-                  x1="92%"
-                  y1="50%"
-                  x2="100%"
-                  y2="50%"
+                  x1="14.64%"
+                  y1="14.64%"
+                  x2="6%"
+                  y2="6%"
                   stroke="black"
                   strokeWidth="1.5"
                 />
-                {/* Bottom line */}
+                {/* 225° line (bottom-left) */}
                 <line
-                  x1="50%"
-                  y1="92%"
-                  x2="50%"
-                  y2="100%"
+                  x1="14.64%"
+                  y1="85.36%"
+                  x2="6%"
+                  y2="94%"
                   stroke="black"
                   strokeWidth="1.5"
                 />
-                {/* Left line */}
+                {/* 315° line (bottom-right) */}
                 <line
-                  x1="8%"
-                  y1="50%"
-                  x2="0%"
-                  y2="50%"
+                  x1="85.36%"
+                  y1="85.36%"
+                  x2="94%"
+                  y2="94%"
                   stroke="black"
                   strokeWidth="1.5"
                 />
@@ -1590,31 +1716,63 @@ function Home() {
               
               {/* Rose will be rendered by existing Three.js canvas overlay */}
               
-              {/* 4 points extending from circle */}
-              {/* Top point */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-36 bg-black rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer">
-                <span className="text-white text-xs uppercase tracking-wider text-center px-2" style={{ fontFamily: "Share Tech Mono, monospace" }}>
-                  Work 1
+              {/* 4 points extending from circle at 45° intervals */}
+              {/* 45° - Top-right */}
+              <div 
+                onClick={() => setSelectedWork(0)}
+                className={`absolute top-1/2 left-1/2 w-28 h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer ${
+                  selectedWork === 0 ? 'bg-black scale-110' : 'bg-black'
+                }`}
+                style={{
+                  transform: 'translate(-50%, -50%) translate(180px, -180px)'
+                }}
+              >
+                <span className="text-white text-[9px] md:text-[11px] lg:text-[12px] uppercase tracking-wider text-center px-2" style={{ fontFamily: "Share Tech Mono, monospace" }}>
+                  AI Visibility
                 </span>
               </div>
               
-              {/* Right point */}
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-36 h-36 bg-black rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer">
-                <span className="text-white text-xs uppercase tracking-wider text-center px-2" style={{ fontFamily: "Share Tech Mono, monospace" }}>
+              {/* 135° - Top-left */}
+              <div 
+                onClick={() => setSelectedWork(1)}
+                className={`absolute top-1/2 left-1/2 w-28 h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer ${
+                  selectedWork === 1 ? 'bg-black scale-110' : 'bg-black'
+                }`}
+                style={{
+                  transform: 'translate(-50%, -50%) translate(-180px, -180px)'
+                }}
+              >
+                <span className="text-white text-[9px] md:text-[11px] lg:text-[12px] uppercase tracking-wider text-center px-2" style={{ fontFamily: "Share Tech Mono, monospace" }}>
                   Work 2
                 </span>
               </div>
               
-              {/* Bottom point */}
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-36 h-36 bg-black rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer">
-                <span className="text-white text-xs uppercase tracking-wider text-center px-2" style={{ fontFamily: "Share Tech Mono, monospace" }}>
+              {/* 225° - Bottom-left */}
+              <div 
+                onClick={() => setSelectedWork(2)}
+                className={`absolute top-1/2 left-1/2 w-28 h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer ${
+                  selectedWork === 2 ? 'bg-black scale-110' : 'bg-black'
+                }`}
+                style={{
+                  transform: 'translate(-50%, -50%) translate(-180px, 180px)'
+                }}
+              >
+                <span className="text-white text-[9px] md:text-[11px] lg:text-[12px] uppercase tracking-wider text-center px-2" style={{ fontFamily: "Share Tech Mono, monospace" }}>
                   Work 3
                 </span>
               </div>
               
-              {/* Left point */}
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-36 h-36 bg-black rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer">
-                <span className="text-white text-xs uppercase tracking-wider text-center px-2" style={{ fontFamily: "Share Tech Mono, monospace" }}>
+              {/* 315° - Bottom-right */}
+              <div 
+                onClick={() => setSelectedWork(3)}
+                className={`absolute top-1/2 left-1/2 w-28 h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer ${
+                  selectedWork === 3 ? 'bg-black scale-110' : 'bg-black'
+                }`}
+                style={{
+                  transform: 'translate(-50%, -50%) translate(180px, 180px)'
+                }}
+              >
+                <span className="text-white text-[9px] md:text-[11px] lg:text-[12px] uppercase tracking-wider text-center px-2" style={{ fontFamily: "Share Tech Mono, monospace" }}>
                   Work 4
                 </span>
               </div>
