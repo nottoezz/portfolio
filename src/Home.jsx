@@ -43,6 +43,12 @@ const ROSE_KEYFRAMES = [
     rotation: { x: 0, y: Math.PI / 2, z: 0 },
     scale: 1.5,
   },
+  {
+    // Section 3 – selected works (centered)
+    position: { x: 0, y: -2, z: 0 },
+    rotation: { x: 0, y: Math.PI / 6, z: 0 },
+    scale: 1.5,
+  },
 ];
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -882,6 +888,7 @@ function Home() {
     let roseModel = null;
     let animationFrameId = null;
     let isCancelled = false;
+    let accumulatedSpin = 0; // Track accumulated spin rotation
 
     const loader = new GLTFLoader();
 
@@ -947,20 +954,37 @@ function Home() {
         roseModel.position.y += (position.y - roseModel.position.y) * posEase;
         roseModel.position.z += (position.z - roseModel.position.z) * posEase;
 
+        // Check if we're in section 3 (Selected Works)
+        const sectionFloat = y / viewportHeight;
+        const isInSelectedWorks = sectionFloat >= 3 && sectionFloat < 4;
+
         roseModel.rotation.x += (rotation.x - roseModel.rotation.x) * rotEase;
-        roseModel.rotation.y += (rotation.y - roseModel.rotation.y) * rotEase;
         roseModel.rotation.z += (rotation.z - roseModel.rotation.z) * rotEase;
+
+        // Handle Y rotation differently based on section
+        if (isInSelectedWorks) {
+          // Accumulate spin rotation when in Selected Works section
+          accumulatedSpin += 0.003;
+          // Target rotation includes accumulated spin so easing works with the spin
+          const targetRotationY = rotation.y + accumulatedSpin;
+          roseModel.rotation.y += (targetRotationY - roseModel.rotation.y) * rotEase;
+        } else {
+          accumulatedSpin = 0; // Reset when not in section
+          // Normal rotation easing
+          roseModel.rotation.y += (rotation.y - roseModel.rotation.y) * rotEase;
+          
+          // Normal mouse influence for other sections
+          const maxMouseInfluence = 0.01;
+          const mouseFalloff = Math.min(y / (viewportHeight * 2.7), 1);
+          const mouseInfluence = maxMouseInfluence * (1 - mouseFalloff);
+
+          roseModel.rotation.y += mouseRef.current.x * mouseInfluence;
+          roseModel.rotation.x += mouseRef.current.y * mouseInfluence * 0.5;
+        }
 
         roseModel.scale.x += (scale - roseModel.scale.x) * scaleEase;
         roseModel.scale.y += (scale - roseModel.scale.y) * scaleEase;
         roseModel.scale.z += (scale - roseModel.scale.z) * scaleEase;
-
-        const maxMouseInfluence = 0.01;
-        const mouseFalloff = Math.min(y / (viewportHeight * 2.7), 1);
-        const mouseInfluence = maxMouseInfluence * (1 - mouseFalloff);
-
-        roseModel.rotation.y += mouseRef.current.x * mouseInfluence;
-        roseModel.rotation.x += mouseRef.current.y * mouseInfluence * 0.5;
       }
 
       renderer.render(scene, camera);
@@ -1511,6 +1535,88 @@ function Home() {
                     </span>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Selected Works Section */}
+        <section className="h-screen bg-[#ece6da] flex items-center justify-center snap-center relative overflow-hidden">
+          <div className="relative w-full h-full flex items-center justify-center">
+            {/* Circle container */}
+            <div className="relative w-[700px] h-[700px] flex items-center justify-center">
+              {/* Circle border */}
+              <div className="absolute inset-0 rounded-full border-2 border-black"></div>
+              
+              {/* Connecting lines */}
+              <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ overflow: 'visible' }}>
+                {/* Top line */}
+                <line
+                  x1="50%"
+                  y1="0%"
+                  x2="50%"
+                  y2="8%"
+                  stroke="black"
+                  strokeWidth="1.5"
+                />
+                {/* Right line */}
+                <line
+                  x1="92%"
+                  y1="50%"
+                  x2="100%"
+                  y2="50%"
+                  stroke="black"
+                  strokeWidth="1.5"
+                />
+                {/* Bottom line */}
+                <line
+                  x1="50%"
+                  y1="92%"
+                  x2="50%"
+                  y2="100%"
+                  stroke="black"
+                  strokeWidth="1.5"
+                />
+                {/* Left line */}
+                <line
+                  x1="8%"
+                  y1="50%"
+                  x2="0%"
+                  y2="50%"
+                  stroke="black"
+                  strokeWidth="1.5"
+                />
+              </svg>
+              
+              {/* Rose will be rendered by existing Three.js canvas overlay */}
+              
+              {/* 4 points extending from circle */}
+              {/* Top point */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-36 bg-black rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer">
+                <span className="text-white text-xs uppercase tracking-wider text-center px-2" style={{ fontFamily: "Share Tech Mono, monospace" }}>
+                  Work 1
+                </span>
+              </div>
+              
+              {/* Right point */}
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-36 h-36 bg-black rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer">
+                <span className="text-white text-xs uppercase tracking-wider text-center px-2" style={{ fontFamily: "Share Tech Mono, monospace" }}>
+                  Work 2
+                </span>
+              </div>
+              
+              {/* Bottom point */}
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-36 h-36 bg-black rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer">
+                <span className="text-white text-xs uppercase tracking-wider text-center px-2" style={{ fontFamily: "Share Tech Mono, monospace" }}>
+                  Work 3
+                </span>
+              </div>
+              
+              {/* Left point */}
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-36 h-36 bg-black rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer">
+                <span className="text-white text-xs uppercase tracking-wider text-center px-2" style={{ fontFamily: "Share Tech Mono, monospace" }}>
+                  Work 4
+                </span>
               </div>
             </div>
           </div>
