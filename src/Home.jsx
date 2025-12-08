@@ -681,6 +681,8 @@ function Home() {
   const [roseSettled, setRoseSettled] = useState(false);
   const [bulletsVisible, setBulletsVisible] = useState(false);
   const [selectedWork, setSelectedWork] = useState(0); // 0 = Work 1 (AI Visibility) by default
+  const [displayedWork, setDisplayedWork] = useState(0); // for animated transitions
+  const [workPhase, setWorkPhase] = useState("idle"); // idle | out | in
   const [typingStates, setTypingStates] = useState([
     false,
     false,
@@ -690,6 +692,29 @@ function Home() {
   const [animationsPlayed, setAnimationsPlayed] = useState(false);
 
   const panel1Visible = useIntersectionObserver(panel1Ref);
+
+  // Smooth content transitions when switching selected work
+  useEffect(() => {
+    if (selectedWork === displayedWork) return;
+    setWorkPhase("out");
+    let settleTimer;
+    const outTimer = setTimeout(() => {
+      setDisplayedWork(selectedWork);
+      setWorkPhase("in");
+      settleTimer = setTimeout(() => setWorkPhase("idle"), 520);
+    }, 140);
+    return () => {
+      clearTimeout(outTimer);
+      if (settleTimer) clearTimeout(settleTimer);
+    };
+  }, [selectedWork, displayedWork]);
+
+  const workTransitionClass =
+    workPhase === "out"
+      ? "opacity-0 translate-y-4 scale-[0.995] blur-[1px]"
+      : "opacity-100 translate-y-0 scale-100 blur-0";
+  const workTransitionBase =
+    "transition-all duration-600 ease-[cubic-bezier(0.22,1,0.36,1)]";
 
   // Asset loading detection
   useEffect(() => {
@@ -1543,9 +1568,11 @@ function Home() {
 
         {/* Selected Works Section */}
         <section className="h-screen bg-[#ece6da] flex items-center justify-center snap-center relative overflow-visible">
-          <div className="relative w-full h-full flex items-center justify-center">
+          <div
+            className={`relative w-full h-full flex items-center justify-center ${workTransitionBase} ${workTransitionClass}`}
+          >
             {/* Content Blocks - AI Visibility */}
-            {selectedWork === 0 && (
+            {displayedWork === 0 && (
               <>
                 {/* Left Column: Title, Image, Description */}
                 <div className="absolute top-8 left-8 bottom-8 hidden md:flex flex-col w-[420px] justify-between">
@@ -1686,7 +1713,7 @@ function Home() {
                 </div>
 
                 {/* Center-top: Stats/Metrics */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[320px] md:-translate-y-[320px] lg:-translate-y-[360px] hidden md:block w-[500px] text-center">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[360px] md:-translate-y-[360px] lg:-translate-y-[400px] hidden md:block w-[520px] text-center border border-black/20 rounded-2xl px-4 py-3 bg-white/50">
                   <div className="grid grid-cols-3 gap-8">
                     <div>
                       <p className="text-3xl lg:text-4xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
@@ -1829,7 +1856,7 @@ function Home() {
             )}
 
             {/* Content Blocks - Iris Network System */}
-            {selectedWork === 1 && (
+            {displayedWork === 1 && (
               <>
                 {/* Left Column: Title, Description */}
                 <div className="absolute top-8 left-8 bottom-8 hidden md:flex flex-col w-[420px] justify-between">
@@ -1969,7 +1996,7 @@ function Home() {
                 </div>
 
                 {/* Center-top: Stats/Metrics */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[320px] md:-translate-y-[320px] lg:-translate-y-[360px] hidden md:block w-[500px] text-center">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[360px] md:-translate-y-[360px] lg:-translate-y-[400px] hidden md:block w-[520px] text-center border border-black/20 rounded-2xl px-4 py-3 bg-white/50">
                   <div className="grid grid-cols-3 gap-8">
                     <div>
                       <p className="text-3xl lg:text-4xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
@@ -2112,7 +2139,7 @@ function Home() {
             )}
 
             {/* Content Blocks - Terminal Orders */}
-            {selectedWork === 2 && (
+            {displayedWork === 2 && (
               <>
                 {/* Left Column: Title, Description */}
                 <div className="absolute top-8 left-8 bottom-8 hidden md:flex flex-col w-[420px] justify-between">
@@ -2127,11 +2154,11 @@ function Home() {
                       className="text-sm uppercase tracking-[0.2em] text-black/60 mb-6"
                       style={{ fontFamily: "Share Tech Mono, monospace" }}
                     >
-                      Horror Cooking Game
+                      Real Cooking Game
                     </p>
 
                     <p className="text-base lg:text-lg text-black/80 leading-relaxed mb-6">
-                      A browser-based horror cooking game built with JavaScript and Three.js. Take strange food orders from a glowing terminal in a dark, low-poly kitchen. Type, cook, and (hopefully) survive.
+                      A browser-based real cooking game built with JavaScript and Three.js. Take strange food orders from a glowing terminal in a dark, low-poly kitchen. Type, cook, and (hopefully) survive.
                     </p>
 
                     <div>
@@ -2143,7 +2170,7 @@ function Home() {
                       </p>
                       <div className="space-y-2 text-sm text-black/70">
                         <p className="font-semibold text-black/90">Design & Narrative</p>
-                        <p className="text-xs leading-relaxed">Created the core concept, designed narrative beats, and balanced playable mechanics with atmospheric horror elements.</p>
+                        <p className="text-xs leading-relaxed">Created the core concept, designed narrative beats, and balanced playable mechanics with atmospheric, real elements.</p>
                         <p className="font-semibold text-black/90 mt-3">Engineering</p>
                         <p className="text-xs leading-relaxed">Built modular JavaScript architecture, Three.js 3D kitchen scene, Canvas-based terminal UI with syntax highlighting, and integrated TheMealDB API for real recipe orders.</p>
                       </div>
@@ -2172,7 +2199,7 @@ function Home() {
                       <p>• 3D kitchen rendered in Three.js</p>
                       <p>• Terminal-style UI with commands</p>
                       <p>• Real recipes via TheMealDB API</p>
-                      <p>• Horror audio and atmosphere</p>
+                      <p>• Real audio and atmosphere</p>
                       <p>• Session state persistence</p>
                       <p>• Low-poly PSX-style visuals</p>
                     </div>
@@ -2229,7 +2256,7 @@ function Home() {
                         Key Challenges
                       </p>
                       <p className="text-sm text-black/70 leading-relaxed">
-                        Making a terminal UI feel like a game, balancing Three.js visuals with browser performance, and turning normal API data into a horror experience.
+                        Making a terminal UI feel like a game, balancing Three.js visuals with browser performance, and turning normal API data into a real experience.
                       </p>
                     </div>
                     <div>
@@ -2252,7 +2279,7 @@ function Home() {
                 </div>
 
                 {/* Center-top: Stats/Metrics */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[320px] md:-translate-y-[320px] lg:-translate-y-[360px] hidden md:block w-[500px] text-center">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[360px] md:-translate-y-[360px] lg:-translate-y-[400px] hidden md:block w-[520px] text-center border border-black/20 rounded-2xl px-4 py-3 bg-white/50">
                   <div className="grid grid-cols-3 gap-8">
                     <div>
                       <p className="text-3xl lg:text-4xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
@@ -2272,7 +2299,7 @@ function Home() {
                     </div>
                     <div>
                       <p className="text-3xl lg:text-4xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
-                        Horror
+                        Real
                       </p>
                       <p className="text-xs uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
                         Experience
@@ -2294,7 +2321,7 @@ function Home() {
                       className="text-xs uppercase tracking-[0.2em] text-black/60 mb-4"
                       style={{ fontFamily: "Share Tech Mono, monospace" }}
                     >
-                      Horror Cooking Game
+                      Real Cooking Game
                     </p>
                   </div>
 
@@ -2306,7 +2333,7 @@ function Home() {
                   </p>
 
                   <p className="text-sm text-black/80 leading-relaxed">
-                    A browser-based horror cooking game built with JavaScript and Three.js. Take strange food orders from a glowing terminal in a dark, low-poly kitchen.
+                    A browser-based real cooking game built with JavaScript and Three.js. Take strange food orders from a glowing terminal in a dark, low-poly kitchen.
                   </p>
 
                   {/* Stats - Mobile */}
@@ -2329,7 +2356,7 @@ function Home() {
                     </div>
                     <div className="text-center">
                       <p className="text-2xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
-                        Horror
+                        Real
                       </p>
                       <p className="text-[10px] uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
                         Game
@@ -2349,7 +2376,7 @@ function Home() {
                       <p>• 3D Three.js kitchen</p>
                       <p>• Terminal UI</p>
                       <p>• Real recipe API</p>
-                      <p>• Horror audio</p>
+                      <p>• Real audio</p>
                       <p>• Session persistence</p>
                       <p>• PSX-style visuals</p>
                     </div>
@@ -2384,7 +2411,7 @@ function Home() {
             )}
 
             {/* Content Blocks - Afrikaans Early Literacy App */}
-            {selectedWork === 3 && (
+            {displayedWork === 3 && (
               <>
                 {/* Left Column: Title, Description */}
                 <div className="absolute top-8 left-8 bottom-8 hidden md:flex flex-col w-[420px] justify-between">
@@ -2399,11 +2426,11 @@ function Home() {
                       className="text-sm uppercase tracking-[0.2em] text-black/60 mb-6"
                       style={{ fontFamily: "Share Tech Mono, monospace" }}
                     >
-                      Grade 1 Learning App
+                      Gr1 Learning App
                     </p>
 
                     <p className="text-base lg:text-lg text-black/80 leading-relaxed mb-6">
-                      A playful iOS learning app helping Grade 1 learners master Afrikaans sounds, letters and early reading skills. Songs, phonics, tracing, and interactive lessons designed for young learners.
+                      A playful iOS learning app helping Gr1 learners master Afrikaans sounds, letters and early reading skills. Songs, phonics, tracing, and interactive lessons designed for young learners.
                     </p>
 
                     <div>
@@ -2417,7 +2444,7 @@ function Home() {
                         <p className="font-semibold text-black/90">Product & Learning Design</p>
                         <p className="text-xs leading-relaxed">Studied early-literacy pedagogy, designed learning progression, and wrote UX copy tailored for young learners.</p>
                         <p className="font-semibold text-black/90 mt-3">Engineering</p>
-                        <p className="text-xs leading-relaxed">Built iOS app in React Native, developed custom SVG letter-tracing system, implemented audio engine, and created lightweight local storage for offline usage.</p>
+                        <p className="text-xs leading-relaxed">Built iOS app in React Native, developed custom SVG letter-tracing system, implemented audio engine, and created lightweight local storage for study usage.</p>
                       </div>
                     </div>
                   </div>
@@ -2446,7 +2473,7 @@ function Home() {
                       <p>• Interactive sound games</p>
                       <p>• Song-based lessons</p>
                       <p>• Parent/Teacher progress tracking</p>
-                      <p>• Fully offline functionality</p>
+                      <p>• Fully study functionality</p>
                     </div>
                   </div>
                 </div>
@@ -2473,7 +2500,7 @@ function Home() {
                         Audience
                       </p>
                       <p className="text-base lg:text-lg text-black/80">
-                        Grade 1 learners, teachers & parents
+                        Gr1 learners, teachers & parents
                       </p>
                     </div>
                     <div>
@@ -2484,7 +2511,7 @@ function Home() {
                         Tech Stack
                       </p>
                       <p className="text-sm text-black/70 leading-relaxed">
-                        React Native · Custom SVG tracing engine · Audio system · Offline architecture
+                        React Native · Custom SVG tracing engine · Audio system · Study architecture
                       </p>
                     </div>
                   </div>
@@ -2524,7 +2551,7 @@ function Home() {
                 </div>
 
                 {/* Center-top: Stats/Metrics */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[320px] md:-translate-y-[320px] lg:-translate-y-[360px] hidden md:block w-[500px] text-center">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[360px] md:-translate-y-[360px] lg:-translate-y-[400px] hidden md:block w-[520px] text-center border border-black/20 rounded-2xl px-4 py-3 bg-white/50">
                   <div className="grid grid-cols-3 gap-8">
                     <div>
                       <p className="text-3xl lg:text-4xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
@@ -2536,7 +2563,7 @@ function Home() {
                     </div>
                     <div>
                       <p className="text-3xl lg:text-4xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
-                        Grade 1
+                        Gr1
                       </p>
                       <p className="text-xs uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
                         Early Literacy
@@ -2544,7 +2571,7 @@ function Home() {
                     </div>
                     <div>
                       <p className="text-3xl lg:text-4xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
-                        Offline
+                        Study
                       </p>
                       <p className="text-xs uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
                         First
@@ -2566,7 +2593,7 @@ function Home() {
                       className="text-xs uppercase tracking-[0.2em] text-black/60 mb-4"
                       style={{ fontFamily: "Share Tech Mono, monospace" }}
                     >
-                      Grade 1 Learning App
+                      Gr1 Learning App
                     </p>
                   </div>
 
@@ -2578,7 +2605,7 @@ function Home() {
                   </p>
 
                   <p className="text-sm text-black/80 leading-relaxed">
-                    A playful iOS learning app helping Grade 1 learners master Afrikaans sounds, letters and early reading skills.
+                    A playful iOS learning app helping Gr1 learners master Afrikaans sounds, letters and early reading skills.
                   </p>
 
                   {/* Stats - Mobile */}
@@ -2593,7 +2620,7 @@ function Home() {
                     </div>
                     <div className="text-center">
                       <p className="text-2xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
-                        Grade 1
+                        Gr1
                       </p>
                       <p className="text-[10px] uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
                         Literacy
@@ -2601,7 +2628,7 @@ function Home() {
                     </div>
                     <div className="text-center">
                       <p className="text-2xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
-                        Offline
+                        Study
                       </p>
                       <p className="text-[10px] uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
                         First
@@ -2623,7 +2650,7 @@ function Home() {
                       <p>• Sound games</p>
                       <p>• Song lessons</p>
                       <p>• Progress tracking</p>
-                      <p>• Offline mode</p>
+                      <p>• Study mode</p>
                     </div>
                   </div>
 
@@ -2773,8 +2800,8 @@ function Home() {
             </div>
 
             {/* Status - Below Rose */}
-            {selectedWork === 0 && (
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[320px] md:translate-y-[320px] lg:translate-y-[360px] hidden md:block w-[500px] text-center">
+            {displayedWork === 0 && (
+              <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[320px] md:translate-y-[320px] lg:translate-y-[360px] hidden md:block w-[500px] text-center ${workTransitionBase} ${workTransitionClass}`}>
                 <p
                   className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2"
                   style={{ fontFamily: "monospace" }}
@@ -2788,8 +2815,8 @@ function Home() {
             )}
 
             {/* Outcome - Below Rose - Iris Network System */}
-            {selectedWork === 1 && (
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[320px] md:translate-y-[320px] lg:translate-y-[360px] hidden md:block w-[500px] text-center">
+            {displayedWork === 1 && (
+              <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[320px] md:translate-y-[320px] lg:translate-y-[360px] hidden md:block w-[500px] text-center ${workTransitionBase} ${workTransitionClass}`}>
                 <p
                   className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2"
                   style={{ fontFamily: "monospace" }}
@@ -2803,8 +2830,8 @@ function Home() {
             )}
 
             {/* Outcome - Below Rose - Terminal Orders */}
-            {selectedWork === 2 && (
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[320px] md:translate-y-[320px] lg:translate-y-[360px] hidden md:block w-[500px] text-center">
+            {displayedWork === 2 && (
+              <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[320px] md:translate-y-[320px] lg:translate-y-[360px] hidden md:block w-[500px] text-center ${workTransitionBase} ${workTransitionClass}`}>
                 <p
                   className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2"
                   style={{ fontFamily: "monospace" }}
@@ -2818,8 +2845,8 @@ function Home() {
             )}
 
             {/* Status - Below Rose - Afrikaans Early Literacy */}
-            {selectedWork === 3 && (
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[320px] md:translate-y-[320px] lg:translate-y-[360px] hidden md:block w-[500px] text-center">
+            {displayedWork === 3 && (
+              <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[320px] md:translate-y-[320px] lg:translate-y-[360px] hidden md:block w-[500px] text-center ${workTransitionBase} ${workTransitionClass}`}>
                 <p
                   className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2"
                   style={{ fontFamily: "monospace" }}
