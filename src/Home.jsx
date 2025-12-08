@@ -49,6 +49,12 @@ const ROSE_KEYFRAMES = [
     rotation: { x: 0, y: Math.PI / 6, z: 0 },
     scale: 1.0,
   },
+  {
+    // Section 4 – contact (stays at section 3 position, but will be hidden)
+    position: { x: 0, y: -1.2, z: 0 },
+    rotation: { x: 0, y: Math.PI / 6, z: 0 },
+    scale: 1.0,
+  },
 ];
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -713,10 +719,10 @@ function Home() {
 
   const workTransitionClass =
     workPhase === "out"
-      ? "opacity-0 translate-y-4 scale-[0.995] blur-[1px]"
-      : "opacity-100 translate-y-0 scale-100 blur-0";
+      ? "opacity-0 translate-y-1"
+      : "opacity-100 translate-y-0";
   const workTransitionBase =
-    "transition-all duration-600 ease-[cubic-bezier(0.22,1,0.36,1)]";
+    "transition-all duration-500 ease-out";
 
   // Asset loading detection
   useEffect(() => {
@@ -1066,6 +1072,13 @@ function Home() {
   }
 
   const textOpacity = Math.max(1 - scrollY / 300, 0);
+  
+  // Fade out rose after Selected Works section (section 3)
+  const viewportHeight = typeof window !== "undefined" ? window.innerHeight : 1;
+  const sectionFloat = scrollY / viewportHeight;
+  const roseOpacity = sectionFloat < 3.5 
+    ? 1 
+    : Math.max(1 - (sectionFloat - 3.5) / 0.5, 0); // Fade out between section 3.5 and 4
 
   return (
     <>
@@ -1088,8 +1101,8 @@ function Home() {
         {/* Three.js background */}
         <div
           ref={mountRef}
-          className="pointer-events-none fixed right-0 top-0 z-10 overflow-hidden"
-          style={{ width: "100vw", height: "100vh" }}
+          className="pointer-events-none fixed right-0 top-0 z-10 overflow-hidden transition-opacity duration-500"
+          style={{ width: "100vw", height: "100vh", opacity: roseOpacity }}
         />
 
         {/* Hero Section */}
@@ -2864,6 +2877,99 @@ function Home() {
               </div>
             )}
 
+          </div>
+        </section>
+
+        {/* Contact Section - Artistic Stylized */}
+        <section className="relative h-screen bg-[#ece6da] snap-center overflow-hidden">
+          {/* Main Content Container */}
+          <div className="relative z-10 h-full flex flex-col items-center justify-center px-4 md:px-8 lg:px-16">
+            {/* Large Artistic Heading */}
+            <div className="text-center mb-12 md:mb-16">
+              <h1 className="text-6xl md:text-8xl lg:text-9xl font-black mb-4 tracking-tight leading-none text-black"
+                style={{ 
+                  fontFamily: "Notable, serif"
+                }}>
+                LET'S
+              </h1>
+              <h2 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-none text-black"
+                style={{ 
+                  fontFamily: "Notable, serif"
+                }}>
+                CONNECT
+              </h2>
+            </div>
+
+            {/* Contact Info Grid */}
+            <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-12">
+              {/* Email Card */}
+              <div className="group relative p-8 md:p-10 border-2 border-black rounded-3xl bg-white/60 backdrop-blur-sm hover:bg-white/80 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#AB3E5B]/5 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-[#AB3E5B]/10 transition-all duration-500" />
+                <p className="text-xs uppercase tracking-[0.3em] text-black/50 mb-4" style={{ fontFamily: "Share Tech Mono, monospace" }}>
+                  01. EMAIL
+                </p>
+                <a 
+                  href="mailto:liam@birch.co.za" 
+                  className="text-2xl md:text-3xl font-bold text-black hover:text-[#AB3E5B] transition-colors duration-300 block"
+                  style={{ fontFamily: "Notable, serif" }}
+                >
+                  liam@birch.co.za
+                </a>
+              </div>
+
+              {/* Links Card */}
+              <div className="group relative p-8 md:p-10 border-2 border-black rounded-3xl bg-white/60 backdrop-blur-sm hover:bg-white/80 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#FFBE40]/5 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-[#FFBE40]/10 transition-all duration-500" />
+                <p className="text-xs uppercase tracking-[0.3em] text-black/50 mb-4" style={{ fontFamily: "Share Tech Mono, monospace" }}>
+                  02. LINKS
+                </p>
+                <div className="flex flex-col gap-3">
+                  <a 
+                    href="https://github.com/nottoezz" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-xl md:text-2xl font-bold text-black hover:text-[#FFBE40] transition-colors duration-300"
+                    style={{ fontFamily: "Notable, serif" }}
+                  >
+                    GitHub →
+                  </a>
+                  <a 
+                    href="https://www.linkedin.com/in/liam-birch-54b4a238a/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-xl md:text-2xl font-bold text-black hover:text-[#61A6AB] transition-colors duration-300"
+                    style={{ fontFamily: "Notable, serif" }}
+                  >
+                    LinkedIn →
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Decorative Line */}
+            <div className="w-full max-w-3xl h-px bg-gradient-to-r from-transparent via-black/20 to-transparent mb-8" />
+
+            {/* Tagline */}
+            <div className="text-center">
+              <p className="text-lg md:text-xl text-black/60 italic mb-2"
+                style={{ fontFamily: "serif" }}>
+                "Building digital experiences that matter"
+              </p>
+              <p className="text-sm uppercase tracking-[0.4em] text-black/40"
+                style={{ fontFamily: "Share Tech Mono, monospace" }}>
+                AVAILABLE FOR PROJECTS
+              </p>
+            </div>
+
+            {/* Scroll Indicator */}
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+              <div className="flex flex-col items-center gap-2">
+                <p className="text-xs uppercase tracking-[0.3em] text-black/30" style={{ fontFamily: "Share Tech Mono, monospace" }}>
+                  END
+                </p>
+                <div className="w-px h-8 bg-black/20" />
+              </div>
+            </div>
           </div>
         </section>
       </main>
