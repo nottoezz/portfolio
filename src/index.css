@@ -108,3 +108,26 @@ html, body {
     transform: translate3d(0, 0, 0);
   }
 }
+
+/* Selected Works wavy line draw-in */
+.sw-lines path {
+  stroke-dasharray: 2400;
+  stroke-dashoffset: 2400;
+  transition: stroke-dashoffset 1.4s ease-out, opacity 0.9s ease-out;
+  opacity: 0.8;
+}
+.sw-lines-visible path {
+  stroke-dashoffset: 0;
+}
+.sw-lines-visible path:nth-child(2) {
+  transition-delay: 0.12s;
+}
+.sw-lines-visible path:nth-child(3) {
+  transition-delay: 0.22s;
+}
+.sw-lines-visible path:nth-child(4) {
+  transition-delay: 0.32s;
+}
+.sw-lines-visible path:nth-child(5) {
+  transition-delay: 0.42s;
+}

@@ -673,6 +673,7 @@ function Home() {
   const scrollRef = useRef(0); // for Three.js loop
   const scrollContainerRef = useRef(null);
   const panel1Ref = useRef(null);
+  const selectedWorksRef = useRef(null);
 
   const [isLoading, setIsLoading] = useState(true);
   const [scrollY, setScrollY] = useState(0);
@@ -692,6 +693,7 @@ function Home() {
   const [animationsPlayed, setAnimationsPlayed] = useState(false);
 
   const panel1Visible = useIntersectionObserver(panel1Ref);
+  const selectedWorksVisible = useIntersectionObserver(selectedWorksRef);
 
   // Smooth content transitions when switching selected work
   useEffect(() => {
@@ -1567,7 +1569,58 @@ function Home() {
         </section>
 
         {/* Selected Works Section */}
-        <section className="h-screen bg-[#ece6da] flex items-center justify-center snap-center relative overflow-visible">
+        <section
+          ref={selectedWorksRef}
+          className="h-screen bg-[#ece6da] flex items-center justify-center snap-center relative overflow-visible"
+        >
+          <div
+            className={`absolute inset-0 pointer-events-none overflow-hidden transition-opacity duration-700 ${
+              selectedWorksVisible ? "opacity-100 sw-lines-visible" : "opacity-0"
+            } sw-lines`}
+            aria-hidden="true"
+          >
+            <svg
+              className="w-full h-full"
+              viewBox="0 0 1600 900"
+              preserveAspectRatio="xMidYMid slice"
+            >
+              <path
+                d="M -220 450 C 180 250, 680 350, 1080 110 S 1720 -190, 1980 -410"
+                fill="none"
+                stroke="rgba(171,62,91,0.15)"
+                strokeWidth="36"
+                strokeLinecap="round"
+              />
+              <path
+                d="M -190 490 C 240 290, 700 390, 1120 150 S 1730 -150, 1990 -370"
+                fill="none"
+                stroke="rgba(255,190,64,0.14)"
+                strokeWidth="34"
+                strokeLinecap="round"
+              />
+              <path
+                d="M -200 900 C 200 650, 620 760, 1000 520 S 1650 260, 1900 -40"
+                fill="none"
+                stroke="rgba(171,62,91,0.18)"
+                strokeWidth="42"
+                strokeLinecap="round"
+              />
+              <path
+                d="M -250 840 C 120 640, 580 640, 980 430 S 1680 180, 1920 -120"
+                fill="none"
+                stroke="rgba(255,190,64,0.16)"
+                strokeWidth="32"
+                strokeLinecap="round"
+              />
+              <path
+                d="M -180 960 C 260 760, 720 820, 1150 560 S 1750 320, 2000 40"
+                fill="none"
+                stroke="rgba(0,0,0,0.04)"
+                strokeWidth="38"
+                strokeLinecap="round"
+              />
+            </svg>
+          </div>
           <div
             className={`relative w-full h-full flex items-center justify-center ${workTransitionBase} ${workTransitionClass}`}
           >
