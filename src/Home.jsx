@@ -1544,142 +1544,1128 @@ function Home() {
         {/* Selected Works Section */}
         <section className="h-screen bg-[#ece6da] flex items-center justify-center snap-center relative overflow-visible">
           <div className="relative w-full h-full flex items-center justify-center">
-            {/* Typographic Halo - wraps around circle in 4 quadrants */}
+            {/* Content Blocks - AI Visibility */}
             {selectedWork === 0 && (
               <>
-                {/* Top-left: Project Title */}
-                <div
-                  className="absolute hidden md:block"
-                  style={{
-                    top: '2rem',
-                    left: '2rem',
-                    width: 'clamp(300px, calc((100vw - 700px) / 2 - 4rem), 450px)',
-                  }}
-                >
-                  <h3
-                    className="text-5xl md:text-6xl lg:text-7xl font-normal text-black leading-tight mb-4"
-                    style={{ fontFamily: "Notable, serif" }}
-                  >
-                    AI VISIBILITY
-                  </h3>
-                  <p
-                    className="text-sm md:text-base uppercase tracking-[0.2em] text-black/60"
-                    style={{ fontFamily: "Share Tech Mono, monospace" }}
-                  >
-                    Technical SEO Scanner
-                  </p>
-                </div>
+                {/* Left Column: Title, Image, Description */}
+                <div className="absolute top-8 left-8 bottom-8 hidden md:flex flex-col w-[420px] justify-between">
+                  <div>
+                    <h3
+                      className="text-6xl lg:text-7xl font-normal text-black leading-none mb-3"
+                      style={{ fontFamily: "Notable, serif" }}
+                    >
+                      AI VISIBILITY
+                    </h3>
+                    <p
+                      className="text-sm uppercase tracking-[0.2em] text-black/60 mb-6"
+                      style={{ fontFamily: "Share Tech Mono, monospace" }}
+                    >
+                      Technical SEO Scanner
+                    </p>
 
-                {/* Top-right: Bold Tagline */}
-                <div
-                  className="absolute hidden md:block text-right"
-                  style={{
-                    top: '2rem',
-                    right: '2rem',
-                    width: 'clamp(300px, calc((100vw - 700px) / 2 - 4rem), 450px)',
-                  }}
-                >
-                  <p
-                    className="text-3xl md:text-4xl lg:text-5xl font-normal text-black leading-tight"
-                    style={{ fontFamily: "Notable, serif" }}
-                  >
-                    Real audits. Real insights. Real results.
-                  </p>
-                </div>
+                    <p className="text-base lg:text-lg text-black/80 leading-relaxed mb-6">
+                      A full-stack tool that audits real-world websites for performance, technical SEO, and crawlability – then turns those scans into actionable insight for founders and marketers.
+                    </p>
 
-                {/* Bottom-left: Description */}
-                <div
-                  className="absolute hidden md:block"
-                  style={{
-                    bottom: '2rem',
-                    left: '2rem',
-                    width: 'clamp(300px, calc((100vw - 700px) / 2 - 4rem), 450px)',
-                  }}
-                >
-                  <p className="text-base md:text-lg lg:text-xl text-black/80 leading-relaxed">
-                    A full-stack tool that audits real-world websites for performance, technical SEO, and crawlability – then turns those scans into actionable insight for founders and marketers.
-                  </p>
-                </div>
-
-                {/* Bottom-right: Role + Impact */}
-                <div
-                  className="absolute hidden md:block text-right"
-                  style={{
-                    bottom: '2rem',
-                    right: '2rem',
-                    width: 'clamp(300px, calc((100vw - 700px) / 2 - 4rem), 450px)',
-                  }}
-                >
-                  <div className="space-y-4 lg:space-y-5">
                     <div>
                       <p
-                        className="text-xs md:text-sm uppercase tracking-[0.2em] text-black/60 mb-2"
-                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                        className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                        style={{ fontFamily: "monospace" }}
                       >
-                        Role
+                        My Responsibilities
                       </p>
-                      <p className="text-base md:text-lg text-black/80">Solo designer, developer & product owner</p>
-                    </div>
-                    <div>
-                      <p
-                        className="text-xs md:text-sm uppercase tracking-[0.2em] text-black/60 mb-2"
-                        style={{ fontFamily: "Share Tech Mono, monospace" }}
-                      >
-                        Impact
-                      </p>
-                      <p className="text-base md:text-lg text-black/80">Live platform. Paying customers. Powers client acquisition.</p>
+                      <div className="space-y-2 text-sm text-black/70">
+                        <p className="font-semibold text-black/90">Product & UX</p>
+                        <p className="text-xs leading-relaxed">Defined core flows, designed minimal high-contrast UI, wrote all UX copy focusing on non-technical founders.</p>
+                        <p className="font-semibold text-black/90 mt-3">Engineering</p>
+                        <p className="text-xs leading-relaxed">Built dashboard, scanning engine, background jobs, and email/lead automation workflows.</p>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Mobile: Stacked layout above circle */}
-                <div className="absolute top-8 left-1/2 -translate-x-1/2 w-[90%] max-w-[500px] md:hidden space-y-4 px-4">
-                  <h3
-                    className="text-3xl font-normal text-black leading-tight"
+                {/* Top-right: Tagline + Features */}
+                <div className="absolute top-8 right-8 hidden md:block w-[420px]">
+                  <p
+                    className="text-4xl lg:text-5xl font-normal text-black leading-tight text-right mb-8"
                     style={{ fontFamily: "Notable, serif" }}
                   >
-                    AI VISIBILITY
-                  </h3>
+                    Real audits.<br />
+                    Real insights.<br />
+                    Real results.
+                  </p>
+
+                  <div className="space-y-4 text-right">
+                    <p
+                      className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                      style={{ fontFamily: "monospace" }}
+                    >
+                      Core Capabilities
+                    </p>
+                    <div className="space-y-2 text-sm text-black/70">
+                      <p>• Lighthouse audits on real URLs</p>
+                      <p>• Performance metrics & Core Web Vitals</p>
+                      <p>• Technical SEO analysis</p>
+                      <p>• Crawlability assessment</p>
+                      <p>• Human-readable reports</p>
+                      <p>• PDF export & shareable links</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom-right: Role & Impact + Tech */}
+                <div className="absolute bottom-8 right-8 hidden md:block w-[420px] text-right">
+                  <div className="space-y-6">
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.2em] text-black/60 mb-2"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        Role
+                      </p>
+                      <p className="text-base lg:text-lg text-black/80">
+                        Solo designer, developer & product owner
+                      </p>
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.2em] text-black/60 mb-2"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        Impact
+                      </p>
+                      <p className="text-base lg:text-lg text-black/80">
+                        Live platform. Paying customers. Powers client acquisition.
+                      </p>
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.25em] text-black/50 mb-2"
+                        style={{ fontFamily: "monospace" }}
+                      >
+                        Tech Stack
+                      </p>
+                      <p className="text-sm text-black/70 leading-relaxed">
+                        React · Node.js · PostgreSQL · Lighthouse API · Puppeteer · Express
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom-left: Additional Details */}
+                <div className="absolute bottom-8 left-8 hidden md:block w-[420px]">
+                  <div className="space-y-6">
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                        style={{ fontFamily: "monospace" }}
+                      >
+                        What It Does
+                      </p>
+                      <p className="text-sm text-black/70 leading-relaxed">
+                        Crawls a website and gathers performance, SEO, accessibility and best-practice metrics in one place. Runs real Lighthouse-style audits on real URLs instead of lab-perfect demo pages. Highlights high-impact issues and explains why they matter.
+                      </p>
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                        style={{ fontFamily: "monospace" }}
+                      >
+                        Key Features
+                      </p>
+                      <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs text-black/70">
+                        <p>• Mobile performance</p>
+                        <p>• Core Web Vitals</p>
+                        <p>• Meta tag analysis</p>
+                        <p>• Broken link detection</p>
+                        <p>• Image optimization</p>
+                        <p>• SEO scoring</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Center-top: Stats/Metrics */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[320px] md:-translate-y-[320px] lg:-translate-y-[360px] hidden md:block w-[500px] text-center">
+                  <div className="grid grid-cols-3 gap-8">
+                    <div>
+                      <p className="text-3xl lg:text-4xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        100+
+                      </p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        Sites Scanned
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-3xl lg:text-4xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        50+
+                      </p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        Metrics Tracked
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-3xl lg:text-4xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        Live
+                      </p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        In Production
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mobile Layout */}
+                <div className="absolute top-8 left-4 right-4 md:hidden space-y-6">
+                  <div>
+                    <h3
+                      className="text-4xl font-normal text-black leading-tight mb-2"
+                      style={{ fontFamily: "Notable, serif" }}
+                    >
+                      AI VISIBILITY
+                    </h3>
+                    <p
+                      className="text-xs uppercase tracking-[0.2em] text-black/60 mb-4"
+                      style={{ fontFamily: "Share Tech Mono, monospace" }}
+                    >
+                      Technical SEO Scanner
+                    </p>
+                  </div>
+
                   <p
-                    className="text-xl font-normal text-black leading-tight"
+                    className="text-2xl font-normal text-black leading-tight"
                     style={{ fontFamily: "Notable, serif" }}
                   >
                     Real audits. Real insights. Real results.
                   </p>
+
                   <p className="text-sm text-black/80 leading-relaxed">
                     A full-stack tool that audits real-world websites for performance, technical SEO, and crawlability – then turns those scans into actionable insight for founders and marketers.
                   </p>
-                  <div className="space-y-2 pt-2">
+
+                  {/* Stats - Mobile */}
+                  <div className="grid grid-cols-3 gap-4 py-4 border-y border-black/10">
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        100+
+                      </p>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        Sites
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        50+
+                      </p>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        Metrics
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        Live
+                      </p>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        Active
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Core Capabilities - Mobile */}
+                  <div>
                     <p
-                      className="text-xs uppercase tracking-[0.2em] text-black/60"
+                      className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                      style={{ fontFamily: "monospace" }}
+                    >
+                      Core Capabilities
+                    </p>
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs text-black/70">
+                      <p>• Lighthouse audits</p>
+                      <p>• Core Web Vitals</p>
+                      <p>• SEO analysis</p>
+                      <p>• Crawlability</p>
+                      <p>• Human reports</p>
+                      <p>• PDF export</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 pt-2">
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.2em] text-black/60 mb-1"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        Role
+                      </p>
+                      <p className="text-sm text-black/80">
+                        Solo designer, developer & product owner
+                      </p>
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.2em] text-black/60 mb-1"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        Impact
+                      </p>
+                      <p className="text-sm text-black/80">
+                        Live platform. Paying customers. Powers client acquisition.
+                      </p>
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.25em] text-black/50 mb-1"
+                        style={{ fontFamily: "monospace" }}
+                      >
+                        Tech Stack
+                      </p>
+                      <p className="text-xs text-black/70">
+                        React · Node.js · PostgreSQL · Lighthouse API
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Content Blocks - Iris Network System */}
+            {selectedWork === 1 && (
+              <>
+                {/* Left Column: Title, Description */}
+                <div className="absolute top-8 left-8 bottom-8 hidden md:flex flex-col w-[420px] justify-between">
+                  <div>
+                    <h3
+                      className="text-6xl lg:text-7xl font-normal text-black leading-none mb-3"
+                      style={{ fontFamily: "Notable, serif" }}
+                    >
+                      IRIS NETWORK SYSTEM
+                    </h3>
+                    <p
+                      className="text-sm uppercase tracking-[0.2em] text-black/60 mb-6"
                       style={{ fontFamily: "Share Tech Mono, monospace" }}
                     >
-                      Role
+                      Website Rebuild
                     </p>
-                    <p className="text-sm text-black/80">Solo designer, developer & product owner</p>
+
+                    <p className="text-base lg:text-lg text-black/80 leading-relaxed mb-6">
+                      Frontend rebuild of their marketing site in React & Tailwind. A faster, cleaner web presence for a network-infrastructure company. Turning a dated brochure site into a modern, responsive experience.
+                    </p>
+
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                        style={{ fontFamily: "monospace" }}
+                      >
+                        My Responsibilities
+                      </p>
+                      <div className="space-y-2 text-sm text-black/70">
+                        <p className="font-semibold text-black/90">UX & Structure</p>
+                        <p className="text-xs leading-relaxed">Audited the old site, simplified information architecture, clarified copy hierarchy with strong hero messaging and scannable sections.</p>
+                        <p className="font-semibold text-black/90 mt-3">Front-end Engineering</p>
+                        <p className="text-xs leading-relaxed">Built React SPA with Tailwind, implemented responsive navigation and config-driven components for easy page assembly.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Top-right: Tagline + Features */}
+                <div className="absolute top-8 right-8 hidden md:block w-[420px]">
+                  <p
+                    className="text-4xl lg:text-5xl font-normal text-black leading-tight text-right mb-8"
+                    style={{ fontFamily: "Notable, serif" }}
+                  >
+                    Modern. Fast.<br />
+                    Clear.
+                  </p>
+
+                  <div className="space-y-4 text-right">
                     <p
-                      className="text-xs uppercase tracking-[0.2em] text-black/60 pt-2"
+                      className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                      style={{ fontFamily: "monospace" }}
+                    >
+                      What the New Site Does
+                    </p>
+                    <div className="space-y-2 text-sm text-black/70">
+                      <p>• Clear service presentation</p>
+                      <p>• Simple path to contact</p>
+                      <p>• Clean case studies</p>
+                      <p>• Responsive across devices</p>
+                      <p>• Performance optimized</p>
+                      <p>• Brand voice intact</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom-right: Role & Impact + Tech */}
+                <div className="absolute bottom-8 right-8 hidden md:block w-[420px] text-right">
+                  <div className="space-y-6">
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.2em] text-black/60 mb-2"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        Role
+                      </p>
+                      <p className="text-base lg:text-lg text-black/80">
+                        Front-end developer & UX collaborator
+                      </p>
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.2em] text-black/60 mb-2"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        Scope
+                      </p>
+                      <p className="text-base lg:text-lg text-black/80">
+                        Full rebuild of public marketing website. Home, services, case studies, contact.
+                      </p>
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.25em] text-black/50 mb-2"
+                        style={{ fontFamily: "monospace" }}
+                      >
+                        Tech Stack
+                      </p>
+                      <p className="text-sm text-black/70 leading-relaxed">
+                        React · Tailwind CSS · Modern build tooling
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom-left: Additional Details */}
+                <div className="absolute bottom-8 left-8 hidden md:block w-[420px]">
+                  <div className="space-y-6">
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                        style={{ fontFamily: "monospace" }}
+                      >
+                        Key Challenges
+                      </p>
+                      <p className="text-sm text-black/70 leading-relaxed">
+                        Translating legacy layout into something modern but familiar. Optimizing for performance and responsiveness. Making technical network services feel approachable to non-technical buyers.
+                      </p>
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                        style={{ fontFamily: "monospace" }}
+                      >
+                        Solution Approach
+                      </p>
+                      <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs text-black/70">
+                        <p>• Component-based layout</p>
+                        <p>• Mobile-first design</p>
+                        <p>• Benefit-led content</p>
+                        <p>• Clear CTAs</p>
+                        <p>• Lean assets</p>
+                        <p>• Better image handling</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Center-top: Stats/Metrics */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[320px] md:-translate-y-[320px] lg:-translate-y-[360px] hidden md:block w-[500px] text-center">
+                  <div className="grid grid-cols-3 gap-8">
+                    <div>
+                      <p className="text-3xl lg:text-4xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        Full
+                      </p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        Rebuild
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-3xl lg:text-4xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        React
+                      </p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        + Tailwind
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-3xl lg:text-4xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        Fast
+                      </p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        Performance
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mobile Layout */}
+                <div className="absolute top-8 left-4 right-4 md:hidden space-y-6">
+                  <div>
+                    <h3
+                      className="text-4xl font-normal text-black leading-tight mb-2"
+                      style={{ fontFamily: "Notable, serif" }}
+                    >
+                      IRIS NETWORK SYSTEM
+                    </h3>
+                    <p
+                      className="text-xs uppercase tracking-[0.2em] text-black/60 mb-4"
                       style={{ fontFamily: "Share Tech Mono, monospace" }}
                     >
-                      Impact
+                      Website Rebuild
                     </p>
-                    <p className="text-sm text-black/80">Live platform. Paying customers. Powers client acquisition.</p>
+                  </div>
+
+                  <p
+                    className="text-2xl font-normal text-black leading-tight"
+                    style={{ fontFamily: "Notable, serif" }}
+                  >
+                    Modern. Fast. Clear.
+                  </p>
+
+                  <p className="text-sm text-black/80 leading-relaxed">
+                    Frontend rebuild of their marketing site in React & Tailwind. A faster, cleaner web presence for a network-infrastructure company.
+                  </p>
+
+                  {/* Stats - Mobile */}
+                  <div className="grid grid-cols-3 gap-4 py-4 border-y border-black/10">
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        Full
+                      </p>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        Rebuild
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        React
+                      </p>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        + Tailwind
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        Fast
+                      </p>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        Speed
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Core Features - Mobile */}
+                  <div>
+                    <p
+                      className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                      style={{ fontFamily: "monospace" }}
+                    >
+                      What It Does
+                    </p>
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs text-black/70">
+                      <p>• Clear services</p>
+                      <p>• Simple contact path</p>
+                      <p>• Clean case studies</p>
+                      <p>• Responsive design</p>
+                      <p>• Performance optimized</p>
+                      <p>• Brand aligned</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 pt-2">
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.2em] text-black/60 mb-1"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        Role
+                      </p>
+                      <p className="text-sm text-black/80">
+                        Front-end developer & UX collaborator
+                      </p>
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.2em] text-black/60 mb-1"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        Scope
+                      </p>
+                      <p className="text-sm text-black/80">
+                        Full rebuild of public marketing website
+                      </p>
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.25em] text-black/50 mb-1"
+                        style={{ fontFamily: "monospace" }}
+                      >
+                        Tech Stack
+                      </p>
+                      <p className="text-xs text-black/70">
+                        React · Tailwind CSS · Modern build tooling
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Content Blocks - Terminal Orders */}
+            {selectedWork === 2 && (
+              <>
+                {/* Left Column: Title, Description */}
+                <div className="absolute top-8 left-8 bottom-8 hidden md:flex flex-col w-[420px] justify-between">
+                  <div>
+                    <h3
+                      className="text-6xl lg:text-7xl font-normal text-black leading-none mb-3"
+                      style={{ fontFamily: "Notable, serif" }}
+                    >
+                      TERMINAL ORDERS
+                    </h3>
+                    <p
+                      className="text-sm uppercase tracking-[0.2em] text-black/60 mb-6"
+                      style={{ fontFamily: "Share Tech Mono, monospace" }}
+                    >
+                      Horror Cooking Game
+                    </p>
+
+                    <p className="text-base lg:text-lg text-black/80 leading-relaxed mb-6">
+                      A browser-based horror cooking game built with JavaScript and Three.js. Take strange food orders from a glowing terminal in a dark, low-poly kitchen. Type, cook, and (hopefully) survive.
+                    </p>
+
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                        style={{ fontFamily: "monospace" }}
+                      >
+                        My Responsibilities
+                      </p>
+                      <div className="space-y-2 text-sm text-black/70">
+                        <p className="font-semibold text-black/90">Design & Narrative</p>
+                        <p className="text-xs leading-relaxed">Created the core concept, designed narrative beats, and balanced playable mechanics with atmospheric horror elements.</p>
+                        <p className="font-semibold text-black/90 mt-3">Engineering</p>
+                        <p className="text-xs leading-relaxed">Built modular JavaScript architecture, Three.js 3D kitchen scene, Canvas-based terminal UI with syntax highlighting, and integrated TheMealDB API for real recipe orders.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Top-right: Tagline + Features */}
+                <div className="absolute top-8 right-8 hidden md:block w-[420px]">
+                  <p
+                    className="text-4xl lg:text-5xl font-normal text-black leading-tight text-right mb-8"
+                    style={{ fontFamily: "Notable, serif" }}
+                  >
+                    Type. Cook.<br />
+                    Survive.
+                  </p>
+
+                  <div className="space-y-4 text-right">
+                    <p
+                      className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                      style={{ fontFamily: "monospace" }}
+                    >
+                      What the Game Does
+                    </p>
+                    <div className="space-y-2 text-sm text-black/70">
+                      <p>• 3D kitchen rendered in Three.js</p>
+                      <p>• Terminal-style UI with commands</p>
+                      <p>• Real recipes via TheMealDB API</p>
+                      <p>• Horror audio and atmosphere</p>
+                      <p>• Session state persistence</p>
+                      <p>• Low-poly PSX-style visuals</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom-right: Role & Stack */}
+                <div className="absolute bottom-8 right-8 hidden md:block w-[420px] text-right">
+                  <div className="space-y-6">
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.2em] text-black/60 mb-2"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        Role
+                      </p>
+                      <p className="text-base lg:text-lg text-black/80">
+                        Solo game designer & developer
+                      </p>
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.2em] text-black/60 mb-2"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        Made For
+                      </p>
+                      <p className="text-base lg:text-lg text-black/80">
+                        Game-dev / web-dev course project
+                      </p>
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.25em] text-black/50 mb-2"
+                        style={{ fontFamily: "monospace" }}
+                      >
+                        Tech Stack
+                      </p>
+                      <p className="text-sm text-black/70 leading-relaxed">
+                        JavaScript · Three.js · Canvas · TheMealDB API · HTML · CSS
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom-left: Challenges */}
+                <div className="absolute bottom-8 left-8 hidden md:block w-[420px]">
+                  <div className="space-y-6">
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                        style={{ fontFamily: "monospace" }}
+                      >
+                        Key Challenges
+                      </p>
+                      <p className="text-sm text-black/70 leading-relaxed">
+                        Making a terminal UI feel like a game, balancing Three.js visuals with browser performance, and turning normal API data into a horror experience.
+                      </p>
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                        style={{ fontFamily: "monospace" }}
+                      >
+                        Solution Approach
+                      </p>
+                      <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs text-black/70">
+                        <p>• Clear prompts & feedback</p>
+                        <p>• Syntax highlighting</p>
+                        <p>• Tight, atmospheric scene</p>
+                        <p>• Modular architecture</p>
+                        <p>• Creepy audio layering</p>
+                        <p>• Visual glitches</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Center-top: Stats/Metrics */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[320px] md:-translate-y-[320px] lg:-translate-y-[360px] hidden md:block w-[500px] text-center">
+                  <div className="grid grid-cols-3 gap-8">
+                    <div>
+                      <p className="text-3xl lg:text-4xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        Solo
+                      </p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        Built
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-3xl lg:text-4xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        3D
+                      </p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        Kitchen
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-3xl lg:text-4xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        Horror
+                      </p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        Experience
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mobile Layout */}
+                <div className="absolute top-8 left-4 right-4 md:hidden space-y-6">
+                  <div>
+                    <h3
+                      className="text-4xl font-normal text-black leading-tight mb-2"
+                      style={{ fontFamily: "Notable, serif" }}
+                    >
+                      TERMINAL ORDERS
+                    </h3>
+                    <p
+                      className="text-xs uppercase tracking-[0.2em] text-black/60 mb-4"
+                      style={{ fontFamily: "Share Tech Mono, monospace" }}
+                    >
+                      Horror Cooking Game
+                    </p>
+                  </div>
+
+                  <p
+                    className="text-2xl font-normal text-black leading-tight"
+                    style={{ fontFamily: "Notable, serif" }}
+                  >
+                    Type. Cook. Survive.
+                  </p>
+
+                  <p className="text-sm text-black/80 leading-relaxed">
+                    A browser-based horror cooking game built with JavaScript and Three.js. Take strange food orders from a glowing terminal in a dark, low-poly kitchen.
+                  </p>
+
+                  {/* Stats - Mobile */}
+                  <div className="grid grid-cols-3 gap-4 py-4 border-y border-black/10">
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        Solo
+                      </p>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        Built
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        3D
+                      </p>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        Kitchen
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        Horror
+                      </p>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        Game
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Features - Mobile */}
+                  <div>
+                    <p
+                      className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                      style={{ fontFamily: "monospace" }}
+                    >
+                      What It Does
+                    </p>
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs text-black/70">
+                      <p>• 3D Three.js kitchen</p>
+                      <p>• Terminal UI</p>
+                      <p>• Real recipe API</p>
+                      <p>• Horror audio</p>
+                      <p>• Session persistence</p>
+                      <p>• PSX-style visuals</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 pt-2">
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.2em] text-black/60 mb-1"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        Role
+                      </p>
+                      <p className="text-sm text-black/80">
+                        Solo game designer & developer
+                      </p>
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.2em] text-black/60 mb-1"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        Tech Stack
+                      </p>
+                      <p className="text-xs text-black/70">
+                        JavaScript · Three.js · Canvas · TheMealDB API
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Content Blocks - Afrikaans Early Literacy App */}
+            {selectedWork === 3 && (
+              <>
+                {/* Left Column: Title, Description */}
+                <div className="absolute top-8 left-8 bottom-8 hidden md:flex flex-col w-[420px] justify-between">
+                  <div>
+                    <h3
+                      className="text-6xl lg:text-7xl font-normal text-black leading-none mb-3"
+                      style={{ fontFamily: "Notable, serif" }}
+                    >
+                      AFRIKAANS EARLY LITERACY
+                    </h3>
+                    <p
+                      className="text-sm uppercase tracking-[0.2em] text-black/60 mb-6"
+                      style={{ fontFamily: "Share Tech Mono, monospace" }}
+                    >
+                      Grade 1 Learning App
+                    </p>
+
+                    <p className="text-base lg:text-lg text-black/80 leading-relaxed mb-6">
+                      A playful iOS learning app helping Grade 1 learners master Afrikaans sounds, letters and early reading skills. Songs, phonics, tracing, and interactive lessons designed for young learners.
+                    </p>
+
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                        style={{ fontFamily: "monospace" }}
+                      >
+                        My Responsibilities
+                      </p>
+                      <div className="space-y-2 text-sm text-black/70">
+                        <p className="font-semibold text-black/90">Product & Learning Design</p>
+                        <p className="text-xs leading-relaxed">Studied early-literacy pedagogy, designed learning progression, and wrote UX copy tailored for young learners.</p>
+                        <p className="font-semibold text-black/90 mt-3">Engineering</p>
+                        <p className="text-xs leading-relaxed">Built iOS app in React Native, developed custom SVG letter-tracing system, implemented audio engine, and created lightweight local storage for offline usage.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Top-right: Tagline + Features */}
+                <div className="absolute top-8 right-8 hidden md:block w-[420px]">
+                  <p
+                    className="text-4xl lg:text-5xl font-normal text-black leading-tight text-right mb-8"
+                    style={{ fontFamily: "Notable, serif" }}
+                  >
+                    SONGS × PHONICS<br />
+                    × TRACING
+                  </p>
+
+                  <div className="space-y-4 text-right">
+                    <p
+                      className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                      style={{ fontFamily: "monospace" }}
+                    >
+                      Core Features
+                    </p>
+                    <div className="space-y-2 text-sm text-black/70">
+                      <p>• Phonics-based learning framework</p>
+                      <p>• Guided letter tracing with stroke order</p>
+                      <p>• Interactive sound games</p>
+                      <p>• Song-based lessons</p>
+                      <p>• Parent/Teacher progress tracking</p>
+                      <p>• Fully offline functionality</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom-right: Role & Stack */}
+                <div className="absolute bottom-8 right-8 hidden md:block w-[420px] text-right">
+                  <div className="space-y-6">
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.2em] text-black/60 mb-2"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        Role
+                      </p>
+                      <p className="text-base lg:text-lg text-black/80">
+                        Solo designer & developer (iOS + React Native)
+                      </p>
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.2em] text-black/60 mb-2"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        Audience
+                      </p>
+                      <p className="text-base lg:text-lg text-black/80">
+                        Grade 1 learners, teachers & parents
+                      </p>
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.25em] text-black/50 mb-2"
+                        style={{ fontFamily: "monospace" }}
+                      >
+                        Tech Stack
+                      </p>
+                      <p className="text-sm text-black/70 leading-relaxed">
+                        React Native · Custom SVG tracing engine · Audio system · Offline architecture
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom-left: Challenges */}
+                <div className="absolute bottom-8 left-8 hidden md:block w-[420px]">
+                  <div className="space-y-6">
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                        style={{ fontFamily: "monospace" }}
+                      >
+                        Key Challenges
+                      </p>
+                      <p className="text-sm text-black/70 leading-relaxed">
+                        Teaching letter formation digitally, designing for very young learners, building an engaging phonics experience, and ensuring performance on low-end school devices.
+                      </p>
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                        style={{ fontFamily: "monospace" }}
+                      >
+                        Solution Approach
+                      </p>
+                      <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs text-black/70">
+                        <p>• Multi-step tracing validator</p>
+                        <p>• Audio-first UI design</p>
+                        <p>• Song integration</p>
+                        <p>• Micro-interactions</p>
+                        <p>• Lightweight architecture</p>
+                        <p>• Local caching</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Center-top: Stats/Metrics */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[320px] md:-translate-y-[320px] lg:-translate-y-[360px] hidden md:block w-[500px] text-center">
+                  <div className="grid grid-cols-3 gap-8">
+                    <div>
+                      <p className="text-3xl lg:text-4xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        iOS
+                      </p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        React Native
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-3xl lg:text-4xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        Grade 1
+                      </p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        Early Literacy
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-3xl lg:text-4xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        Offline
+                      </p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        First
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mobile Layout */}
+                <div className="absolute top-8 left-4 right-4 md:hidden space-y-6">
+                  <div>
+                    <h3
+                      className="text-4xl font-normal text-black leading-tight mb-2"
+                      style={{ fontFamily: "Notable, serif" }}
+                    >
+                      AFRIKAANS EARLY LITERACY
+                    </h3>
+                    <p
+                      className="text-xs uppercase tracking-[0.2em] text-black/60 mb-4"
+                      style={{ fontFamily: "Share Tech Mono, monospace" }}
+                    >
+                      Grade 1 Learning App
+                    </p>
+                  </div>
+
+                  <p
+                    className="text-2xl font-normal text-black leading-tight"
+                    style={{ fontFamily: "Notable, serif" }}
+                  >
+                    SONGS × PHONICS × TRACING
+                  </p>
+
+                  <p className="text-sm text-black/80 leading-relaxed">
+                    A playful iOS learning app helping Grade 1 learners master Afrikaans sounds, letters and early reading skills.
+                  </p>
+
+                  {/* Stats - Mobile */}
+                  <div className="grid grid-cols-3 gap-4 py-4 border-y border-black/10">
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        iOS
+                      </p>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        React Native
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        Grade 1
+                      </p>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        Literacy
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-black mb-1" style={{ fontFamily: "Notable, serif" }}>
+                        Offline
+                      </p>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-black/50" style={{ fontFamily: "monospace" }}>
+                        First
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Features - Mobile */}
+                  <div>
+                    <p
+                      className="text-xs uppercase tracking-[0.25em] text-black/50 mb-3"
+                      style={{ fontFamily: "monospace" }}
+                    >
+                      Core Features
+                    </p>
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs text-black/70">
+                      <p>• Phonics framework</p>
+                      <p>• Letter tracing</p>
+                      <p>• Sound games</p>
+                      <p>• Song lessons</p>
+                      <p>• Progress tracking</p>
+                      <p>• Offline mode</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 pt-2">
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.2em] text-black/60 mb-1"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        Role
+                      </p>
+                      <p className="text-sm text-black/80">
+                        Solo designer & developer
+                      </p>
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs uppercase tracking-[0.2em] text-black/60 mb-1"
+                        style={{ fontFamily: "Share Tech Mono, monospace" }}
+                      >
+                        Tech Stack
+                      </p>
+                      <p className="text-xs text-black/70">
+                        React Native · Custom SVG tracing · Audio system
+                      </p>
+                    </div>
                   </div>
                 </div>
               </>
             )}
 
             {/* Circle container - larger to fill screen */}
-            <div className="relative w-[400px] h-[400px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px] flex items-center justify-center md:mt-0 mt-[280px]">
+            <div className="relative w-[350px] h-[350px] md:w-[500px] md:h-[500px] lg:w-[580px] lg:h-[580px] flex items-center justify-center md:mt-0 mt-[280px]">
               {/* Circle border */}
               <div className="absolute inset-0 rounded-full border-2 border-black"></div>
               
               {/* Connecting lines */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ overflow: 'visible' }}>
-                {/* 45° line (top-right) - from circle edge to work circle */}
+                {/* 45° line (top-right) - from inside circle to work circle */}
                 <line
-                  x1="85.36%"
-                  y1="14.64%"
+                  x1="65%"
+                  y1="35%"
                   x2="94%"
                   y2="6%"
                   stroke="black"
@@ -1687,8 +2673,8 @@ function Home() {
                 />
                 {/* 135° line (top-left) */}
                 <line
-                  x1="14.64%"
-                  y1="14.64%"
+                  x1="35%"
+                  y1="35%"
                   x2="6%"
                   y2="6%"
                   stroke="black"
@@ -1696,8 +2682,8 @@ function Home() {
                 />
                 {/* 225° line (bottom-left) */}
                 <line
-                  x1="14.64%"
-                  y1="85.36%"
+                  x1="35%"
+                  y1="65%"
                   x2="6%"
                   y2="94%"
                   stroke="black"
@@ -1705,8 +2691,8 @@ function Home() {
                 />
                 {/* 315° line (bottom-right) */}
                 <line
-                  x1="85.36%"
-                  y1="85.36%"
+                  x1="65%"
+                  y1="65%"
                   x2="94%"
                   y2="94%"
                   stroke="black"
@@ -1720,14 +2706,16 @@ function Home() {
               {/* 45° - Top-right */}
               <div 
                 onClick={() => setSelectedWork(0)}
-                className={`absolute top-1/2 left-1/2 w-28 h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer ${
-                  selectedWork === 0 ? 'bg-black scale-110' : 'bg-black'
+                className={`absolute top-1/2 left-1/2 w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 cursor-pointer group ${
+                  selectedWork === 0 ? 'bg-white' : 'bg-black hover:bg-white'
                 }`}
                 style={{
-                  transform: 'translate(-50%, -50%) translate(180px, -180px)'
+                  transform: 'translate(-50%, -50%) translate(185px, -185px)'
                 }}
               >
-                <span className="text-white text-[9px] md:text-[11px] lg:text-[12px] uppercase tracking-wider text-center px-2" style={{ fontFamily: "Share Tech Mono, monospace" }}>
+                <span className={`text-[8px] md:text-[10px] lg:text-[11px] uppercase tracking-wider text-center px-2 transition-colors duration-200 ${
+                  selectedWork === 0 ? 'text-black' : 'text-white group-hover:text-black'
+                }`} style={{ fontFamily: "Share Tech Mono, monospace" }}>
                   AI Visibility
                 </span>
               </div>
@@ -1735,48 +2723,115 @@ function Home() {
               {/* 135° - Top-left */}
               <div 
                 onClick={() => setSelectedWork(1)}
-                className={`absolute top-1/2 left-1/2 w-28 h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer ${
-                  selectedWork === 1 ? 'bg-black scale-110' : 'bg-black'
+                className={`absolute top-1/2 left-1/2 w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 cursor-pointer group ${
+                  selectedWork === 1 ? 'bg-white' : 'bg-black hover:bg-white'
                 }`}
                 style={{
-                  transform: 'translate(-50%, -50%) translate(-180px, -180px)'
+                  transform: 'translate(-50%, -50%) translate(-185px, -185px)'
                 }}
               >
-                <span className="text-white text-[9px] md:text-[11px] lg:text-[12px] uppercase tracking-wider text-center px-2" style={{ fontFamily: "Share Tech Mono, monospace" }}>
-                  Work 2
+                <span className={`text-[8px] md:text-[10px] lg:text-[11px] uppercase tracking-wider text-center px-2 transition-colors duration-200 ${
+                  selectedWork === 1 ? 'text-black' : 'text-white group-hover:text-black'
+                }`} style={{ fontFamily: "Share Tech Mono, monospace" }}>
+                  Iris Network
                 </span>
               </div>
               
               {/* 225° - Bottom-left */}
               <div 
                 onClick={() => setSelectedWork(2)}
-                className={`absolute top-1/2 left-1/2 w-28 h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer ${
-                  selectedWork === 2 ? 'bg-black scale-110' : 'bg-black'
+                className={`absolute top-1/2 left-1/2 w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 cursor-pointer group ${
+                  selectedWork === 2 ? 'bg-white' : 'bg-black hover:bg-white'
                 }`}
                 style={{
-                  transform: 'translate(-50%, -50%) translate(-180px, 180px)'
+                  transform: 'translate(-50%, -50%) translate(-185px, 185px)'
                 }}
               >
-                <span className="text-white text-[9px] md:text-[11px] lg:text-[12px] uppercase tracking-wider text-center px-2" style={{ fontFamily: "Share Tech Mono, monospace" }}>
-                  Work 3
+                <span className={`text-[8px] md:text-[10px] lg:text-[11px] uppercase tracking-wider text-center px-2 transition-colors duration-200 ${
+                  selectedWork === 2 ? 'text-black' : 'text-white group-hover:text-black'
+                }`} style={{ fontFamily: "Share Tech Mono, monospace" }}>
+                  Terminal Orders
                 </span>
               </div>
               
               {/* 315° - Bottom-right */}
               <div 
                 onClick={() => setSelectedWork(3)}
-                className={`absolute top-1/2 left-1/2 w-28 h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer ${
-                  selectedWork === 3 ? 'bg-black scale-110' : 'bg-black'
+                className={`absolute top-1/2 left-1/2 w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 cursor-pointer group ${
+                  selectedWork === 3 ? 'bg-white' : 'bg-black hover:bg-white'
                 }`}
                 style={{
-                  transform: 'translate(-50%, -50%) translate(180px, 180px)'
+                  transform: 'translate(-50%, -50%) translate(185px, 185px)'
                 }}
               >
-                <span className="text-white text-[9px] md:text-[11px] lg:text-[12px] uppercase tracking-wider text-center px-2" style={{ fontFamily: "Share Tech Mono, monospace" }}>
-                  Work 4
+                <span className={`text-[8px] md:text-[10px] lg:text-[11px] uppercase tracking-wider text-center px-2 transition-colors duration-200 ${
+                  selectedWork === 3 ? 'text-black' : 'text-white group-hover:text-black'
+                }`} style={{ fontFamily: "Share Tech Mono, monospace" }}>
+                  Afrikaans Literacy
                 </span>
               </div>
             </div>
+
+            {/* Status - Below Rose */}
+            {selectedWork === 0 && (
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[320px] md:translate-y-[320px] lg:translate-y-[360px] hidden md:block w-[500px] text-center">
+                <p
+                  className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2"
+                  style={{ fontFamily: "monospace" }}
+                >
+                  Status
+                </p>
+                <p className="text-sm text-black/70">
+                  Live platform in active use with early paying customers. Powers my own client acquisition through automated site scanning and outreach workflows.
+                </p>
+              </div>
+            )}
+
+            {/* Outcome - Below Rose - Iris Network System */}
+            {selectedWork === 1 && (
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[320px] md:translate-y-[320px] lg:translate-y-[360px] hidden md:block w-[500px] text-center">
+                <p
+                  className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2"
+                  style={{ fontFamily: "monospace" }}
+                >
+                  Outcome
+                </p>
+                <p className="text-sm text-black/70">
+                  A modern React/Tailwind codebase that's easier to extend and maintain. A site that feels faster, clearer and more premium, aligned with Iris's technical capabilities.
+                </p>
+              </div>
+            )}
+
+            {/* Outcome - Below Rose - Terminal Orders */}
+            {selectedWork === 2 && (
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[320px] md:translate-y-[320px] lg:translate-y-[360px] hidden md:block w-[500px] text-center">
+                <p
+                  className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2"
+                  style={{ fontFamily: "monospace" }}
+                >
+                  Outcome
+                </p>
+                <p className="text-sm text-black/70">
+                  A complete, playable web experience demonstrating comfort with Three.js, Canvas, browser APIs and modular architecture. Shows ability to ship solo projects with strong concept, atmosphere and technical backbone.
+                </p>
+              </div>
+            )}
+
+            {/* Status - Below Rose - Afrikaans Early Literacy */}
+            {selectedWork === 3 && (
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-[320px] md:translate-y-[320px] lg:translate-y-[360px] hidden md:block w-[500px] text-center">
+                <p
+                  className="text-[10px] uppercase tracking-[0.3em] text-black/40 mb-2"
+                  style={{ fontFamily: "monospace" }}
+                >
+                  Status
+                </p>
+                <p className="text-sm text-black/70">
+                  In development; preparing for App Store release & pilot testing. Gives Afrikaans learners a local-language alternative and provides teachers a ready-made digital supplement for early literacy.
+                </p>
+              </div>
+            )}
+
           </div>
         </section>
       </main>
