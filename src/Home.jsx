@@ -1201,15 +1201,15 @@ function Home() {
         </section>
 
         {/* Scroll Section with crescent + fanned bullets + flip board */}
-        <section className="h-screen bg-[#ece6da] flex items-center snap-center">
-          <div className="max-w-6xl mx-auto px-8 flex items-center gap-12 w-full">
-            {/* Right: animated eye */}
-            <div className="w-[400px] flex justify-center -ml-32">
+        <section className="h-screen bg-[#ece6da] flex items-center snap-center relative">
+          <div className="max-w-6xl mx-auto px-8 flex items-center gap-12 w-full relative">
+            {/* Right: animated eye - Desktop only */}
+            <div className="w-[400px] flex justify-center -ml-32 hidden md:flex">
               <Eye progress={eyeProgress} />
             </div>
 
-            {/* Left: fanned bullet titles emerging from the moon */}
-            <div className="flex-1 max-w-lg">
+            {/* Left: fanned bullet titles emerging from the moon - Desktop only */}
+            <div className="flex-1 max-w-lg hidden md:block">
               <div className="relative h-[500px] flex items-center -ml-48">
                 {bullets.map((bullet, index) => {
                   const offsetsY = [-80, -30, 30, 80];
@@ -1257,13 +1257,31 @@ function Home() {
               </div>
             </div>
 
-            {/* Center-Right: flip-board detail panel */}
-            <div className="flex-1 flex items-center justify-center ml-8 -mr-16">
-              <div className="perspective-1000">
-                <div className="bg-black text-white rounded-3xl px-10 py-10 shadow-2xl w-[480px] h-[550px] flex flex-col">
+            {/* Mobile: Horizontal tab buttons */}
+            <div className="absolute top-20 left-4 right-4 flex md:hidden gap-2 justify-center z-20">
+              {bullets.map((bullet, index) => (
+                <button
+                  key={bullet.rayLabel}
+                  onClick={() => setActiveIndex(index)}
+                  className={`px-4 py-2 rounded-full border border-black/70 text-xs uppercase tracking-[0.16em] transition-all duration-200 ${
+                    activeIndex === index
+                      ? "bg-black text-white"
+                      : "bg-white text-black hover:bg-black/10"
+                  }`}
+                  style={{ fontFamily: "Share Tech Mono, monospace" }}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </div>
+
+            {/* Center-Right: flip-board detail panel - Centered on mobile, full height */}
+            <div className="flex-1 w-full md:w-auto flex items-center justify-center ml-0 md:ml-8 -mr-0 md:-mr-16">
+              <div className="perspective-1000 w-full md:max-w-none mt-16 md:mt-0">
+                <div className="bg-black text-white rounded-none md:rounded-3xl px-8 pt-16 pb-12 md:px-10 md:py-10 shadow-2xl w-full h-screen md:w-[480px] md:h-[550px] flex flex-col">
                   {/* Tiny label at top */}
                   <p
-                    className="text-xs uppercase tracking-[0.3em] mb-6 opacity-70"
+                    className="text-xs md:text-xs uppercase tracking-[0.3em] mb-6 md:mb-6 opacity-70"
                     style={{ fontFamily: "Share Tech Mono, monospace" }}
                   >
                     {bullets[activeIndex].tinyLabel}
@@ -1271,7 +1289,7 @@ function Home() {
 
                   {/* Big heading */}
                   <h3
-                    className="text-2xl font-semibold mb-6 leading-tight"
+                    className="text-2xl md:text-2xl font-semibold mb-8 md:mb-6 leading-tight"
                     style={{ fontFamily: "Notable, serif" }}
                   >
                     <FlipText
@@ -1282,8 +1300,8 @@ function Home() {
                   </h3>
 
                   {/* Body text */}
-                  <div className="flex-1 mb-8">
-                    <p className="text-base leading-relaxed text-gray-200 whitespace-pre-line">
+                  <div className="flex-1 mb-8 md:mb-8">
+                    <p className="text-base md:text-base leading-relaxed text-gray-200 whitespace-pre-line">
                       <FlipText
                         text={bullets[activeIndex].body}
                         speed={20}
@@ -1293,18 +1311,18 @@ function Home() {
                   </div>
 
                   {/* In practice row */}
-                  <div className="mb-6">
+                  <div className="mb-8 md:mb-6">
                     <p
-                      className="text-xs uppercase tracking-[0.2em] mb-3 opacity-70"
+                      className="text-xs md:text-xs uppercase tracking-[0.2em] mb-4 md:mb-3 opacity-70"
                       style={{ fontFamily: "Share Tech Mono, monospace" }}
                     >
                       IN PRACTICE
                     </p>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-3">
                       {bullets[activeIndex].inPractice.map((item, idx) => (
                         <span
                           key={idx}
-                          className="text-xs bg-gray-800 px-3 py-1 rounded-full"
+                          className="text-xs md:text-xs bg-gray-800 px-4 py-2 md:px-3 md:py-1 rounded-full"
                           style={{ fontFamily: "Share Tech Mono, monospace" }}
                         >
                           {item}
@@ -1315,7 +1333,7 @@ function Home() {
 
                   {/* Tools line at bottom */}
                   <p
-                    className="text-xs uppercase tracking-wide opacity-60 mt-auto"
+                    className="text-xs md:text-xs uppercase tracking-wide opacity-60 mt-auto"
                     style={{ fontFamily: "Share Tech Mono, monospace" }}
                   >
                     {bullets[activeIndex].tools}
