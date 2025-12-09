@@ -27,7 +27,7 @@ const isBrowser = typeof window !== "undefined";
 const ROSE_KEYFRAMES = [
   {
     // Section 0 – hero (start)
-    position: { x: 2, y: -3, z: 0 },
+    position: { x: 2, y: -3.5, z: 0 },
     rotation: { x: 0, y: Math.PI / 6, z: 0 },
     scale: 2,
   },
@@ -88,6 +88,13 @@ function getRosePoseFromScroll(scrollY, viewportHeight) {
     },
     scale: lerp(from.scale, to.scale, t),
   };
+}
+
+// Scales the rose relative to viewport width
+function getViewportScaleMultiplier(viewportWidth) {
+  const base = 1440;
+  const w = viewportWidth || (isBrowser ? window.innerWidth : base) || base;
+  return clamp(w / base, 0.65, 1.2);
 }
 
 // ---------------------------------------------------------------------------
@@ -950,9 +957,13 @@ function Home() {
         });
 
         const start = ROSE_KEYFRAMES[0];
-        roseModel.scale.set(start.scale, start.scale, start.scale);
+        const startScaleMult = getViewportScaleMultiplier(window.innerWidth);
+        const startScale = start.scale * startScaleMult;
+        const isMobileInit = (window.innerWidth || 0) < 768;
+        const startPosX = isMobileInit ? 0 : start.position.x;
+        roseModel.scale.set(startScale, startScale, startScale);
         roseModel.position.set(
-          start.position.x,
+          startPosX,
           start.position.y,
           start.position.z
         );
@@ -975,21 +986,28 @@ function Home() {
       if (roseModel) {
         const y = scrollRef.current;
         const viewportHeight = window.innerHeight || 1;
+        const viewportWidth = window.innerWidth || 1;
         const { position, rotation, scale } = getRosePoseFromScroll(
           y,
           viewportHeight
         );
+        const scaleMult = getViewportScaleMultiplier(viewportWidth);
+        const targetScale = scale * scaleMult;
+        const sectionFloat = y / viewportHeight;
+        const isMobile = viewportWidth < 768;
 
         const posEase = 0.08;
         const rotEase = 0.08;
         const scaleEase = 0.05;
 
-        roseModel.position.x += (position.x - roseModel.position.x) * posEase;
+        const targetPosX =
+          isMobile && sectionFloat < 1 ? 0 : position.x;
+
+        roseModel.position.x += (targetPosX - roseModel.position.x) * posEase;
         roseModel.position.y += (position.y - roseModel.position.y) * posEase;
         roseModel.position.z += (position.z - roseModel.position.z) * posEase;
 
         // Check if we're in section 3 (Selected Works)
-        const sectionFloat = y / viewportHeight;
         const isInSelectedWorks = sectionFloat >= 3 && sectionFloat < 4;
 
         roseModel.rotation.x += (rotation.x - roseModel.rotation.x) * rotEase;
@@ -1016,9 +1034,9 @@ function Home() {
           roseModel.rotation.x += mouseRef.current.y * mouseInfluence * 0.5;
         }
 
-        roseModel.scale.x += (scale - roseModel.scale.x) * scaleEase;
-        roseModel.scale.y += (scale - roseModel.scale.y) * scaleEase;
-        roseModel.scale.z += (scale - roseModel.scale.z) * scaleEase;
+        roseModel.scale.x += (targetScale - roseModel.scale.x) * scaleEase;
+        roseModel.scale.y += (targetScale - roseModel.scale.y) * scaleEase;
+        roseModel.scale.z += (targetScale - roseModel.scale.z) * scaleEase;
       }
 
       renderer.render(scene, camera);
@@ -1106,38 +1124,38 @@ function Home() {
         />
 
         {/* Hero Section */}
-        <section className="h-screen relative flex items-center snap-center">
+        <section className="h-screen relative flex items-center snap-center px-6 md:px-0">
           <div
-            className="fixed left-[20vw] top-[50%] -translate-y-1/2 z-200 transition-all duration-300"
+            className="fixed left-1/2 md:left-[20vw] top-[50%] md:top-[60%] -translate-y-1/2 -translate-x-1/2 md:translate-x-0 z-200 transition-all duration-300 w-[min(92vw,560px)] md:w-auto text-center md:text-left"
             style={{
-              transform: `translateY(calc(-50% + ${-scrollY * 0.5}px))`,
+              transform: `translateY(calc(-50% + ${-scrollY * 0.5 + (isBrowser && window.innerWidth >= 768 ? 20 : 0)}px))`,
               opacity: textOpacity,
             }}
           >
             <div>
               <h1
-                className="text-8xl font-normal text-black leading-none m-0"
+                className="text-[12vw] md:text-8xl font-normal text-black leading-none m-0"
                 style={{ fontFamily: "Notable, serif" }}
               >
                 Liam Birch
               </h1>
               <p
-                className="text-xl font-normal text-black opacity-80 my-2 mb-4 max-w-170"
+                className="text-base md:text-xl font-normal text-black opacity-80 my-2 mb-4 max-w-[90vw] md:max-w-170 mx-auto md:mx-0"
                 style={{ fontFamily: "Notable, serif" }}
               >
                 Designing interfaces. Building fast, technically-sound systems
                 behind them.
               </p>
               <p
-                className="text-sm font-mono text-black opacity-60 tracking-wide"
+                className="text-xs md:text-sm font-mono text-black opacity-60 tracking-wide"
                 style={{ fontFamily: "Share Tech Mono, monospace" }}
               >
                 React · Three.js · Tailwind · Performance · Technical SEO
               </p>
 
-              <div className="absolute bottom-0 left-0 flex gap-4 top-100">
+              <div className="mt-6 md:mt-8 flex gap-3 md:gap-4 justify-center md:justify-start">
                 <button
-                  className="w-32 h-32 bg-black text-white font-mono text-sm tracking-wide hover:bg-gray-800 transition-colors duration-200 cursor-pointer flex items-center justify-center"
+                  className="w-28 h-28 md:w-32 md:h-32 bg-black text-white font-mono text-xs md:text-sm tracking-wide hover:bg-gray-800 transition-colors duration-200 cursor-pointer flex items-center justify-center"
                   style={{ fontFamily: "Share Tech Mono, monospace" }}
                 >
                   <span className="text-center leading-tight">
@@ -1147,7 +1165,7 @@ function Home() {
                   </span>
                 </button>
                 <button
-                  className="w-32 h-32 border-2 border-black text-black font-mono text-sm tracking-wide hover:bg-black/20 hover:text-black transition-all duration-200 cursor-pointer flex items-center justify-center"
+                  className="w-28 h-28 md:w-32 md:h-32 border-2 border-black text-black font-mono text-xs md:text-sm tracking-wide hover:bg-black/20 hover:text-black transition-all duration-200 cursor-pointer flex items-center justify-center"
                   style={{ fontFamily: "Share Tech Mono, monospace" }}
                 >
                   <span className="text-center leading-tight">
@@ -1159,17 +1177,20 @@ function Home() {
               </div>
 
               <div
-                className="fixed left-[47vw] top-[90%] -translate-y-1/2 z-200 transition-opacity duration-300"
+                className="mt-6 md:mt-6 md:fixed md:left-[47vw] md:top-[78%] z-200 transition-opacity duration-300 w-full md:w-[400px]"
                 style={{
                   opacity: textOpacity,
-                  width: "400px",
+                  transform:
+                    isBrowser && window.innerWidth >= 768
+                      ? "translateY(calc(-50% - 70px))"
+                      : "translateY(-50%)",
                 }}
               >
                 <p
-                  className="text-base font-normal text-black m-0 text-left opacity-90 whitespace-pre-line"
+                  className="text-sm md:text-base font-normal text-black m-0 text-center md:text-left opacity-90 whitespace-pre-line"
                   style={{
                     fontFamily: "Share Tech Mono, monospace",
-                    lineHeight: "1.2",
+                    lineHeight: "1.25",
                   }}
                 >
                   Creating experiences{"\n"}that drive action.
@@ -1584,7 +1605,7 @@ function Home() {
         {/* Selected Works Section */}
         <section
           ref={selectedWorksRef}
-          className="h-screen bg-[#ece6da] flex items-center justify-center snap-center relative overflow-visible"
+          className="min-h-screen bg-[#ece6da] flex items-start md:items-center justify-center snap-center relative overflow-visible pt-10 pb-20 md:pt-0 md:pb-0"
         >
           <div
             className={`relative w-full h-full flex items-center justify-center ${workTransitionBase} ${workTransitionClass}`}
@@ -2701,7 +2722,7 @@ function Home() {
             )}
 
             {/* Circle container - larger to fill screen */}
-            <div className="relative w-[350px] h-[350px] md:w-[500px] md:h-[500px] lg:w-[580px] lg:h-[580px] flex items-center justify-center md:mt-0 mt-[280px]">
+            <div className="relative w-[260px] h-[260px] md:w-[500px] md:h-[500px] lg:w-[580px] lg:h-[580px] flex items-center justify-center md:mt-0 mt-[220px]">
               {/* Circle border */}
               <div className="absolute inset-0 rounded-full border-2 border-black"></div>
               
@@ -2755,7 +2776,7 @@ function Home() {
                   selectedWork === 0 ? 'bg-white' : 'bg-black hover:bg-white'
                 }`}
                 style={{
-                  transform: 'translate(-50%, -50%) translate(185px, -185px)'
+                  transform: 'translate(-50%, -50%) translate(150px, -150px)'
                 }}
               >
                 <span className={`text-[8px] md:text-[10px] lg:text-[11px] uppercase tracking-wider text-center px-2 transition-colors duration-200 ${
@@ -2772,7 +2793,7 @@ function Home() {
                   selectedWork === 1 ? 'bg-white' : 'bg-black hover:bg-white'
                 }`}
                 style={{
-                  transform: 'translate(-50%, -50%) translate(-185px, -185px)'
+                  transform: 'translate(-50%, -50%) translate(-150px, -150px)'
                 }}
               >
                 <span className={`text-[8px] md:text-[10px] lg:text-[11px] uppercase tracking-wider text-center px-2 transition-colors duration-200 ${
@@ -2789,7 +2810,7 @@ function Home() {
                   selectedWork === 2 ? 'bg-white' : 'bg-black hover:bg-white'
                 }`}
                 style={{
-                  transform: 'translate(-50%, -50%) translate(-185px, 185px)'
+                  transform: 'translate(-50%, -50%) translate(-150px, 150px)'
                 }}
               >
                 <span className={`text-[8px] md:text-[10px] lg:text-[11px] uppercase tracking-wider text-center px-2 transition-colors duration-200 ${
@@ -2806,7 +2827,7 @@ function Home() {
                   selectedWork === 3 ? 'bg-white' : 'bg-black hover:bg-white'
                 }`}
                 style={{
-                  transform: 'translate(-50%, -50%) translate(185px, 185px)'
+                  transform: 'translate(-50%, -50%) translate(150px, 150px)'
                 }}
               >
                 <span className={`text-[8px] md:text-[10px] lg:text-[11px] uppercase tracking-wider text-center px-2 transition-colors duration-200 ${
