@@ -98,3 +98,9 @@ temp/
 
 # Local Netlify folder
 .netlify
+
+# Astro
+.astro/
+
+# Sister repo (has its own git)
+KlinkendaKlankeWeb/

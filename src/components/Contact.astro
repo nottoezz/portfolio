@@ -1,0 +1,57 @@
+---
+import { site } from "../data/site";
+const year = new Date().getFullYear();
+---
+
+<section id="contact" class="bg-ink text-on-ink" aria-labelledby="contact-title">
+  <div class="wrap pb-10 pt-20 md:pt-28">
+    <p class="label flex items-center justify-between border-b border-on-ink/25 pb-3 opacity-70">
+      <span>§04 Contact</span>
+      <span>Available for projects</span>
+    </p>
+
+    <h2 id="contact-title" class="display mt-10 text-[clamp(4rem,19vw,15rem)] md:mt-14" data-reveal>
+      Let’s<br />talk<span class="text-accent">.</span>
+    </h2>
+
+    <div class="mt-10 grid gap-10 md:mt-16 md:grid-cols-12 md:items-end">
+      <div class="md:col-span-7" data-reveal>
+        <p class="max-w-[34ch] text-xl italic leading-snug opacity-80 md:text-2xl">
+          Have a product that needs to look sharp and load fast? Tell me about it.
+        </p>
+        <a
+          href={`mailto:${site.email}`}
+          class="link-underline mt-6 inline-block break-all font-serif text-[clamp(1.75rem,6.5vw,3.75rem)] leading-tight hover:text-accent"
+        >
+          {site.email}
+        </a>
+      </div>
+
+      <div class="md:col-span-5" data-reveal style="--d: .1s">
+        <a
+          href={site.bookCall}
+          class="label inline-flex w-full items-center justify-between gap-4 border border-on-ink px-5 py-4 text-sm transition-colors hover:bg-on-ink hover:text-ink md:w-auto md:min-w-72"
+        >
+          Book a call <span aria-hidden="true">→</span>
+        </a>
+        <ul class="mt-6 flex gap-6">
+          {
+            site.links.map((l) => (
+              <li>
+                <a href={l.href} target="_blank" rel="noopener noreferrer" class="label link-underline py-2 opacity-80 hover:opacity-100">
+                  {l.label} <span aria-hidden="true">↗</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <footer class="label mt-20 grid gap-3 border-t border-on-ink/25 pt-5 opacity-60 md:mt-28 md:grid-cols-3">
+      <p>© {year} {site.name}</p>
+      <p class="md:text-center">Set in Notable, Newsreader &amp; Share Tech Mono</p>
+      <p class="md:text-right">Built with Astro · No trackers</p>
+    </footer>
+  </div>
+</section>

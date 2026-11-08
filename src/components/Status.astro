@@ -1,0 +1,37 @@
+---
+interface Props {
+  status: "Live" | "Pre-launch" | "Shipped" | "Retired";
+  class?: string;
+}
+const { status, class: className = "" } = Astro.props;
+---
+
+<span class:list={["label inline-flex items-center gap-2 whitespace-nowrap", status === "Retired" ? "text-ink-3" : "text-ink-2", className]}>
+  <span
+    class:list={[
+      "inline-block size-1.5 rounded-full",
+      status === "Live" && "bg-accent status-pulse",
+      status === "Pre-launch" && "border border-accent",
+      status === "Shipped" && "bg-ink-2",
+      status === "Retired" && "bg-ink-3",
+    ]}
+    aria-hidden="true"></span>
+  {status}
+</span>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .status-pulse {
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+  }
+  @keyframes pulse {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent);
+    }
+    50% {
+      box-shadow: 0 0 0 5px transparent;
+    }
+  }
+</style>

@@ -1,0 +1,265 @@
+---
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import Eye from "../components/Eye.astro";
+import Status from "../components/Status.astro";
+import Contact from "../components/Contact.astro";
+import { site, capabilities, toolkit } from "../data/site";
+
+const work = (await getCollection("work")).sort((a, b) => a.data.order - b.data.order);
+const pad = (n: number) => String(n).padStart(2, "0");
+---
+
+<Base title="Liam Birch: Design engineer" description={site.description}>
+  <!-- ─────────────── Masthead ─────────────── -->
+  <section class="wrap pb-16 pt-5 md:pb-24 md:pt-8" aria-labelledby="hero-title">
+    <p class="label flex justify-between gap-4 border-b border-rule pb-3 text-ink-3">
+      <span>Portfolio · Vol. 02</span>
+      <span class="hidden sm:inline">{site.location}</span>
+      <span>{site.role}</span>
+    </p>
+
+    <h1 id="hero-title" class="display mt-10 text-[clamp(2.25rem,11.4vw,10.5rem)] md:mt-16">
+      <span class="block" data-reveal>Designing</span>
+      <span class="block" data-reveal style="--d: .08s">interfaces<span class="text-accent">.</span></span>
+    </h1>
+
+    <div class="mt-6 grid items-end gap-x-10 gap-y-8 md:mt-8 lg:grid-cols-12">
+      <p
+        class="min-w-0 max-w-[22ch] text-[clamp(1.6rem,5.4vw,3rem)] italic leading-[1.1] text-ink-2 lg:col-span-7"
+        data-reveal
+        style="--d: .16s"
+      >
+        &amp; building the fast, technically sound systems behind them.
+      </p>
+
+      <div class="flex min-w-0 items-center gap-5 sm:gap-8 lg:col-span-5 lg:justify-end">
+        <Eye ring class="size-28 shrink-0 sm:size-36 lg:order-last lg:size-48 xl:size-56" label="An illustrated eye that follows your cursor" />
+        <p class="min-w-0 max-w-[26ch] text-base leading-snug text-ink-2 lg:text-right" data-reveal style="--d: .24s">
+          I’m Liam, a {site.role.toLowerCase()} in {site.location}. I design and build products that are clear to use and fast to load.
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-10 flex flex-col gap-3 sm:flex-row md:mt-14" data-reveal style="--d: .3s">
+      <a
+        href="#work"
+        class="label inline-flex items-center justify-between gap-6 bg-ink px-5 py-4 text-sm text-on-ink transition-colors hover:bg-accent sm:justify-start"
+      >
+        See the work <span aria-hidden="true">↓</span>
+      </a>
+      <a
+        href={site.bookCall}
+        class="label inline-flex items-center justify-between gap-6 border border-ink px-5 py-4 text-sm transition-colors hover:bg-ink hover:text-on-ink sm:justify-start"
+      >
+        Book a call <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ─────────────── Selected work ─────────────── -->
+  <section id="work" class="wrap pb-20 md:pb-32" aria-labelledby="work-title">
+    <div class="flex items-baseline justify-between border-b border-ink pb-3">
+      <h2 id="work-title" class="label">§01 Selected work</h2>
+      <span class="label text-ink-3">{pad(work.length)} cases</span>
+    </div>
+
+    <ol class="work-list" data-work-list>
+      {
+        work.map((p, i) => (
+          <li data-reveal style={`--d: ${i * 0.05}s`}>
+            <a
+              href={`/work/${p.id}`}
+              class="work-row group grid grid-cols-[2rem_1fr_auto] items-baseline gap-x-3 border-b border-rule py-5 sm:grid-cols-[3rem_1fr_auto] md:grid-cols-[4rem_minmax(0,1fr)_16rem_8rem_2rem] md:gap-x-6 md:py-8"
+              data-preview={p.id}
+            >
+              <span class="label text-ink-3">{pad(i + 1)}</span>
+              <span class="min-w-0">
+                <span class="display block text-[clamp(1.6rem,6.4vw,3.75rem)] transition-colors group-hover:text-accent">
+                  {p.data.title}
+                </span>
+                <span class="mt-1.5 block text-base italic text-ink-2 md:hidden">{p.data.kind}</span>
+              </span>
+              <span class="hidden text-lg italic text-ink-2 md:block">{p.data.kind}</span>
+              <Status status={p.data.status} class="self-center md:self-baseline" />
+              <span
+                class="hidden text-2xl transition-transform duration-300 group-hover:translate-x-1.5 md:block"
+                aria-hidden="true"
+              >
+                →
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+
+    <!-- Hover preview (desktop, fine pointer only) -->
+    <div class="work-preview" data-work-preview aria-hidden="true">
+      {
+        work.map((p) => (
+          <div class="work-preview__item" data-preview-item={p.id}>
+            {p.data.cover ? (
+              <Image src={p.data.cover} alt="" widths={[480, 720]} sizes="360px" class="h-full w-full object-cover object-top" />
+            ) : (
+              <div class="flex h-full w-full flex-col justify-between bg-ink p-5 text-on-ink">
+                <span class="label opacity-70">{p.data.kind}</span>
+                <span class="display text-4xl">{p.data.tagline}</span>
+              </div>
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ─────────────── Capabilities ─────────────── -->
+  <section class="border-y border-rule bg-paper-2" aria-labelledby="cap-title">
+    <div class="wrap py-20 md:py-28">
+      <div class="grid gap-6 lg:grid-cols-12">
+        <h2 id="cap-title" class="label lg:col-span-4">§02 What I do</h2>
+        <p class="max-w-[24ch] text-[clamp(1.75rem,4.5vw,3rem)] leading-[1.1] lg:col-span-8" data-reveal>
+          One person from the first sketch to the deployed build. Nothing gets lost in handoff.
+        </p>
+      </div>
+
+      <div class="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-2 md:mt-20 xl:grid-cols-4">
+        {
+          capabilities.map((c, i) => (
+            <article class="flex flex-col border-t border-ink pt-5" data-reveal style={`--d: ${i * 0.06}s`}>
+              <p class="label flex justify-between text-ink-3">
+                <span>{pad(i + 1)}</span>
+                <span>{c.label}</span>
+              </p>
+              <h3 class="mt-6 text-[1.6rem] font-medium leading-[1.15] tracking-[-0.01em]">{c.heading}</h3>
+              <p class="mt-4 text-[1.0625rem] leading-relaxed text-ink-2">{c.body}</p>
+              <ul class="mt-6 space-y-1.5 border-t border-rule pt-4">
+                {c.practice.map((item) => (
+                  <li class="flex gap-3 text-base">
+                    <span class="text-accent" aria-hidden="true">—</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <p class="label mt-auto pt-6 text-ink-3">{c.tools.join(" · ")}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────── About ─────────────── -->
+  <section id="about" class="wrap py-20 md:py-32" aria-labelledby="about-title">
+    <h2 id="about-title" class="label border-b border-ink pb-3">§03 About</h2>
+
+    <div class="mt-12 grid gap-12 md:mt-16 lg:grid-cols-12">
+      <blockquote class="lg:col-span-6" data-reveal>
+        <p class="text-[clamp(2rem,5.6vw,4rem)] italic leading-[1.05] tracking-[-0.01em]">
+          “Start from constraints and real content, ship something small, then refine.”
+        </p>
+      </blockquote>
+
+      <div class="lg:col-span-5 lg:col-start-8" data-reveal style="--d: .1s">
+        <p class="text-xl leading-relaxed text-ink-2">
+          I mix craft with pragmatism: clean systems, clear UX, and code that can evolve. My work runs end to end, from interfaces and
+          behaviour to data and performance, and I’ve spent 4+ years doing it for clients and for my own products.
+        </p>
+
+        <dl class="mt-10 divide-y divide-rule border-y border-rule">
+          <div class="grid grid-cols-[7.5rem_1fr] gap-4 py-4">
+            <dt class="label pt-1 text-ink-3">Based in</dt>
+            <dd>{site.location}, working remotely</dd>
+          </div>
+          <div class="grid grid-cols-[7.5rem_1fr] gap-4 py-4">
+            <dt class="label pt-1 text-ink-3">Focus</dt>
+            <dd>Design systems, component libraries, APIs &amp; data modelling, performance, technical SEO, motion, accessibility</dd>
+          </div>
+          <div class="grid grid-cols-[7.5rem_1fr] gap-4 py-4">
+            <dt class="label pt-1 text-ink-3">Toolkit</dt>
+            <dd class="flex flex-wrap gap-x-2 gap-y-1">
+              {toolkit.map((t, i) => (
+                <span>
+                  {t}
+                  {i < toolkit.length - 1 && <span class="text-ink-3"> /</span>}
+                </span>
+              ))}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <Contact />
+</Base>
+
+<style>
+  .work-preview {
+    display: none;
+  }
+  @media (hover: hover) and (pointer: fine) and (min-width: 64rem) {
+    .work-preview {
+      display: block;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 40;
+      width: 22.5rem;
+      aspect-ratio: 16 / 10;
+      pointer-events: none;
+      opacity: 0;
+      transform: translate3d(var(--x, 0), var(--y, 0), 0) scale(0.92) rotate(-2deg);
+      transition:
+        opacity 0.25s ease,
+        transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+      box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.35);
+      outline: 1px solid var(--ink);
+      overflow: hidden;
+    }
+    .work-preview.is-on {
+      opacity: 1;
+      transform: translate3d(var(--x, 0), var(--y, 0), 0) scale(1) rotate(-2deg);
+    }
+    .work-preview__item {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+    }
+    .work-preview__item.is-active {
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  const preview = document.querySelector<HTMLElement>("[data-work-preview]");
+  const list = document.querySelector<HTMLElement>("[data-work-list]");
+  const mq = window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 64rem)");
+
+  if (preview && list) {
+    const items = new Map(
+      [...preview.querySelectorAll<HTMLElement>("[data-preview-item]")].map((el) => [el.dataset.previewItem, el]),
+    );
+    let active: HTMLElement | undefined;
+
+    list.addEventListener("pointermove", (e) => {
+      if (!mq.matches) return;
+      preview.style.setProperty("--x", `${e.clientX + 28}px`);
+      preview.style.setProperty("--y", `${e.clientY - 120}px`);
+    });
+
+    list.querySelectorAll<HTMLElement>("[data-preview]").forEach((row) => {
+      row.addEventListener("pointerenter", () => {
+        if (!mq.matches) return;
+        active?.classList.remove("is-active");
+        active = items.get(row.dataset.preview);
+        active?.classList.add("is-active");
+        preview.classList.add("is-on");
+      });
+    });
+
+    list.addEventListener("pointerleave", () => preview.classList.remove("is-on"));
+  }
+</script>

@@ -1,0 +1,32 @@
+---
+import Eye from "./Eye.astro";
+const isHome = Astro.url.pathname === "/";
+const base = isHome ? "" : "/";
+const nav = [
+  { href: `${base}#work`, label: "Work" },
+  { href: `${base}#about`, label: "About" },
+  { href: `${base}#contact`, label: "Contact" },
+];
+---
+
+<header class="sticky top-0 z-50 border-b border-rule bg-paper/85 backdrop-blur-md">
+  <div class="wrap flex h-14 items-center justify-between gap-4">
+    <a href="/" class="group flex items-center gap-2.5" aria-label="Liam Birch, home">
+      <Eye class="h-6 w-9" />
+      <span class="display text-[0.95rem] tracking-[0.02em] group-hover:text-accent transition-colors">Liam Birch</span>
+    </a>
+    <nav aria-label="Primary">
+      <ul class="flex items-center gap-4 sm:gap-7">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} class="label link-underline py-2 text-ink-2 hover:text-ink">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>

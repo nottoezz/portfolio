@@ -1,0 +1,16 @@
+---
+import Base from "../layouts/Base.astro";
+import Eye from "../components/Eye.astro";
+---
+
+<Base title="Page not found · Liam Birch" description="This page doesn’t exist.">
+  <section class="wrap grid min-h-[calc(100dvh-3.5rem)] content-center justify-items-start gap-8 py-16">
+    <Eye ring class="size-32 md:size-44" />
+    <p class="label text-accent">Error 404</p>
+    <h1 class="display text-[clamp(3rem,13vw,9rem)]">Nothing<br />here<span class="text-accent">.</span></h1>
+    <p class="max-w-[30ch] text-xl italic text-ink-2">I looked everywhere. This page doesn’t exist, or it moved.</p>
+    <a href="/" class="label inline-flex items-center gap-6 bg-ink px-5 py-4 text-sm text-on-ink hover:bg-accent">
+      <span aria-hidden="true">←</span> Back to the index
+    </a>
+  </section>
+</Base>
