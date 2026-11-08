@@ -1,9 +1,11 @@
 @import "tailwindcss";
 
-@import "@fontsource/notable/400.css";
-@import "@fontsource/share-tech-mono/400.css";
-@import "@fontsource-variable/newsreader/opsz.css";
-@import "@fontsource-variable/newsreader/opsz-italic.css";
+/* Latin-only static cuts: ~100 KB of fonts in total */
+@import "@fontsource/notable/latin-400.css";
+@import "@fontsource/share-tech-mono/latin-400.css";
+@import "@fontsource/newsreader/latin-400.css";
+@import "@fontsource/newsreader/latin-400-italic.css";
+@import "@fontsource/newsreader/latin-500.css";
 
 /* ------------------------------------------------------------------
    Tokens: paper edition (light) / night edition (dark)
@@ -13,7 +15,7 @@
   --paper-2: #e3dbcb;
   --ink: #15130f;
   --ink-2: rgb(21 19 15 / 0.72);
-  --ink-3: rgb(21 19 15 / 0.52);
+  --ink-3: rgb(21 19 15 / 0.64); /* ≥4.5:1 on both paper tones */
   --rule: rgb(21 19 15 / 0.2);
   --accent: #ab3e5b;
   --on-ink: #ece6da;
@@ -26,7 +28,7 @@
     --paper-2: #1d1a16;
     --ink: #ece6da;
     --ink-2: rgb(236 230 218 / 0.74);
-    --ink-3: rgb(236 230 218 / 0.52);
+    --ink-3: rgb(236 230 218 / 0.58);
     --rule: rgb(236 230 218 / 0.18);
     --accent: #e0728f;
     --on-ink: #14120f;
@@ -45,7 +47,7 @@
   --color-on-ink: var(--on-ink);
 
   --font-display: "Notable", "Arial Black", sans-serif;
-  --font-serif: "Newsreader Variable", Georgia, "Times New Roman", serif;
+  --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
   --font-mono: "Share Tech Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
 
@@ -66,7 +68,6 @@
     font-family: var(--font-serif);
     font-size: 1.125rem;
     line-height: 1.6;
-    font-optical-sizing: auto;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     overflow-x: clip;
@@ -159,7 +160,7 @@
 }
 .prose-case p strong {
   color: var(--ink);
-  font-weight: 600;
+  font-weight: 500;
 }
 .prose-case ul {
   margin: 0 0 1.1rem;

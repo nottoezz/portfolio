@@ -8,6 +8,8 @@ const SITE = "https://liambirch.co.za";
 export default defineConfig({
   site: SITE,
   trailingSlash: "never",
+  // ~8 KB gzipped: inlining it removes the render-blocking CSS request.
+  build: { inlineStylesheets: "always" },
   vite: {
     plugins: [tailwindcss()],
   },

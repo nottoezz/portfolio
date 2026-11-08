@@ -1,6 +1,6 @@
 ---
 import { getCollection, render } from "astro:content";
-import { Image, getImage } from "astro:assets";
+import { Image, Picture, getImage } from "astro:assets";
 import Base from "../../layouts/Base.astro";
 import Status from "../../components/Status.astro";
 import Contact from "../../components/Contact.astro";
@@ -18,7 +18,7 @@ const { data } = entry;
 const { Content } = await render(entry);
 const pad = (n: number) => String(n).padStart(2, "0");
 const host = data.url ? new URL(data.url).hostname.replace(/^www\./, "") : null;
-const og = data.cover ? (await getImage({ src: data.cover, width: 1200, height: 630, fit: "cover", position: "top", format: "png" })).src : undefined;
+const og = data.cover ? (await getImage({ src: data.cover, width: 1200, height: 630, fit: "cover", position: "top", format: "jpg", quality: 80 })).src : undefined;
 ---
 
 <Base title={`${data.title}: ${data.kind} · Liam Birch`} description={data.summary} image={og}>
@@ -87,10 +87,11 @@ const og = data.cover ? (await getImage({ src: data.cover, width: 1200, height: 
                 <span class="size-2 rounded-full border border-ink" />
                 <span class="label ml-3 truncate text-[0.65rem] text-ink-3">{host ?? data.title.toLowerCase().replace(/\s+/g, "-")}</span>
               </div>
-              <Image
+              <Picture
                 src={data.cover}
                 alt={data.coverAlt ?? ""}
-                widths={[640, 960, 1440, 2000]}
+                formats={["avif", "webp"]}
+                widths={[480, 720, 960, 1440, 2000]}
                 sizes="(min-width: 88rem) 83rem, calc(100vw - 2rem)"
                 class="block w-full"
                 loading="eager"

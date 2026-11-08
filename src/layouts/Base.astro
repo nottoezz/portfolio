@@ -1,6 +1,9 @@
 ---
 import "../styles/global.css";
 import Header from "../components/Header.astro";
+// Preload the two faces visible above the fold (headline + body text).
+import notableWoff2 from "@fontsource/notable/files/notable-latin-400-normal.woff2?url";
+import newsreaderWoff2 from "@fontsource/newsreader/files/newsreader-latin-400-normal.woff2?url";
 
 interface Props {
   title: string;
@@ -19,6 +22,8 @@ const ogImage = new URL(image, Astro.site);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
+    <link rel="preload" href={notableWoff2} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={newsreaderWoff2} as="font" type="font/woff2" crossorigin />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
