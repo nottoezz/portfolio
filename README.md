@@ -16,6 +16,7 @@ Requires Node 20.19+ or 22.12+.
 | What | Where |
 | --- | --- |
 | Case studies | `src/content/work/*.md`: frontmatter for the facts, Markdown body for the story. `order` sets the position. |
+| Lab experiments | `src/content/lab/*.md`: unfinished/experimental things. Frontmatter has `status`, `play`/`source` links and a `roadmap` checklist. Pages render in the forced-dark "night" theme. |
 | Screenshots | `src/assets/work/` (referenced from frontmatter `cover` / `mobile`; Astro optimises them). |
 | Name, email, links, capabilities, toolkit | `src/data/site.ts` |
 | Colours & fonts | `src/styles/global.css` (`:root` tokens, with a dark "night edition" under `prefers-color-scheme`) |

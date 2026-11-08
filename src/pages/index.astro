@@ -8,6 +8,7 @@ import Contact from "../components/Contact.astro";
 import { site, capabilities, toolkit } from "../data/site";
 
 const work = (await getCollection("work")).sort((a, b) => a.data.order - b.data.order);
+const lab = (await getCollection("lab")).sort((a, b) => a.data.order - b.data.order);
 const pad = (n: number) => String(n).padStart(2, "0");
 ---
 
@@ -25,21 +26,15 @@ const pad = (n: number) => String(n).padStart(2, "0");
       <span class="block" data-reveal style="--d: .08s">interfaces<span class="text-accent">.</span></span>
     </h1>
 
-    <div class="mt-6 grid items-end gap-x-10 gap-y-8 md:mt-8 lg:grid-cols-12">
+    <div class="mt-6 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-x-6 md:mt-8 md:gap-x-10">
       <p
-        class="min-w-0 max-w-[22ch] text-[clamp(1.6rem,5.4vw,3rem)] italic leading-[1.1] text-ink-2 lg:col-span-7"
+        class="max-w-[22ch] text-[clamp(1.5rem,5.4vw,3rem)] italic leading-[1.1] text-ink-2"
         data-reveal
         style="--d: .16s"
       >
         &amp; building the fast, technically sound systems behind them.
       </p>
-
-      <div class="flex min-w-0 items-center gap-5 sm:gap-8 lg:col-span-5 lg:justify-end">
-        <Eye ring class="size-28 shrink-0 sm:size-36 lg:order-last lg:size-48 xl:size-56" label="An illustrated eye that follows your cursor" />
-        <p class="min-w-0 max-w-[26ch] text-base leading-snug text-ink-2 lg:text-right" data-reveal style="--d: .24s">
-          I’m Liam, a {site.role.toLowerCase()} in {site.location}. I design and build products that are clear to use and fast to load.
-        </p>
-      </div>
+      <Eye ring class="size-24 shrink-0 sm:size-36 lg:size-48 xl:size-56" label="An illustrated eye that follows your cursor" />
     </div>
 
     <div class="mt-10 flex flex-col gap-3 sm:flex-row md:mt-14" data-reveal style="--d: .3s">
@@ -114,11 +109,66 @@ const pad = (n: number) => String(n).padStart(2, "0");
     </div>
   </section>
 
+  <!-- ─────────────── Lab ─────────────── -->
+  <section id="lab" class="lab-band" aria-labelledby="lab-title">
+    <div class="wrap py-20 md:py-28">
+      <div class="flex items-baseline justify-between border-b border-[#ece6da]/30 pb-3">
+        <h2 id="lab-title" class="label">§02 Lab</h2>
+        <span class="label opacity-60">Unfinished · Experimental</span>
+      </div>
+
+      <div class="mt-12 grid gap-8 md:mt-16 lg:grid-cols-12 lg:items-end">
+        <p class="display text-[clamp(2.75rem,11vw,7.5rem)] lg:col-span-7" data-reveal>
+          Side<br />quests<span class="text-phosphor">_</span>
+        </p>
+        <p class="max-w-[34ch] text-xl italic leading-snug opacity-75 lg:col-span-5" data-reveal style="--d: .08s">
+          Experiments, games and half-built ideas. Made for fun, shown as they are, bugs and all.
+        </p>
+      </div>
+
+      <ol class="mt-12 font-mono md:mt-16">
+        {
+          lab.map((x, i) => (
+            <li data-reveal style={`--d: ${i * 0.05}s`}>
+              <a
+                href={`/lab/${x.id}`}
+                class="group grid grid-cols-[3rem_1fr] items-baseline gap-x-3 border-b border-[#ece6da]/15 py-5 md:grid-cols-[4rem_minmax(0,1fr)_16rem_9rem_2rem] md:gap-x-6 md:py-7"
+              >
+                <span class="label opacity-60">{String(i + 1).padStart(3, "0")}</span>
+                <span class="min-w-0">
+                  <span class="block break-all text-[clamp(1.15rem,4.5vw,2.25rem)] text-phosphor md:truncate md:break-normal">
+                    <span class="opacity-50">&gt; </span>
+                    {x.data.file}
+                  </span>
+                  <span class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 md:hidden">
+                    <span class="font-serif text-base italic opacity-70">{x.data.kind}</span>
+                    <span class="label border border-phosphor/60 px-2 py-0.5 text-phosphor">{x.data.status}</span>
+                  </span>
+                </span>
+                <span class="hidden font-serif text-lg italic opacity-70 md:block">{x.data.kind}</span>
+                <span class="label hidden whitespace-nowrap border border-phosphor/60 px-2 py-1 text-phosphor md:block md:justify-self-start">
+                  {x.data.status}
+                </span>
+                <span class="hidden text-2xl transition-transform duration-300 group-hover:translate-x-1.5 md:block" aria-hidden="true">
+                  →
+                </span>
+              </a>
+            </li>
+          ))
+        }
+        <li class="grid grid-cols-[3rem_1fr] gap-x-3 py-5 opacity-60 md:grid-cols-[4rem_1fr] md:gap-x-6 md:py-7" aria-label="More experiments coming">
+          <span class="label">{String(lab.length + 1).padStart(3, "0")}</span>
+          <span class="text-[clamp(1.15rem,4.5vw,2.25rem)]">&gt; loading next experiment<span class="lab-cursor">_</span></span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
   <!-- ─────────────── Capabilities ─────────────── -->
   <section class="border-y border-rule bg-paper-2" aria-labelledby="cap-title">
     <div class="wrap py-20 md:py-28">
       <div class="grid gap-6 lg:grid-cols-12">
-        <h2 id="cap-title" class="label lg:col-span-4">§02 What I do</h2>
+        <h2 id="cap-title" class="label lg:col-span-4">§03 What I do</h2>
         <p class="max-w-[24ch] text-[clamp(1.75rem,4.5vw,3rem)] leading-[1.1] lg:col-span-8" data-reveal>
           One person from the first sketch to the deployed build. Nothing gets lost in handoff.
         </p>
@@ -152,7 +202,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
   <!-- ─────────────── About ─────────────── -->
   <section id="about" class="wrap py-20 md:py-32" aria-labelledby="about-title">
-    <h2 id="about-title" class="label border-b border-ink pb-3">§03 About</h2>
+    <h2 id="about-title" class="label border-b border-ink pb-3">§04 About</h2>
 
     <div class="mt-12 grid gap-12 md:mt-16 lg:grid-cols-12">
       <blockquote class="lg:col-span-6" data-reveal>
@@ -196,6 +246,22 @@ const pad = (n: number) => String(n).padStart(2, "0");
 </Base>
 
 <style>
+  /* Always-dark band, independent of the light/dark theme */
+  .lab-band {
+    background: #0f0e0c;
+    color: #ece6da;
+    border-block: 1px solid #000;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .lab-cursor {
+      animation: lab-blink 1.1s steps(1) infinite;
+    }
+  }
+  @keyframes lab-blink {
+    50% {
+      opacity: 0;
+    }
+  }
   .work-preview {
     display: none;
   }

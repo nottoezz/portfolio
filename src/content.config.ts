@@ -26,4 +26,24 @@ const work = defineCollection({
     }),
 });
 
-export const collections = { work };
+// Lab: experiments, side quests, unfinished things.
+const lab = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/lab" }),
+  schema: z.object({
+    order: z.number(),
+    title: z.string(),
+    file: z.string(), // terminal-style name, e.g. terminal_orders.exe
+    kind: z.string(),
+    tagline: z.string(),
+    summary: z.string(),
+    status: z.enum(["Unfinished", "Ongoing", "Done"]),
+    year: z.number(),
+    stack: z.array(z.string()),
+    play: z.string().url().optional(),
+    playNote: z.string().optional(),
+    source: z.string().url().optional(),
+    roadmap: z.array(z.object({ item: z.string(), done: z.boolean().default(false) })).default([]),
+  }),
+});
+
+export const collections = { work, lab };

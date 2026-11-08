@@ -9,15 +9,16 @@ interface Props {
   title: string;
   description: string;
   image?: string; // absolute or root-relative path to an OG image
+  theme?: "night";
 }
 
-const { title, description, image = "/og.png" } = Astro.props;
+const { title, description, image = "/og.png", theme } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(image, Astro.site);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class:list={[theme === "night" && "theme-night"]}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -27,8 +28,16 @@ const ogImage = new URL(image, Astro.site);
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="theme-color" content="#ece6da" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#14120f" media="(prefers-color-scheme: dark)" />
+    {
+      theme === "night" ? (
+        <meta name="theme-color" content="#0f0e0c" />
+      ) : (
+        <>
+          <meta name="theme-color" content="#ece6da" media="(prefers-color-scheme: light)" />
+          <meta name="theme-color" content="#14120f" media="(prefers-color-scheme: dark)" />
+        </>
+      )
+    }
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Liam Birch" />

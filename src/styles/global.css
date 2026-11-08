@@ -36,7 +36,25 @@
   }
 }
 
+/* Night theme: forced on Lab pages regardless of system preference */
+:root.theme-night {
+  --paper: #0f0e0c;
+  --paper-2: #1a1814;
+  --ink: #ece6da;
+  --ink-2: rgb(236 230 218 / 0.74);
+  --ink-3: rgb(236 230 218 / 0.58);
+  --rule: rgb(236 230 218 / 0.16);
+  --accent: #e0728f;
+  --on-ink: #0f0e0c;
+  color-scheme: dark;
+}
+
+:root {
+  --phosphor: #ffbe40; /* amber CRT, used in the lab */
+}
+
 @theme inline {
+  --color-phosphor: var(--phosphor);
   --color-paper: var(--paper);
   --color-paper-2: var(--paper-2);
   --color-ink: var(--ink);
